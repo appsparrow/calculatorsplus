@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .search-container {
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        .search-box {
+            width: 80%;
+            max-width: 600px;
+            padding: 1rem 1.5rem;
+            font-size: 1.1rem;
+            border: 2px solid #dee2e6;
+            border-radius: 50px;
+            outline: none;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .search-box:focus {
+            border-color: #4c6ef5;
+            box-shadow: 0 0 0 4px rgba(76, 110, 245, 0.1);
+        }
+
+        .search-label {
+            display: block;
+            margin-bottom: 1rem;
+            color: #495057;
+            font-size: 1.2rem;
+        }
+
+        h1 {
+            text-align: center;
+            color: #212529;
+            margin-bottom: 3rem;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            padding: 1rem;
+        }
+
+        .calculator-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid #e9ecef;
+            opacity: 1;
+        }
+
+        .calculator-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
+            border-color: #4c6ef5;
+        }
+
+        .calculator-card h2 {
+            color: #212529;
+            margin-bottom: 0.8rem;
+            font-size: 1.3rem;
+        }
+
+        .calculator-card p {
+            color: #6c757d;
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+
+        .icon {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .request-form {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 600px;
+            margin: 2rem auto;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .request-form textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            margin: 1rem 0;
+            min-height: 100px;
+            font-family: inherit;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background: #4c6ef5;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background: #364fc7;
+        }
+
+
+        .success-message {
+            color: #2b8a3e;
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        .error-message {
+            color: #dc3545;
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .search-box {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>CalculatorsPlus</h1>
+        <div class="search-container">
+            <label for="calculator-search" class="search-label">I am looking for a calculator for...</label>
+            <input type="text" id="calculator-search" class="search-box" placeholder="Type here to find a calculator">
+        </div>
+        <div class="calculator-grid" id="calculatorGrid"></div>
+    </div>
+
+    <script>
+        const calculators = [
+            {
+                title: "Mortgage Calculator",
+                description: "Calculate monthly mortgage payments, interest, and amortization schedule.",
+                icon: "🏠",
+                link: "/mortgage-calculator"
+            },
+            {
+                title: "Auto Loan Calculator",
+                description: "Estimate car loan payments and total cost of ownership.",
+                icon: "🚗",
+                link: "/auto-calculator"
+            },
+            {
+                title: "Personal Loan Calculator",
+                description: "Calculate monthly payments and interest for personal loans.",
+                icon: "💰",
+                link: "/loan-calculator"
+            },
+            {
+                title: "GPA Calculator",
+                description: "Calculate your Grade Point Average for semester or cumulative GPA.",
+                icon: "📚",
+                link: "/gpa-calculator"
+            },
+            {
+                title: "Debt Payoff Calculator",
+                description: "Plan your debt payoff strategy and timeline.",
+                icon: "📊",
+                link: "/debt-calculator"
+            },
+            {
+                title: "Home Affordability Calculator",
+                description: "Find out how much house you can afford based on your income.",
+                icon: "🏘️",
+                link: "/home-affordability"
+            },
+            {
+                title: "Credit Card Payoff Calculator",
+                description: "Plan your credit card debt repayment and save on interest.",
+                icon: "💳",
+                link: "/credit-card-payoff"
+            }
+        ];
+
+        function createCalculatorCards() {
+            const grid = document.getElementById('calculatorGrid');
+            grid.innerHTML = '';
+
+            calculators.forEach(calc => {
+                const card = document.createElement('div');
+                card.className = 'calculator-card';
+                card.innerHTML = `
+                    <div class="icon">${calc.icon}</div>
+                    <h2>${calc.title}</h2>
+                    <p>${calc.description}</p>
+                `;
+                card.addEventListener('click', () => {
+                    window.location.href = calc.link;
+                });
+                grid.appendChild(card);
+            });
+        }
+
+        function showRequestForm(searchTerm) {
+            const grid = document.getElementById('calculatorGrid');
+            grid.innerHTML = `
+                <div class="request-form">
+                    <h2>Request a Calculator</h2>
+                    <p>We couldn't find a calculator for "${searchTerm}". Please describe what you're looking for:</p>
+                    <textarea id="requestDescription" placeholder="I need a calculator that..."></textarea>
+                    <button class="submit-btn" onclick="submitRequest()">Submit Request</button>
+                    <div id="successMessage"></div>
+                    <button class="submit-btn" style="background: #868e96; margin-top: 1rem;" onclick="resetSearch()">Back to All Calculators</button>
+                </div>
+            `;
+        }
+        /**
+                function submitRequest() {
+                    const description = document.getElementById('requestDescription').value;
+                    if (!description.trim()) {
+                        alert('Please describe the calculator you need');
+                        return;
+                    }
+        
+                    const timestamp = new Date().toISOString();
+                    const content = `Request Time: ${timestamp}\nDescription: ${description}\n\n`;
+        
+                    const blob = new Blob([content], { type: 'text/plain' });
+                    const a = document.createElement('a');
+                    a.href = URL.createObjectURL(blob);
+                    a.download = 'calculator_requests.txt';
+                    a.click();
+        
+                    document.getElementById('successMessage').innerHTML = `
+                        <div class="success-message">
+                            Thank you for your request! We will consider adding this calculator.
+                        </div>`;
+                    document.getElementById('requestDescription').value = '';
+                }
+        **/
+        function submitRequest() {
+            const description = document.getElementById('requestDescription').value;
+            if (!description.trim()) {
+                alert('Please describe the calculator you need');
+                return;
+            }
+
+            // Create form data
+            const formData = new FormData();
+            formData.append('description', description);
+
+            // Send request to PHP endpoint
+            fetch('save_request.php', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('successMessage').innerHTML = `
+                <div class="success-message">
+                    Thank you for your request! We will consider adding this calculator.
+                </div>`;
+                        document.getElementById('requestDescription').value = '';
+                    } else {
+                        throw new Error(data.message || 'Failed to save request');
+                    }
+                })
+                .catch(error => {
+                    alert('Error saving request: ' + error.message);
+                });
+        }
+
+        function resetSearch() {
+            document.getElementById('calculator-search').value = '';
+            createCalculatorCards();
+        }
+
+        function filterCalculators(searchTerm) {
+            const cards = document.querySelectorAll('.calculator-card');
+            let hasVisibleCards = false;
+
+            cards.forEach(card => {
+                const title = card.querySelector('h2').textContent.toLowerCase();
+                const description = card.querySelector('p').textContent.toLowerCase();
+
+                if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                    card.style.display = 'block';
+                    card.style.opacity = '1';
+                    hasVisibleCards = true;
+                } else {
+                    card.style.display = 'none';
+                    card.style.opacity = '0';
+                }
+            });
+
+            if (!hasVisibleCards && searchTerm !== '') {
+                showRequestForm(searchTerm);
+            }
+        }
+
+        const searchBox = document.getElementById('calculator-search');
+        searchBox.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.trim().toLowerCase();
+            if (searchTerm === '') {
+                createCalculatorCards();
+            } else {
+                filterCalculators(searchTerm);
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            createCalculatorCards();
+            searchBox.value = '';
+        });
+    </script>
+</body>
+
+</html>
