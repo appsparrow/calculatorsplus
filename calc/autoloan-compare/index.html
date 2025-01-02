@@ -15,6 +15,7 @@
     }
     .container {
       max-width: 1200px;
+      width:80%;
       margin: 60px auto;
       padding: 20px;
       background: white;
@@ -234,6 +235,11 @@
             <td>Total Payment</td>
             <td>${formatCurrency(loan1.totalPayment)}</td>
             <td>${formatCurrency(loan2.totalPayment)}</td>
+          </tr>
+           <tr>
+            <td>Monthly Rate</td>
+            <td>${formatCurrency(loan1.monthlyRate)}</td>
+            <td>${formatCurrency(loan2.monthlyRate)}</td>
           </tr>
         </table>
         <div class="savings">
