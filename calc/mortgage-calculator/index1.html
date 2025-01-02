@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -116,17 +117,60 @@
             <h2 style="margin-bottom: 1.5rem;">Mortgage Calculator</h2>
             <!-- Keep existing input section and results section -->
             <div class="input-section">
-                <!-- Your existing input groups -->
+                <h2 style="margin-bottom: 1.5rem;">Mortgage Calculator</h2>
+                <div class="input-group">
+                    <label>Home Price ($)</label>
+                    <input type="number" id="homePrice" value="300000" min="0" step="1000">
+                </div>
+                <div class="input-group">
+                    <label>Down Payment ($)</label>
+                    <input type="number" id="downPayment" value="60000" min="0" step="1000">
+                </div>
+                <div class="input-group">
+                    <label>Interest Rate (%)</label>
+                    <input type="number" id="interestRate" value="6.5" min="0" max="30" step="0.1">
+                </div>
+                <div class="input-group">
+                    <label>Loan Term (Years)</label>
+                    <input type="number" id="loanTerm" value="30" min="1" max="50">
+                </div>
+                <div class="input-group">
+                    <label>Property Tax ($/year)</label>
+                    <input type="number" id="propertyTax" value="3600" min="0" step="100">
+                </div>
+                <div class="input-group">
+                    <label>Insurance ($/year)</label>
+                    <input type="number" id="insurance" value="1200" min="0" step="100">
+                </div>
             </div>
+
             <div class="results-section">
                 <div class="results-grid">
-                    <!-- Your existing result cards -->
+                    <div class="result-card">
+                        <h3>Monthly Principal & Interest</h3>
+                        <div class="result-value" id="monthlyPI">$0</div>
+                    </div>
+                    <div class="result-card">
+                        <h3>Monthly PITI Payment</h3>
+                        <div class="result-value" id="monthlyPITI">$0</div>
+                    </div>
+                    <div class="result-card">
+                        <h3>Total Interest Paid</h3>
+                        <div class="result-value" id="totalInterest">$0</div>
+                    </div>
+                    <div class="result-card">
+                        <h3>Total Cost</h3>
+                        <div class="result-value" id="totalCost">$0</div>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Right Column -->
         <div class="right-column">
+            <div class="right-column">
+                <div class="chart-container" id="paymentChart"></div>
+            </div>
             <div class="scenarios-section">
                 <h2>Common Scenarios</h2>
                 <div class="scenarios-grid">
