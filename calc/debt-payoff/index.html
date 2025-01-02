@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debt Consolidation Calculator</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="/assets/components.js"></script>
+
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/assets/common.css">
+
+</head>
+<body>
+    <div id="header-component"></div>
+    <div class="container">
+        <div class="calculator-section">
+            <h1>Debt Payoff Calculator</h1>
+            
+            <div class="debt-list" id="debtList">
+                <div class="debt-header">
+                    <div>Debt Name</div>
+                    <div>Balance ($)</div>
+                    <div>Interest Rate (%)</div>
+                    <div>Min Payment ($)</div>
+                    <div></div>
+                </div>
+                <div class="debt-item">
+                    <input type="text" class="debt-name" placeholder="e.g., Credit Card 1">
+                    <input type="number" class="debt-balance" placeholder="0" min="0">
+                    <input type="number" class="debt-rate" placeholder="0" min="0" max="100" step="0.1">
+                    <input type="number" class="debt-payment" placeholder="0" min="0">
+                    <button class="remove-debt">×</button>
+                </div>
+            </div>
+
+            <button class="add-debt" id="addDebtBtn">Add Another Debt</button>
+
+            <div class="strategy-section">
+                <div class="input-group">
+                    <label for="strategy">Repayment Strategy:</label>
+                    <select id="strategy">
+                        <option value="avalanche">Debt Avalanche (Highest Interest First)</option>
+                        <option value="snowball">Debt Snowball (Lowest Balance First)</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="extraPayment">Extra Monthly Payment ($):</label>
+                    <input type="number" id="extraPayment" value="0" min="0">
+                </div>
+            </div>
+
+            <button class="calculate-btn" id="calculateBtn">Calculate Payoff Plan</button>
+
+            <div class="results-section">
+                <div class="results-grid">
+                    <div class="result-card">
+                        <h3>Total Debt</h3>
+                        <div class="result-value" id="totalDebt">\$0</div>
+                    </div>
+                    <div class="result-card">
+                        <h3>Total Interest</h3>
+                        <div class="result-value" id="totalInterest">\$0</div>
+                    </div>
+                    <div class="result-card">
+                        <h3>Months to Debt-Free</h3>
+                        <div class="result-value" id="monthsToFree">0</div>
+                    </div>
+                    <div class="result-card">
+                        <h3>Debt-Free Date</h3>
+                        <div class="result-value" id="debtFreeDate">-</div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <div id="payoffChart"></div>
+                    <div id="paymentBreakdownChart"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="scenarios-section">
+            <h2>Debt Payoff Scenarios</h2>
+            
+            <div class="scenarios-grid">
+                <div class="scenario-card">
+                    <h3>Strategy Comparison</h3>
+                    <div id="strategyComparison">
+                        <p>Time Difference: <span id="timeDiff">-</span></p>
+                        <p>Interest Savings: <span id="interestDiff">-</span></p>
+                    </div>
+                </div>
+
+                <div class="scenario-card">
+                    <h3>Extra Payment Impact</h3>
+                    <div id="extraPaymentImpact">
+                        <p>Time Saved: <span id="timeSaved">-</span></p>
+                        <p>Interest Saved: <span id="interestSaved">-</span></p>
+                    </div>
+                </div>
+
+                <div class="scenario-card">
+                    <h3>Debt Consolidation Analysis</h3>
+                    <div id="consolidationAnalysis">
+                        <p>Consolidated Payment: <span id="consolidatedPayment">-</span></p>
+                        <p>Potential Savings: <span id="potentialSavings">-</span></p>
+                    </div>
+                </div>
+
+                <div class="scenario-card">
+                    <h3>Payment Breakdown</h3>
+                    <div id="paymentBreakdown">
+                        <p>Principal: <span id="principalPercent">-</span></p>
+                        <p>Interest: <span id="interestPercent">-</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="footer-component"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
