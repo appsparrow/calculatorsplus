@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator Template</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --background-color: #f8fafc;
+            --text-color: #1f2937;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: white;
+            padding: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .calculator-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: var(--primary-color);
+        }
+
+        .input-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+        }
+
+        .input-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .results-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+        }
+
+        .scenarios {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .scenario-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .scenario-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: var(--secondary-color);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Calculator App</h1>
+        </div>
+    </header>
+
+    <main class="container">
+        <h2 class="calculator-title">Investment Calculator</h2>
+
+        <section class="input-section">
+            <div class="input-group">
+                <label for="initial">Initial Investment ($)</label>
+                <input type="number" id="initial" min="0">
+            </div>
+            <div class="input-group">
+                <label for="monthly">Monthly Contribution ($)</label>
+                <input type="number" id="monthly" min="0">
+            </div>
+            <div class="input-group">
+                <label for="years">Investment Period (Years)</label>
+                <input type="number" id="years" min="1">
+            </div>
+            <button onclick="calculate()">Calculate</button>
+        </section>
+
+        <section class="results-section">
+            <h3>Results</h3>
+            <div id="results"></div>
+        </section>
+
+        <section class="chart-container">
+            <canvas id="resultChart"></canvas>
+        </section>
+
+        <section class="scenarios">
+            <div class="scenario-card" onclick="loadScenario('conservative')">
+                <h3>Conservative</h3>
+                <p>Low risk, steady growth</p>
+            </div>
+            <div class="scenario-card" onclick="loadScenario('moderate')">
+                <h3>Moderate</h3>
+                <p>Balanced risk and return</p>
+            </div>
+            <div class="scenario-card" onclick="loadScenario('aggressive')">
+                <h3>Aggressive</h3>
+                <p>Higher risk, higher potential</p>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        let chart;
+
+        function calculate() {
+            const initial = parseFloat(document.getElementById('initial').value) || 0;
+            const monthly = parseFloat(document.getElementById('monthly').value) || 0;
+            const years = parseInt(document.getElementById('years').value) || 0;
+
+            // Sample calculation (replace with your actual calculation logic)
+            const finalAmount = initial + (monthly * 12 * years);
+
+            // Display results
+            document.getElementById('results').innerHTML = `
+                <p>Initial Investment: $${initial.toLocaleString()}</p>
+                <p>Total Contributions: $${(monthly * 12 * years).toLocaleString()}</p>
+                <p>Final Amount: $${finalAmount.toLocaleString()}</p>
+            `;
+
+            updateChart(years, initial, finalAmount);
+        }
+
+        function updateChart(years, initial, final) {
+            const ctx = document.getElementById('resultChart').getContext('2d');
+
+            // Destroy existing chart if it exists
+            if (chart) {
+                chart.destroy();
+            }
+
+            // Create new chart
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: Array.from({length: years + 1}, (_, i) => `Year ${i}`),
+                    datasets: [{
+                        label: 'Investment Growth',
+                        data: Array.from({length: years + 1}, (_, i) => 
+                            initial + (final - initial) * (i / years)
+                        ),
+                        borderColor: '#2563eb',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Investment Growth Over Time'
+                        }
+                    }
+                }
+            });
+        }
+
+        function loadScenario(type) {
+            // Sample scenarios (replace with your actual scenarios)
+            const scenarios = {
+                conservative: { initial: 10000, monthly: 500, years: 10 },
+                moderate: { initial: 20000, monthly: 1000, years: 15 },
+                aggressive: { initial: 30000, monthly: 2000, years: 20 }
+            };
+
+            const scenario = scenarios[type];
+            document.getElementById('initial').value = scenario.initial;
+            document.getElementById('monthly').value = scenario.monthly;
+            document.getElementById('years').value = scenario.years;
+
+            calculate();
+        }
+    </script>
+</body>
+</html>
