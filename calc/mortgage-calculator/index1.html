@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mortgage Calculator | CalculatorsPlus</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        /* Keep existing base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2196F3;
+            --surface-color: #ffffff;
+            --background-color: #f5f5f5;
+            --border-color: #e0e0e0;
+            --header-height: 70px;
+        }
+
+        /* Keep existing header and base styles */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--header-height);
+            background-color: var(--surface-color);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+        }
+
+        /* Updated container layout for two columns */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: calc(var(--header-height) + 2rem) 2rem 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        /* Left column styles */
+        .left-column {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        /* Right column styles */
+        .right-column {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        /* Update chart container */
+        .chart-container {
+            background: var(--surface-color);
+            padding: 1.5rem;
+            border-radius: 8px;
+            height: auto;
+            min-height: 400px;
+        }
+
+        /* Scenarios section */
+        .scenarios-section {
+            background: var(--surface-color);
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+
+        .scenarios-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .scenario-card {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .scenario-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* Responsive design */
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Keep all other existing styles */
+        /* ... (rest of your existing CSS) ... */
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="/" class="logo">
+            <span><img src="https://CalculatorsPlus.com/assets/logo.png" style="width: 40px"></span>
+            <span>CalculatorsPlus</span>
+        </a>
+        <a href="/" class="back-link">
+            <span>←</span>
+            <span>Back to Calculators</span>
+        </a>
+    </header>
+
+    <div class="container">
+        <!-- Left Column -->
+        <div class="left-column">
+            <div class="input-section">
+                <h2>Mortgage Calculator</h2>
+                <!-- Keep existing input groups -->
+                <div class="input-group">
+                    <label>Home Price ($)
+                        <span class="tooltip">
+                            <span class="tooltip-text">The total price of the property</span>
+                        </span>
+                    </label>
+                    <input type="number" id="homePrice" min="0" step="1000" placeholder="300000" value="300000">
+                </div>
+                <!-- ... other input groups ... -->
+                <div class="input-group">
+                    <label>Down Payment ($)
+                        <span class="tooltip">
+                            <span class="tooltip-text">Initial payment, typically 20% of home price</span>
+                        </span>
+                    </label>
+                    <input type="number" id="downPayment" min="0" step="1000" placeholder="60000" value="60000">
+                </div>
+
+                <div class="input-group">
+                    <label>Interest Rate (%)
+                        <span class="tooltip">
+                            <span class="tooltip-text">Annual interest rate for the mortgage</span>
+                        </span>
+                    </label>
+                    <input type="number" id="interestRate" min="0" max="30" step="0.01" placeholder="6.5" value="6.5">
+                </div>
+
+                <div class="input-group">
+                    <label>Loan Term (Years)
+                        <span class="tooltip">
+                            <span class="tooltip-text">Length of the mortgage in years</span>
+                        </span>
+                    </label>
+                    <input type="number" id="loanTerm" min="1" max="50" step="1" placeholder="30" value="30">
+                </div>
+
+                <div class="input-group">
+                    <label>Property Tax ($/year)
+                        <span class="tooltip">
+                            <span class="tooltip-text">Annual property tax amount</span>
+                        </span>
+                    </label>
+                    <input type="number" id="propertyTax" min="0" step="100" placeholder="3600" value="3600">
+                </div>
+
+                <div class="input-group">
+                    <label>Insurance ($/year)
+                        <span class="tooltip">
+                            <span class="tooltip-text">Annual homeowner's insurance cost</span>
+                        </span>
+                    </label>
+                    <input type="number" id="insurance" min="0" step="100" placeholder="1200" value="1200">
+                </div>
+            </div>
+
+            <div class="results-section">
+                <div class="results-grid">
+                    <div class="result-card">
+                        <h3>Monthly Principal & Interest</h3>
+                        <div class="result-value" id="monthlyPI">$0</div>
+                    </div>
+                    <div class="result-card">
+                        <h3>Monthly PITI Payment</h3>
+                        <div class="result-value" id="monthlyPITI">$0</div>
+                    </div>
+                    <div class="result-card">
+                        <h3>Total Interest Paid</h3>
+                        <div class="result-value" id="totalInterest">$0</div>
+                    </div>
+                    <div class="result-card">
+                        <h3>Total Cost</h3>
+                        <div class="result-value" id="totalCost">$0</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="right-column">
+            <div class="chart-container" id="paymentChart">
+                <!-- Chart will be rendered here -->
+            </div>
+
+            <div class="scenarios-section">
+                <h2>Common Scenarios</h2>
+                <div class="scenarios-grid">
+                    <div class="scenario-card" onclick="loadScenario('starter')">
+                        <h3>Starter Home</h3>
+                        <p>$250,000 home with 10% down</p>
+                    </div>
+                    <div class="scenario-card" onclick="loadScenario('midrange')">
+                        <h3>Mid-Range Home</h3>
+                        <p>$500,000 home with 20% down</p>
+                    </div>
+                    <div class="scenario-card" onclick="loadScenario('luxury')">
+                        <h3>Luxury Home</h3>
+                        <p>$750,000 home with 20% down</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Keep existing JavaScript functions
+        // Add new scenario loading function
+        function loadScenario(type) {
+            const scenarios = {
+                starter: {
+                    homePrice: 250000,
+                    downPayment: 25000,
+                    interestRate: 6.5,
+                    loanTerm: 30,
+                    propertyTax: 3000,
+                    insurance: 1000
+                },
+                midrange: {
+                    homePrice: 500000,
+                    downPayment: 100000,
+                    interestRate: 6.5,
+                    loanTerm: 30,
+                    propertyTax: 6000,
+                    insurance: 2000
+                },
+                luxury: {
+                    homePrice: 750000,
+                    downPayment: 150000,
+                    interestRate: 6.5,
+                    loanTerm: 30,
+                    propertyTax: 9000,
+                    insurance: 3000
+                }
+            };
+
+            const scenario = scenarios[type];
+            if (scenario) {
+                Object.keys(scenario).forEach(key => {
+                    document.getElementById(key).value = scenario[key];
+                });
+                calculateMortgage();
+            }
+        }
+
+        // Keep all other existing JavaScript functions
+        // ... (rest of your existing JavaScript) ...
+    </script>
+</body>
+</html>
