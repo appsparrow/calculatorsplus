@@ -205,23 +205,128 @@
                     </div>
                 </div>
             </div>
-            <div class="scenarios-section">
-                <h2>Common Scenarios</h2>
-                <div class="scenarios-grid">
-                    <div class="scenario-card" onclick="loadScenario('starter')">
-                        <h3>Starter Home</h3>
-                        <p>$250,000 with 10% down</p>
-                    </div>
-                    <div class="scenario-card" onclick="loadScenario('midrange')">
-                        <h3>Mid-Range Home</h3>
-                        <p>$500,000 with 20% down</p>
-                    </div>
-                    <div class="scenario-card" onclick="loadScenario('luxury')">
-                        <h3>Luxury Home</h3>
-                        <p>$750,000 with 20% down</p>
-                    </div>
-                </div>
-            </div>
+            <!-- Previous code remains the same until scenarios section -->
+
+<div class="scenarios-section">
+    <h2>Common Scenarios</h2>
+    <div class="scenarios-grid">
+        <div class="scenario-card" onclick="loadScenario('firstTime')">
+            <h3>First-Time Buyer</h3>
+            <p>$300,000 with 3.5% down (FHA)</p>
+        </div>
+        <div class="scenario-card" onclick="loadScenario('conventional')">
+            <h3>Conventional 20% Down</h3>
+            <p>$400,000 with 20% down</p>
+        </div>
+        <div class="scenario-card" onclick="loadScenario('jumbo')">
+            <h3>Jumbo Loan</h3>
+            <p>$800,000 with 20% down</p>
+        </div>
+        <div class="scenario-card" onclick="loadScenario('va')">
+            <h3>VA Loan</h3>
+            <p>$400,000 with 0% down</p>
+        </div>
+        <div class="scenario-card" onclick="loadScenario('refinance')">
+            <h3>Refinance</h3>
+            <p>$350,000 at lower rate</p>
+        </div>
+        <div class="scenario-card" onclick="loadScenario('fifteenYear')">
+            <h3>15-Year Fixed</h3>
+            <p>$350,000 with 20% down</p>
+        </div>
+        <div class="scenario-card" onclick="loadScenario('investment')">
+            <h3>Investment Property</h3>
+            <p>$250,000 with 25% down</p>
+        </div>
+        <div class="scenario-card" onclick="loadScenario('condo')">
+            <h3>Condo Purchase</h3>
+            <p>$200,000 with 10% down</p>
+        </div>
+    </div>
+</div>
+
+<!-- Update the loadScenario function in your JavaScript -->
+<script>
+function loadScenario(type) {
+    const scenarios = {
+        firstTime: {
+            homePrice: 300000,
+            downPayment: 10500, // 3.5% down
+            interestRate: 7.0,
+            loanTerm: 30,
+            propertyTax: 3600,
+            insurance: 1800 // Higher due to PMI
+        },
+        conventional: {
+            homePrice: 400000,
+            downPayment: 80000, // 20% down
+            interestRate: 6.5,
+            loanTerm: 30,
+            propertyTax: 4800,
+            insurance: 1200
+        },
+        jumbo: {
+            homePrice: 800000,
+            downPayment: 160000, // 20% down
+            interestRate: 6.8, // Slightly higher for jumbo
+            loanTerm: 30,
+            propertyTax: 9600,
+            insurance: 2400
+        },
+        va: {
+            homePrice: 400000,
+            downPayment: 0, // 0% down
+            interestRate: 6.25, // Often lower for VA
+            loanTerm: 30,
+            propertyTax: 4800,
+            insurance: 1000
+        },
+        refinance: {
+            homePrice: 350000,
+            downPayment: 70000,
+            interestRate: 5.5, // Lower refinance rate
+            loanTerm: 30,
+            propertyTax: 4200,
+            insurance: 1100
+        },
+        fifteenYear: {
+            homePrice: 350000,
+            downPayment: 70000, // 20% down
+            interestRate: 5.75, // Lower for 15-year
+            loanTerm: 15,
+            propertyTax: 4200,
+            insurance: 1100
+        },
+        investment: {
+            homePrice: 250000,
+            downPayment: 62500, // 25% down
+            interestRate: 7.5, // Higher for investment
+            loanTerm: 30,
+            propertyTax: 3000,
+            insurance: 1500
+        },
+        condo: {
+            homePrice: 200000,
+            downPayment: 20000, // 10% down
+            interestRate: 6.75,
+            loanTerm: 30,
+            propertyTax: 2400,
+            insurance: 1000
+        }
+    };
+
+    const scenario = scenarios[type];
+    if (scenario) {
+        Object.keys(scenario).forEach(key => {
+            document.getElementById(key).value = scenario[key];
+        });
+        calculateMortgage();
+    }
+}
+</script>
+
+<!-- Rest of the code remains the same -->
+
             <div class="chart-container" id="paymentChart"></div>
         </div>
     </div>
