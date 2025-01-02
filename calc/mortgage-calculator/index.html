@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mortgage Calculator | CalculatorsPlus</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <header class="header">
+        <a href="/" class="logo">
+            <span><img src="https://CalculatorsPlus.com/assets/logo.png" style="width: 40px"></span>
+            <span>CalculatorsPlus</span>
+        </a>
+        <a href="/" class="back-link">
+            <span>←</span>
+            <span>Back to Calculators</span>
+        </a>
+    </header>
+
+    
+    <div class="container">
+        <h1>Mortgage Calculator</h1>
+        
+        <div class="input-section">
+            <div class="input-group">
+                <label>Home Price ($)
+                    <span class="tooltip">
+                        <span class="tooltip-text">The total price of the property</span>
+                    </span>
+                </label>
+                <input type="number" id="homePrice" min="0" step="1000" placeholder="300000" value="300000">
+            </div>
+
+            <div class="input-group">
+                <label>Down Payment ($)
+                    <span class="tooltip">
+                        <span class="tooltip-text">Initial payment, typically 20% of home price</span>
+                    </span>
+                </label>
+                <input type="number" id="downPayment" min="0" step="1000" placeholder="60000" value="60000">
+            </div>
+
+            <div class="input-group">
+                <label>Interest Rate (%)
+                    <span class="tooltip">
+                        <span class="tooltip-text">Annual interest rate for the mortgage</span>
+                    </span>
+                </label>
+                <input type="number" id="interestRate" min="0" max="30" step="0.01" placeholder="6.5" value="6.5">
+            </div>
+
+            <div class="input-group">
+                <label>Loan Term (Years)
+                    <span class="tooltip">
+                        <span class="tooltip-text">Length of the mortgage in years</span>
+                    </span>
+                </label>
+                <input type="number" id="loanTerm" min="1" max="50" step="1" placeholder="30" value="30">
+            </div>
+
+            <div class="input-group">
+                <label>Property Tax ($/year)
+                    <span class="tooltip">
+                        <span class="tooltip-text">Annual property tax amount</span>
+                    </span>
+                </label>
+                <input type="number" id="propertyTax" min="0" step="100" placeholder="3600" value="3600">
+            </div>
+
+            <div class="input-group">
+                <label>Insurance ($/year)
+                    <span class="tooltip">
+                        <span class="tooltip-text">Annual homeowner's insurance cost</span>
+                    </span>
+                </label>
+                <input type="number" id="insurance" min="0" step="100" placeholder="1200" value="1200">
+            </div>
+        </div>
+
+        <div class="results-section">
+            <div class="results-grid">
+                <div class="result-card">
+                    <h3>Monthly Principal & Interest</h3>
+                    <div class="result-value" id="monthlyPI">\$0</div>
+                </div>
+                <div class="result-card">
+                    <h3>Monthly PITI Payment</h3>
+                    <div class="result-value" id="monthlyPITI">\$0</div>
+                </div>
+                <div class="result-card">
+                    <h3>Total Interest Paid</h3>
+                    <div class="result-value" id="totalInterest">\$0</div>
+                </div>
+                <div class="result-card">
+                    <h3>Total Cost</h3>
+                    <div class="result-value" id="totalCost">\$0</div>
+                </div>
+            </div>
+            <div class="chart-container" id="paymentChart"></div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
