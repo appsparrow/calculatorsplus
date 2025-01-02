@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CalculatorPlus - {{CALCULATOR_NAME}}</title>
+    <style>
+        /* Common Theme Styles */
+        :root {
+            --primary-color: #2196F3;
+            --secondary-color: #1976D2;
+            --background-color: #f5f5f5;
+            --surface-color: #ffffff;
+            --text-primary: #212529;
+            --text-secondary: #6c757d;
+            --spacing-unit: 1rem;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header Styles */
+        .header {
+            background-color: var(--surface-color);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: var(--spacing-unit);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .logo img {
+            height: 40px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-links a:hover {
+            background-color: var(--background-color);
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 var(--spacing-unit);
+        }
+
+        .calculator-container {
+            background-color: var(--surface-color);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 2rem;
+        }
+
+        /* Footer Styles */
+        .footer {
+            background-color: var(--surface-color);
+            padding: var(--spacing-unit);
+            margin-top: auto;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content, .footer-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links, .footer-links {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="/" class="logo">
+                <img src="/assets/logo.png" alt="CalculatorPlus">
+                <span>CalculatorPlus</span>
+            </a>
+            <nav class="nav-links">
+                <a href="/">Home</a>
+                <a href="/about">About</a>
+                <a href="/contact">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="calculator-container">
+            <!-- Calculator specific content goes here -->
+            <h1>{{CALCULATOR_NAME}}</h1>
+            <div id="calculator-content">
+                <!-- Individual calculator HTML -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="/privacy">Privacy Policy</a>
+                <a href="/terms">Terms of Use</a>
+                <a href="/sitemap">Sitemap</a>
+            </div>
+            <div class="copyright">
+                © 2024 CalculatorPlus. All rights reserved.
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

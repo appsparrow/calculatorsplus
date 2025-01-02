@@ -1,0 +1,223 @@
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #2196F3;
+    --surface-color: #ffffff;
+    --background-color: #f5f5f5;
+    --border-color: #e0e0e0;
+    --header-height: 70px;
+}
+
+body {
+    font-family: system-ui, -apple-system, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-color);
+    color: #333;
+    min-height: 100vh;
+}
+
+/* Header styles */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--header-height);
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: #212529;
+}
+
+.logo img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+}
+
+.logo span {
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.back-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: #6c757d;
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.back-link:hover {
+    color: #4c6ef5;
+    background-color: rgba(76, 110, 245, 0.1);
+}
+
+/* Main container styles */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: calc(var(--header-height) + 2rem) 2rem 2rem;
+}
+
+
+/* Update h1 styles to match home page */
+h1 {
+    text-align: center;
+    color: #212529;
+    margin-bottom: 2rem;
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+.input-section, .results-section {
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    background: var(--surface-color);
+}
+
+.input-group {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.1);
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    margin-left: 8px;
+    cursor: help;
+}
+
+.tooltip::after {
+    content: "?";
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+    text-align: center;
+    border-radius: 50%;
+    background-color: #e0e0e0;
+    color: #666;
+    font-size: 12px;
+}
+
+.tooltip:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+.tooltip-text {
+    visibility: hidden;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    padding: 8px;
+    background-color: #333;
+    color: white;
+    text-align: center;
+    border-radius: 4px;
+    font-size: 12px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.result-card {
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.result-card h3 {
+    margin: 0 0 10px 0;
+    font-size: 16px;
+    color: #666;
+}
+
+.result-value {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.chart-container {
+    height: 400px;
+    margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+    .header {
+        padding: 0 1rem;
+    }
+
+    .logo span:last-child {
+        display: none; /* Hide text logo on mobile */
+    }
+
+    .container {
+        padding: calc(var(--header-height) + 1rem) 1rem 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .back-link span:last-child {
+        display: none; /* Hide "Back to Calculators" text on very small screens */
+    }
+
+    .back-link {
+        padding: 0.5rem;
+    }
+}
