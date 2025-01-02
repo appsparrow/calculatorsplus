@@ -4,89 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mortgage Calculator | CalculatorsPlus</title>
+    <link rel="stylesheet" href="/assets/common.css">
+    <link rel="stylesheet" href="style.css">
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script src="/assets/components.js"></script>
-    <link rel="/assets/common.css">
-    
     <style>
-        /* Keep existing base styles */
-        :root {
-            --primary-color: #2196F3;
-            --surface-color: #ffffff;
-            --background-color: #f5f5f5;
-            --border-color: #e0e0e0;
-            --header-height: 70px;
-            --column-width: 600px; /* Fixed width for columns */
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: system-ui, -apple-system, sans-serif;
-            background-color: var(--background-color);
-            min-height: 100vh;
-            padding-top: var(--header-height);
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 2rem auto;
-            padding: 0 2rem;
-            display: grid;
-            grid-template-columns: minmax(auto, var(--column-width)) minmax(auto, var(--column-width));
-            gap: 2rem;
-            justify-content: center;
-        }
-
-        .left-column, .right-column {
-            width: 100%;
-            max-width: var(--column-width);
-        }
-
-        .scenarios-section {
-            background: var(--surface-color);
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin-bottom: 2rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .scenarios-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .scenario-card {
-            background: #f8f9fa;
-            padding: 1rem;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .scenario-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .scenario-card h3 {
-            font-size: 1rem;
-            margin-bottom: 0.5rem;
-            color: var(--primary-color);
-        }
-
-        .scenario-card p {
-            font-size: 0.875rem;
-            color: #666;
-        }
-
-        /* Keep all other existing styles */
         .calculator-container {
             background-color: var(--surface-color);
             border-radius: 8px;
@@ -200,62 +121,73 @@
             height: 400px;
             margin-top: 20px;
         }
-
-
-        @media (max-width: 1024px) {
-            .container {
-                grid-template-columns: 1fr;
-                padding: 0 1rem;
-            }
-
-            .left-column, .right-column {
-                max-width: 100%;
-            }
-        }
     </style>
 </head>
 <body>
     <!-- Header placeholder -->
     <div id="header-component"></div>
 
-    <div class="container">
-        <!-- Left Column -->
-        <div class="left-column">
-           
-            <!-- Keep existing input section and results section -->
+    <!-- Main content -->
+    <main class="main-content">
+        <div class="calculator-container">
+            <h1>Mortgage Calculator</h1>
+
             <div class="input-section">
-                <h2 style="margin-bottom: 1.5rem;">Mortgage Calculator</h2>
                 <div class="input-group">
-                    <label>Home Price ($)</label>
-                    <input type="number" id="homePrice" value="300000" min="0" step="1000">
+                    <label>Home Price ($)
+                        <span class="tooltip">
+                            <span class="tooltip-text">The total price of the property</span>
+                        </span>
+                    </label>
+                    <input type="number" id="homePrice" min="0" step="1000" placeholder="300000" value="300000">
                 </div>
+
                 <div class="input-group">
-                    <label>Down Payment ($)</label>
-                    <input type="number" id="downPayment" value="60000" min="0" step="1000">
+                    <label>Down Payment ($)
+                        <span class="tooltip">
+                            <span class="tooltip-text">Initial payment, typically 20% of home price</span>
+                        </span>
+                    </label>
+                    <input type="number" id="downPayment" min="0" step="1000" placeholder="60000" value="60000">
                 </div>
+
                 <div class="input-group">
-                    <label>Interest Rate (%)</label>
-                    <input type="number" id="interestRate" value="6.5" min="0" max="30" step="0.1">
+                    <label>Interest Rate (%)
+                        <span class="tooltip">
+                            <span class="tooltip-text">Annual interest rate for the mortgage</span>
+                        </span>
+                    </label>
+                    <input type="number" id="interestRate" min="0" max="30" step="0.01" placeholder="6.5" value="6.5">
                 </div>
+
                 <div class="input-group">
-                    <label>Loan Term (Years)</label>
-                    <input type="number" id="loanTerm" value="30" min="1" max="50">
+                    <label>Loan Term (Years)
+                        <span class="tooltip">
+                            <span class="tooltip-text">Length of the mortgage in years</span>
+                        </span>
+                    </label>
+                    <input type="number" id="loanTerm" min="1" max="50" step="1" placeholder="30" value="30">
                 </div>
+
                 <div class="input-group">
-                    <label>Property Tax ($/year)</label>
-                    <input type="number" id="propertyTax" value="3600" min="0" step="100">
+                    <label>Property Tax ($/year)
+                        <span class="tooltip">
+                            <span class="tooltip-text">Annual property tax amount</span>
+                        </span>
+                    </label>
+                    <input type="number" id="propertyTax" min="0" step="100" placeholder="3600" value="3600">
                 </div>
+
                 <div class="input-group">
-                    <label>Insurance ($/year)</label>
-                    <input type="number" id="insurance" value="1200" min="0" step="100">
+                    <label>Insurance ($/year)
+                        <span class="tooltip">
+                            <span class="tooltip-text">Annual homeowner's insurance cost</span>
+                        </span>
+                    </label>
+                    <input type="number" id="insurance" min="0" step="100" placeholder="1200" value="1200">
                 </div>
             </div>
 
-
-        </div>
-
-        <!-- Right Column -->
-        <div class="right-column">
             <div class="results-section">
                 <div class="results-grid">
                     <div class="result-card">
@@ -275,138 +207,18 @@
                         <div class="result-value" id="totalCost">$0</div>
                     </div>
                 </div>
-            </div>
-            <div class="chart-container" id="paymentChart"></div>
-            
-
-        </div>
-        
-    </div>
-  
-
-    <div class="scenarios-section">
-        <h2>Common Scenarios</h2>
-        <div class="scenarios-grid">
-            <div class="scenario-card" onclick="loadScenario('firstTime')">
-                <h3>First-Time Buyer</h3>
-                <p>$300,000 with 3.5% down (FHA)</p>
-            </div>
-            <div class="scenario-card" onclick="loadScenario('conventional')">
-                <h3>Conventional 20% Down</h3>
-                <p>$400,000 with 20% down</p>
-            </div>
-            <div class="scenario-card" onclick="loadScenario('jumbo')">
-                <h3>Jumbo Loan</h3>
-                <p>$800,000 with 20% down</p>
-            </div>
-            <div class="scenario-card" onclick="loadScenario('va')">
-                <h3>VA Loan</h3>
-                <p>$400,000 with 0% down</p>
-            </div>
-            <div class="scenario-card" onclick="loadScenario('refinance')">
-                <h3>Refinance</h3>
-                <p>$350,000 at lower rate</p>
-            </div>
-            <div class="scenario-card" onclick="loadScenario('fifteenYear')">
-                <h3>15-Year Fixed</h3>
-                <p>$350,000 with 20% down</p>
-            </div>
-            <div class="scenario-card" onclick="loadScenario('investment')">
-                <h3>Investment Property</h3>
-                <p>$250,000 with 25% down</p>
-            </div>
-            <div class="scenario-card" onclick="loadScenario('condo')">
-                <h3>Condo Purchase</h3>
-                <p>$200,000 with 10% down</p>
+                <div class="chart-container" id="paymentChart"></div>
             </div>
         </div>
-    </div>
-    
+    </main>
 
-        <!-- Footer placeholder -->
-        <div id="footer-component"></div>
+    <!-- Footer placeholder -->
+    <div id="footer-component"></div>
 
+    <!-- Scripts -->
+    <script src="/assets/components.js"></script>
     <script>
-        // Keep your existing JavaScript functions
-        // Add new scenario loading function
-        function loadScenario(type) {
-    const scenarios = {
-        firstTime: {
-            homePrice: 300000,
-            downPayment: 10500, // 3.5% down
-            interestRate: 7.0,
-            loanTerm: 30,
-            propertyTax: 3600,
-            insurance: 1800 // Higher due to PMI
-        },
-        conventional: {
-            homePrice: 400000,
-            downPayment: 80000, // 20% down
-            interestRate: 6.5,
-            loanTerm: 30,
-            propertyTax: 4800,
-            insurance: 1200
-        },
-        jumbo: {
-            homePrice: 800000,
-            downPayment: 160000, // 20% down
-            interestRate: 6.8, // Slightly higher for jumbo
-            loanTerm: 30,
-            propertyTax: 9600,
-            insurance: 2400
-        },
-        va: {
-            homePrice: 400000,
-            downPayment: 0, // 0% down
-            interestRate: 6.25, // Often lower for VA
-            loanTerm: 30,
-            propertyTax: 4800,
-            insurance: 1000
-        },
-        refinance: {
-            homePrice: 350000,
-            downPayment: 70000,
-            interestRate: 5.5, // Lower refinance rate
-            loanTerm: 30,
-            propertyTax: 4200,
-            insurance: 1100
-        },
-        fifteenYear: {
-            homePrice: 350000,
-            downPayment: 70000, // 20% down
-            interestRate: 5.75, // Lower for 15-year
-            loanTerm: 15,
-            propertyTax: 4200,
-            insurance: 1100
-        },
-        investment: {
-            homePrice: 250000,
-            downPayment: 62500, // 25% down
-            interestRate: 7.5, // Higher for investment
-            loanTerm: 30,
-            propertyTax: 3000,
-            insurance: 1500
-        },
-        condo: {
-            homePrice: 200000,
-            downPayment: 20000, // 10% down
-            interestRate: 6.75,
-            loanTerm: 30,
-            propertyTax: 2400,
-            insurance: 1000
-        }
-    };
-
-    const scenario = scenarios[type];
-    if (scenario) {
-        Object.keys(scenario).forEach(key => {
-            document.getElementById(key).value = scenario[key];
-        });
-        calculateMortgage();
-    }
-}
-
-
+        // Utility function to format currency
         function formatCurrency(value) {
             return new Intl.NumberFormat('en-US', {
                 style: 'currency',
@@ -416,6 +228,7 @@
             }).format(value);
         }
 
+        // Function to validate inputs
         function validateInputs(values) {
             const { homePrice, downPayment, interestRate, loanTerm } = values;
 
@@ -438,7 +251,9 @@
             return true;
         }
 
+        // Main calculation function
         function calculateMortgage() {
+            // Get input values
             const values = {
                 homePrice: parseFloat(document.getElementById('homePrice').value) || 0,
                 downPayment: parseFloat(document.getElementById('downPayment').value) || 0,
@@ -448,28 +263,46 @@
                 insurance: parseFloat(document.getElementById('insurance').value) || 0
             };
 
-            if (!validateInputs(values)) return;
+            // Validate inputs
+            if (!validateInputs(values)) {
+                return;
+            }
 
             try {
+                // Calculate loan amount
                 const loanAmount = values.homePrice - values.downPayment;
+
+                // Calculate monthly interest rate
                 const monthlyRate = (values.interestRate / 100) / 12;
+
+                // Calculate number of payments
                 const numberOfPayments = values.loanTerm * 12;
 
+                // Calculate monthly P&I payment
                 const monthlyPI = loanAmount * 
                     (monthlyRate * Math.pow(1 + monthlyRate, numberOfPayments)) / 
                     (Math.pow(1 + monthlyRate, numberOfPayments) - 1);
 
+                // Calculate monthly tax and insurance
                 const monthlyTax = values.propertyTax / 12;
                 const monthlyInsurance = values.insurance / 12;
+
+                // Calculate total monthly payment (PITI)
                 const monthlyPITI = monthlyPI + monthlyTax + monthlyInsurance;
+
+                // Calculate total interest
                 const totalInterest = (monthlyPI * numberOfPayments) - loanAmount;
+
+                // Calculate total cost
                 const totalCost = (monthlyPITI * numberOfPayments) + values.downPayment;
 
+                // Update results
                 document.getElementById('monthlyPI').textContent = formatCurrency(monthlyPI);
                 document.getElementById('monthlyPITI').textContent = formatCurrency(monthlyPITI);
                 document.getElementById('totalInterest').textContent = formatCurrency(totalInterest);
                 document.getElementById('totalCost').textContent = formatCurrency(totalCost);
 
+                // Create payment breakdown chart
                 createChart(loanAmount, totalInterest, values.propertyTax, values.insurance, values.loanTerm);
             } catch (error) {
                 console.error('Calculation error:', error);
@@ -477,6 +310,7 @@
             }
         }
 
+        // Function to create the payment breakdown chart
         function createChart(principal, totalInterest, annualTax, annualInsurance, term) {
             const taxInsurance = (annualTax + annualInsurance) * term;
 
@@ -499,11 +333,13 @@
             Plotly.newPlot('paymentChart', data, layout);
         }
 
-        // Add event listeners and initial calculation
+        // Add event listeners to all inputs
         document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('input').forEach(input => {
                 input.addEventListener('input', calculateMortgage);
             });
+
+            // Initial calculation
             calculateMortgage();
         });
     </script>
