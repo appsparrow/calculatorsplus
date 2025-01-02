@@ -205,50 +205,23 @@
                     </div>
                 </div>
             </div>
-            <!-- Previous code remains the same until scenarios section -->
-
-<div class="scenarios-section">
-    <h2>Common Scenarios</h2>
-    <div class="scenarios-grid">
-        <div class="scenario-card" onclick="loadScenario('firstTime')">
-            <h3>First-Time Buyer</h3>
-            <p>$300,000 with 3.5% down (FHA)</p>
-        </div>
-        <div class="scenario-card" onclick="loadScenario('conventional')">
-            <h3>Conventional 20% Down</h3>
-            <p>$400,000 with 20% down</p>
-        </div>
-        <div class="scenario-card" onclick="loadScenario('jumbo')">
-            <h3>Jumbo Loan</h3>
-            <p>$800,000 with 20% down</p>
-        </div>
-        <div class="scenario-card" onclick="loadScenario('va')">
-            <h3>VA Loan</h3>
-            <p>$400,000 with 0% down</p>
-        </div>
-        <div class="scenario-card" onclick="loadScenario('refinance')">
-            <h3>Refinance</h3>
-            <p>$350,000 at lower rate</p>
-        </div>
-        <div class="scenario-card" onclick="loadScenario('fifteenYear')">
-            <h3>15-Year Fixed</h3>
-            <p>$350,000 with 20% down</p>
-        </div>
-        <div class="scenario-card" onclick="loadScenario('investment')">
-            <h3>Investment Property</h3>
-            <p>$250,000 with 25% down</p>
-        </div>
-        <div class="scenario-card" onclick="loadScenario('condo')">
-            <h3>Condo Purchase</h3>
-            <p>$200,000 with 10% down</p>
-        </div>
-    </div>
-</div>
-
-
-
-<!-- Rest of the code remains the same -->
-
+            <div class="scenarios-section">
+                <h2>Common Scenarios</h2>
+                <div class="scenarios-grid">
+                    <div class="scenario-card" onclick="loadScenario('starter')">
+                        <h3>Starter Home</h3>
+                        <p>$250,000 with 10% down</p>
+                    </div>
+                    <div class="scenario-card" onclick="loadScenario('midrange')">
+                        <h3>Mid-Range Home</h3>
+                        <p>$500,000 with 20% down</p>
+                    </div>
+                    <div class="scenario-card" onclick="loadScenario('luxury')">
+                        <h3>Luxury Home</h3>
+                        <p>$750,000 with 20% down</p>
+                    </div>
+                </div>
+            </div>
             <div class="chart-container" id="paymentChart"></div>
         </div>
     </div>
@@ -328,7 +301,6 @@
     </div>
 </div>
 
-
 function loadScenario(type) {
     const scenarios = {
         firstTime: {
@@ -404,44 +376,7 @@ function loadScenario(type) {
         });
         calculateMortgage();
     }
-}
 
-
-            const scenarios = {
-                starter: {
-                    homePrice: 250000,
-                    downPayment: 25000,
-                    interestRate: 6.5,
-                    loanTerm: 30,
-                    propertyTax: 3000,
-                    insurance: 1000
-                },
-                midrange: {
-                    homePrice: 500000,
-                    downPayment: 100000,
-                    interestRate: 6.5,
-                    loanTerm: 30,
-                    propertyTax: 6000,
-                    insurance: 2000
-                },
-                luxury: {
-                    homePrice: 750000,
-                    downPayment: 150000,
-                    interestRate: 6.5,
-                    loanTerm: 30,
-                    propertyTax: 9000,
-                    insurance: 3000
-                }
-            };
-
-            const scenario = scenarios[type];
-            if (scenario) {
-                Object.keys(scenario).forEach(key => {
-                    document.getElementById(key).value = scenario[key];
-                });
-                calculateMortgage();
-            }
-        }
 
         function calculateMortgage() {
             const values = {
