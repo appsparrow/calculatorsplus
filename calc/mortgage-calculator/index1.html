@@ -1,22 +1,23 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mortgage Calculator | CalculatorsPlus</title>
-    <link rel="stylesheet" href="/assets/common.css">
-    <link rel="stylesheet" href="style.css">
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="/assets/components.js"></script>
-
+    <link rel="/assets/common.css">
+    
     <style>
+        /* Keep existing base styles */
         :root {
             --primary-color: #2196F3;
             --surface-color: #ffffff;
             --background-color: #f5f5f5;
             --border-color: #e0e0e0;
             --header-height: 70px;
-            --column-width: 600px;
+            --column-width: 600px; /* Fixed width for columns */
         }
 
         * {
@@ -47,61 +48,12 @@
             max-width: var(--column-width);
         }
 
-        .input-section, .results-section, .scenarios-section {
+        .scenarios-section {
             background: var(--surface-color);
             padding: 1.5rem;
             border-radius: 8px;
             margin-bottom: 2rem;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .input-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-        }
-
-        .input-group input {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            font-size: 1rem;
-        }
-
-        .input-group input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.1);
-        }
-
-        .results-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-        }
-
-        .result-card {
-            background: #f8f9fa;
-            padding: 1.5rem;
-            border-radius: 6px;
-            text-align: center;
-        }
-
-        .result-card h3 {
-            font-size: 0.875rem;
-            color: #666;
-            margin-bottom: 0.5rem;
-        }
-
-        .result-value {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--primary-color);
         }
 
         .scenarios-grid {
@@ -124,14 +76,19 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        .chart-container {
-            background: var(--surface-color);
-            padding: 1.5rem;
-            border-radius: 8px;
-            min-height: 400px;
-            margin-top: 2rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        .scenario-card h3 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
         }
+
+        .scenario-card p {
+            font-size: 0.875rem;
+            color: #666;
+        }
+
+        /* Keep all other existing styles */
+        /* ... (rest of your existing CSS) ... */
 
         @media (max-width: 1024px) {
             .container {
@@ -152,6 +109,8 @@
     <div class="container">
         <!-- Left Column -->
         <div class="left-column">
+            <h2 style="margin-bottom: 1.5rem;">Mortgage Calculator</h2>
+            <!-- Keep existing input section and results section -->
             <div class="input-section">
                 <h2 style="margin-bottom: 1.5rem;">Mortgage Calculator</h2>
                 <div class="input-group">
@@ -180,11 +139,6 @@
                 </div>
             </div>
 
-
-        </div>
-
-        <!-- Right Column -->
-        <div class="right-column">
             <div class="results-section">
                 <div class="results-grid">
                     <div class="result-card">
@@ -205,20 +159,47 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="right-column">
+            <div class="right-column">
+                <div class="chart-container" id="paymentChart"></div>
+            </div>
             <div class="scenarios-section">
                 <h2>Common Scenarios</h2>
                 <div class="scenarios-grid">
-                    <div class="scenario-card" onclick="loadScenario('starter')">
-                        <h3>Starter Home</h3>
-                        <p>$250,000 with 10% down</p>
+                    <div class="scenario-card" onclick="loadScenario('firstTime')">
+                        <h3>First-Time Buyer</h3>
+                        <p>$300,000 with 3.5% down (FHA)</p>
                     </div>
-                    <div class="scenario-card" onclick="loadScenario('midrange')">
-                        <h3>Mid-Range Home</h3>
-                        <p>$500,000 with 20% down</p>
+                    <div class="scenario-card" onclick="loadScenario('conventional')">
+                        <h3>Conventional 20% Down</h3>
+                        <p>$400,000 with 20% down</p>
                     </div>
-                    <div class="scenario-card" onclick="loadScenario('luxury')">
-                        <h3>Luxury Home</h3>
-                        <p>$750,000 with 20% down</p>
+                    <div class="scenario-card" onclick="loadScenario('jumbo')">
+                        <h3>Jumbo Loan</h3>
+                        <p>$800,000 with 20% down</p>
+                    </div>
+                    <div class="scenario-card" onclick="loadScenario('va')">
+                        <h3>VA Loan</h3>
+                        <p>$400,000 with 0% down</p>
+                    </div>
+                    <div class="scenario-card" onclick="loadScenario('refinance')">
+                        <h3>Refinance</h3>
+                        <p>$350,000 at lower rate</p>
+                    </div>
+                    <div class="scenario-card" onclick="loadScenario('fifteenYear')">
+                        <h3>15-Year Fixed</h3>
+                        <p>$350,000 with 20% down</p>
+                    </div>
+                    <div class="scenario-card" onclick="loadScenario('investment')">
+                        <h3>Investment Property</h3>
+                        <p>$250,000 with 25% down</p>
+                    </div>
+                    <div class="scenario-card" onclick="loadScenario('condo')">
+                        <h3>Condo Purchase</h3>
+                        <p>$200,000 with 10% down</p>
                     </div>
                 </div>
             </div>
@@ -226,82 +207,13 @@
         </div>
     </div>
 
-    <!-- Footer placeholder -->
-    <div id="footer-component"></div>
+        <!-- Footer placeholder -->
+        <div id="footer-component"></div>
 
     <script>
-        function formatCurrency(value) {
-            return new Intl.NumberFormat('en-US', {
-                style: 'currency',
-                currency: 'USD',
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 0
-            }).format(value);
-        }
-
-        function validateInputs(values) {
-            const { homePrice, downPayment, interestRate, loanTerm } = values;
-
-            if (homePrice <= 0) {
-                alert('Home price must be greater than 0');
-                return false;
-            }
-            if (downPayment < 0 || downPayment >= homePrice) {
-                alert('Down payment must be between 0 and home price');
-                return false;
-            }
-            if (interestRate <= 0 || interestRate >= 30) {
-                alert('Interest rate must be between 0 and 30');
-                return false;
-            }
-            if (loanTerm <= 0 || loanTerm > 50) {
-                alert('Loan term must be between 1 and 50 years');
-                return false;
-            }
-            return true;
-        }
-
-        <!-- Previous code remains the same until scenarios section -->
-
-<div class="scenarios-section">
-    <h2>Common Scenarios</h2>
-    <div class="scenarios-grid">
-        <div class="scenario-card" onclick="loadScenario('firstTime')">
-            <h3>First-Time Buyer</h3>
-            <p>$300,000 with 3.5% down (FHA)</p>
-        </div>
-        <div class="scenario-card" onclick="loadScenario('conventional')">
-            <h3>Conventional 20% Down</h3>
-            <p>$400,000 with 20% down</p>
-        </div>
-        <div class="scenario-card" onclick="loadScenario('jumbo')">
-            <h3>Jumbo Loan</h3>
-            <p>$800,000 with 20% down</p>
-        </div>
-        <div class="scenario-card" onclick="loadScenario('va')">
-            <h3>VA Loan</h3>
-            <p>$400,000 with 0% down</p>
-        </div>
-        <div class="scenario-card" onclick="loadScenario('refinance')">
-            <h3>Refinance</h3>
-            <p>$350,000 at lower rate</p>
-        </div>
-        <div class="scenario-card" onclick="loadScenario('fifteenYear')">
-            <h3>15-Year Fixed</h3>
-            <p>$350,000 with 20% down</p>
-        </div>
-        <div class="scenario-card" onclick="loadScenario('investment')">
-            <h3>Investment Property</h3>
-            <p>$250,000 with 25% down</p>
-        </div>
-        <div class="scenario-card" onclick="loadScenario('condo')">
-            <h3>Condo Purchase</h3>
-            <p>$200,000 with 10% down</p>
-        </div>
-    </div>
-</div>
-
-function loadScenario(type) {
+        // Keep your existing JavaScript functions
+        // Add new scenario loading function
+        function loadScenario(type) {
     const scenarios = {
         firstTime: {
             homePrice: 300000,
@@ -376,7 +288,39 @@ function loadScenario(type) {
         });
         calculateMortgage();
     }
+}
 
+
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(value);
+        }
+
+        function validateInputs(values) {
+            const { homePrice, downPayment, interestRate, loanTerm } = values;
+
+            if (homePrice <= 0) {
+                alert('Home price must be greater than 0');
+                return false;
+            }
+            if (downPayment < 0 || downPayment >= homePrice) {
+                alert('Down payment must be between 0 and home price');
+                return false;
+            }
+            if (interestRate <= 0 || interestRate >= 30) {
+                alert('Interest rate must be between 0 and 30');
+                return false;
+            }
+            if (loanTerm <= 0 || loanTerm > 50) {
+                alert('Loan term must be between 1 and 50 years');
+                return false;
+            }
+            return true;
+        }
 
         function calculateMortgage() {
             const values = {
@@ -439,6 +383,7 @@ function loadScenario(type) {
             Plotly.newPlot('paymentChart', data, layout);
         }
 
+        // Add event listeners and initial calculation
         document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('input').forEach(input => {
                 input.addEventListener('input', calculateMortgage);
