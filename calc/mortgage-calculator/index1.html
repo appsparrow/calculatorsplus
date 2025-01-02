@@ -245,8 +245,90 @@
     </div>
 </div>
 
-<!-- Update the loadScenario function in your JavaScript -->
-<script>
+
+
+<!-- Rest of the code remains the same -->
+
+            <div class="chart-container" id="paymentChart"></div>
+        </div>
+    </div>
+
+    <!-- Footer placeholder -->
+    <div id="footer-component"></div>
+
+    <script>
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(value);
+        }
+
+        function validateInputs(values) {
+            const { homePrice, downPayment, interestRate, loanTerm } = values;
+
+            if (homePrice <= 0) {
+                alert('Home price must be greater than 0');
+                return false;
+            }
+            if (downPayment < 0 || downPayment >= homePrice) {
+                alert('Down payment must be between 0 and home price');
+                return false;
+            }
+            if (interestRate <= 0 || interestRate >= 30) {
+                alert('Interest rate must be between 0 and 30');
+                return false;
+            }
+            if (loanTerm <= 0 || loanTerm > 50) {
+                alert('Loan term must be between 1 and 50 years');
+                return false;
+            }
+            return true;
+        }
+
+        <!-- Previous code remains the same until scenarios section -->
+
+<div class="scenarios-section">
+    <h2>Common Scenarios</h2>
+    <div class="scenarios-grid">
+        <div class="scenario-card" onclick="loadScenario('firstTime')">
+            <h3>First-Time Buyer</h3>
+            <p>$300,000 with 3.5% down (FHA)</p>
+        </div>
+        <div class="scenario-card" onclick="loadScenario('conventional')">
+            <h3>Conventional 20% Down</h3>
+            <p>$400,000 with 20% down</p>
+        </div>
+        <div class="scenario-card" onclick="loadScenario('jumbo')">
+            <h3>Jumbo Loan</h3>
+            <p>$800,000 with 20% down</p>
+        </div>
+        <div class="scenario-card" onclick="loadScenario('va')">
+            <h3>VA Loan</h3>
+            <p>$400,000 with 0% down</p>
+        </div>
+        <div class="scenario-card" onclick="loadScenario('refinance')">
+            <h3>Refinance</h3>
+            <p>$350,000 at lower rate</p>
+        </div>
+        <div class="scenario-card" onclick="loadScenario('fifteenYear')">
+            <h3>15-Year Fixed</h3>
+            <p>$350,000 with 20% down</p>
+        </div>
+        <div class="scenario-card" onclick="loadScenario('investment')">
+            <h3>Investment Property</h3>
+            <p>$250,000 with 25% down</p>
+        </div>
+        <div class="scenario-card" onclick="loadScenario('condo')">
+            <h3>Condo Purchase</h3>
+            <p>$200,000 with 10% down</p>
+        </div>
+    </div>
+</div>
+
+
 function loadScenario(type) {
     const scenarios = {
         firstTime: {
@@ -323,50 +405,8 @@ function loadScenario(type) {
         calculateMortgage();
     }
 }
-</script>
 
-<!-- Rest of the code remains the same -->
 
-            <div class="chart-container" id="paymentChart"></div>
-        </div>
-    </div>
-
-    <!-- Footer placeholder -->
-    <div id="footer-component"></div>
-
-    <script>
-        function formatCurrency(value) {
-            return new Intl.NumberFormat('en-US', {
-                style: 'currency',
-                currency: 'USD',
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 0
-            }).format(value);
-        }
-
-        function validateInputs(values) {
-            const { homePrice, downPayment, interestRate, loanTerm } = values;
-
-            if (homePrice <= 0) {
-                alert('Home price must be greater than 0');
-                return false;
-            }
-            if (downPayment < 0 || downPayment >= homePrice) {
-                alert('Down payment must be between 0 and home price');
-                return false;
-            }
-            if (interestRate <= 0 || interestRate >= 30) {
-                alert('Interest rate must be between 0 and 30');
-                return false;
-            }
-            if (loanTerm <= 0 || loanTerm > 50) {
-                alert('Loan term must be between 1 and 50 years');
-                return false;
-            }
-            return true;
-        }
-
-        function loadScenario(type) {
             const scenarios = {
                 starter: {
                     homePrice: 250000,
