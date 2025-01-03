@@ -3,334 +3,535 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mortgage Calculator | CalculatorsPlus</title>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script src="/assets/components.js"></script>
-    <link rel="stylesheet" href="/assets/common.css">
-    
+    <title>Mortgage Calculator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="assets/components.js"></script>
+    <link rel="stylesheet" href="assets/common.css">
+    <!-- Use the same styles from T3.html -->
     <style>
-        /* Keep existing base styles */
-        :root {
-            --primary-color: #2196F3;
-            --surface-color: #ffffff;
-            --background-color: #f5f5f5;
-            --border-color: #e0e0e0;
-            --header-height: 70px;
-            --column-width: 600px; /* Fixed width for columns */
+    /* Copy all styles from T3.html template */
+    :root {
+            --primary: #4f46e5;
+            --primary-light: #818cf8;
+            --secondary: #0ea5e9;
+            --accent: #06b6d4;
+            --background: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
         body {
-            font-family: system-ui, -apple-system, sans-serif;
-            background-color: var(--background-color);
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
             min-height: 100vh;
-            padding-top: var(--header-height);
+            display: flex;
+            flex-direction: column;
         }
 
-        .container {
+        .app-container {
             max-width: 1400px;
-            /* margin: 2rem auto; */
-            margin: 60px auto;
-
-            padding: 0 2rem;
-            display: grid;
-            grid-template-columns: minmax(auto, var(--column-width)) minmax(auto, var(--column-width));
-            gap: 2rem;
-            justify-content: center;
-        }
-
-        .left-column, .right-column {
+            margin: 0 auto;
+            padding: 2rem;
             width: 100%;
-            max-width: var(--column-width);
+            flex: 1;
         }
 
-        .scenarios-section {
-            background: var(--surface-color);
-            padding: 1.5rem;
-            border-radius: 8px;
+        .calculator-nav {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding: 1rem 0;
             margin-bottom: 2rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            scrollbar-width: none;
+        }
+
+        .calculator-nav::-webkit-scrollbar {
+            display: none;
+        }
+
+        .calc-tab {
+            padding: 1rem 1.5rem;
+            background: var(--card-bg);
+            border-radius: 12px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            color: var(--text-light);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .calc-tab.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+        }
+
+        .calc-tab:hover:not(.active) {
+            border-color: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .calculator-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .calculator-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: var(--background);
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .calc-button {
+            width: 100%;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .calc-button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .results-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-top: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .result-item {
+            padding: 1rem;
+            background: var(--background);
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .result-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .result-label {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .chart-container {
+            width: 100%;
+            height: 300px;
+            margin-top: 2rem;
         }
 
         .scenarios-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 1rem;
-            margin-top: 1rem;
+            margin-top: 1.5rem;
         }
 
         .scenario-card {
-            background: #f8f9fa;
+            background: var(--background);
             padding: 1rem;
-            border-radius: 6px;
+            border-radius: 12px;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: all 0.3s ease;
+            text-align: center;
         }
 
         .scenario-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .scenario-card h3 {
-            font-size: 1rem;
-            margin-bottom: 0.5rem;
-            color: var(--primary-color);
-        }
-
-        .scenario-card p {
-            font-size: 0.875rem;
-            color: #666;
-        }
-
-        /* Keep all other existing styles */
-        .calculator-container {
-            background-color: var(--surface-color);
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            padding: 2rem;
-            margin-top: 2rem;
-        }
-
-        .input-section, .results-section {
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            background: var(--surface-color);
-        }
-
-        .input-group {
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-        }
-
-        .input-group input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            font-size: 16px;
-        }
-
-        .input-group input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.1);
-        }
-
-        .tooltip {
-            position: relative;
-            display: inline-block;
-            margin-left: 8px;
-            cursor: help;
-        }
-
-        .tooltip::after {
-            content: "?";
-            display: inline-block;
-            width: 18px;
-            height: 18px;
-            line-height: 18px;
-            text-align: center;
-            border-radius: 50%;
-            background-color: #e0e0e0;
-            color: #666;
-            font-size: 12px;
-        }
-
-        .tooltip-text {
-            visibility: hidden;
-            position: absolute;
-            z-index: 1;
-            bottom: 125%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 200px;
-            padding: 8px;
-            background-color: #333;
+            background: var(--primary);
             color: white;
-            text-align: center;
+            transform: translateY(-3px);
+        }
+
+        @media (max-width: 768px) {
+            .app-container {
+                padding: 1rem;
+            }
+
+            .calculator-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .result-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .scenarios-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* Animations */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: slideIn 0.3s ease forwards;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--background);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-light);
             border-radius: 4px;
-            font-size: 12px;
-            opacity: 0;
-            transition: opacity 0.3s;
         }
 
-        .tooltip:hover .tooltip-text {
-            visibility: visible;
-            opacity: 1;
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
         }
 
-        .results-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .result-card {
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            text-align: center;
-        }
-
-        .result-card h3 {
-            margin: 0 0 10px 0;
-            font-size: 16px;
-            color: #666;
-        }
-
-        .result-value {
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--primary-color);
-        }
-
-        .chart-container {
-            height: 400px;
-            margin-top: 20px;
-        }
-
+        /* Previous CSS remains the same until media queries */
 
         @media (max-width: 1024px) {
-            .container {
-                grid-template-columns: 1fr;
-                padding: 0 1rem;
-            }
-
-            .left-column, .right-column {
-                max-width: 100%;
+            .app-container {
+                padding: 1rem;
+                width: 100%;
+                overflow-x: hidden;
             }
         }
-    </style>
+
+        @media (max-width: 768px) {
+            .app-container {
+                padding: 0.5rem;
+            }
+
+            .calculator-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .calculator-card {
+                padding: 1rem;
+                width: 100%;
+                margin: 0;
+            }
+
+            .result-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .scenarios-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.5rem;
+            }
+
+            .card-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.5rem;
+            }
+
+            .input-group {
+                margin-bottom: 1rem;
+            }
+
+            .chart-container {
+                height: 250px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .calculator-nav {
+                padding: 0.5rem 0;
+                margin-bottom: 1rem;
+                gap: 0.5rem;
+            }
+
+            .calc-tab {
+                padding: 0.75rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .card-title {
+                font-size: 1.1rem;
+            }
+
+            .input-label {
+                font-size: 0.85rem;
+            }
+
+            .input-field {
+                padding: 0.5rem;
+                font-size: 0.9rem;
+            }
+
+            .result-value {
+                font-size: 1.25rem;
+            }
+
+            .result-label {
+                font-size: 0.8rem;
+            }
+
+            .scenarios-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .scenario-card {
+                padding: 0.75rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Fix horizontal scrolling issues */
+        body {
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        .calculator-nav {
+            max-width: 100vw;
+            margin: 0 auto;
+            padding-bottom: 0.5rem;
+        }
+
+        /* Ensure content doesn't overflow */
+        * {
+            max-width: 100%;
+        }
+
+        /* Make cards full width on mobile */
+        .calculator-card {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* Adjust chart responsiveness */
+        .chart-container {
+            width: 100% !important;
+            position: relative;
+            max-width: 100vw;
+        }
+
+        canvas {
+            max-width: 100% !important;
+            height: auto !important;
+        }    </style>
 </head>
 <body>
-    <!-- Header placeholder -->
     <div id="header-component"></div>
-
-    <div class="container">
-        <!-- Left Column -->
-        <div class="left-column">
-           
-            <!-- Keep existing input section and results section -->
-            <div class="input-section">
-                <h2 style="margin-bottom: 1.5rem;">Mortgage Calculator</h2>
-                <div class="input-group">
-                    <label>Home Price ($)</label>
-                    <input type="number" id="homePrice" value="300000" min="0">
-                </div>
-                <div class="input-group">
-                    <label>Down Payment ($)</label>
-                    <input type="number" id="downPayment" value="60000" min="0" >
-                </div>
-                <div class="input-group">
-                    <label>Interest Rate (%)</label>
-                    <input type="number" id="interestRate" value="6.5" min="0" max="30">
-                </div>
-                <div class="input-group">
-                    <label>Loan Term (Years)</label>
-                    <input type="number" id="loanTerm" value="30" min="1" max="50">
-                </div>
-                <div class="input-group">
-                    <label>Property Tax ($/year)</label>
-                    <input type="number" id="propertyTax" value="3600" min="0">
-                </div>
-                <div class="input-group">
-                    <label>Insurance ($/year)</label>
-                    <input type="number" id="insurance" value="1200" min="0">
-                </div>
+    <div class="app-container">
+        <!-- Calculator Navigation -->
+        <div class="calculator-nav">
+            <div class="calc-tab">
+                <i class="fas fa-calculator"></i> Investment
             </div>
-
-
+            <div class="calc-tab active">
+                <i class="fas fa-home"></i> Mortgage
+            </div>
+            <div class="calc-tab">
+                <i class="fas fa-coins"></i> Savings
+            </div>
         </div>
 
-        <!-- Right Column -->
-        <div class="right-column">
-            <div class="results-section">
-                <div class="results-grid">
-                    <div class="result-card">
-                        <h3>Monthly Principal & Interest</h3>
-                        <div class="result-value" id="monthlyPI">$0</div>
+        <!-- Calculator Grid -->
+        <div class="calculator-grid">
+            <!-- Input Card -->
+            <div class="calculator-card animate-in">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-home"></i>
                     </div>
-                    <div class="result-card">
-                        <h3>Monthly PITI Payment</h3>
-                        <div class="result-value" id="monthlyPITI">$0</div>
+                    <h2 class="card-title">Mortgage Calculator</h2>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Home Price ($)</label>
+                    <input type="number" class="input-field" id="homePrice" value="300000">
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Down Payment ($)</label>
+                    <input type="number" class="input-field" id="downPayment" value="60000">
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Interest Rate (%)</label>
+                    <input type="number" class="input-field" id="interestRate" value="6.5">
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Loan Term (Years)</label>
+                    <input type="number" class="input-field" id="loanTerm" value="30">
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Property Tax ($/year)</label>
+                    <input type="number" class="input-field" id="propertyTax" value="3600">
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Insurance ($/year)</label>
+                    <input type="number" class="input-field" id="insurance" value="1200">
+                </div>
+
+                <button class="calc-button" onclick="calculateMortgage()">
+                    Calculate <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+
+            <!-- Results Card -->
+            <div class="calculator-card animate-in" style="animation-delay: 0.1s;">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-chart-pie"></i>
                     </div>
-                    <div class="result-card">
-                        <h3>Total Interest Paid</h3>
-                        <div class="result-value" id="totalInterest">$0</div>
+                    <h2 class="card-title">Results & Analysis</h2>
+                </div>
+
+                <div class="result-grid">
+                    <div class="result-item">
+                        <div class="result-value" id="monthlyPI">\$0</div>
+                        <div class="result-label">Monthly P&I</div>
                     </div>
-                    <div class="result-card">
-                        <h3>Total Cost</h3>
-                        <div class="result-value" id="totalCost">$0</div>
+                    <div class="result-item">
+                        <div class="result-value" id="monthlyPITI">\$0</div>
+                        <div class="result-label">Monthly PITI</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-value" id="totalInterest">\$0</div>
+                        <div class="result-label">Total Interest</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-value" id="totalCost">\$0</div>
+                        <div class="result-label">Total Cost</div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="paymentChart"></canvas>
+                </div>
+
+                <h3 style="margin: 1.5rem 0 1rem;">Common Scenarios</h3>
+                <div class="scenarios-grid">
+                    <div class="scenario-card" onclick="loadScenario('firstTime')">
+                        First-Time Buyer
+                    </div>
+                    <div class="scenario-card" onclick="loadScenario('conventional')">
+                        Conventional
+                    </div>
+                    <div class="scenario-card" onclick="loadScenario('jumbo')">
+                        Jumbo Loan
+                    </div>
+                    <div class="scenario-card" onclick="loadScenario('va')">
+                        VA Loan
                     </div>
                 </div>
             </div>
-            <div class="chart-container" id="paymentChart"></div>
-            
-
         </div>
-        
     </div>
-  
-
-    <div class="scenarios-section">
-        <h2>Common Scenarios</h2>
-        <div class="scenarios-grid">
-            <div class="scenario-card" onclick="loadScenario('firstTime')">
-                <h3>First-Time Buyer</h3>
-                <p>$300,000 with 3.5% down (FHA)</p>
-            </div>
-            <div class="scenario-card" onclick="loadScenario('conventional')">
-                <h3>Conventional 20% Down</h3>
-                <p>$400,000 with 20% down</p>
-            </div>
-            <div class="scenario-card" onclick="loadScenario('jumbo')">
-                <h3>Jumbo Loan</h3>
-                <p>$800,000 with 20% down</p>
-            </div>
-            <div class="scenario-card" onclick="loadScenario('va')">
-                <h3>VA Loan</h3>
-                <p>$400,000 with 0% down</p>
-            </div>
-            <div class="scenario-card" onclick="loadScenario('refinance')">
-                <h3>Refinance</h3>
-                <p>$350,000 at lower rate</p>
-            </div>
-            <div class="scenario-card" onclick="loadScenario('fifteenYear')">
-                <h3>15-Year Fixed</h3>
-                <p>$350,000 with 20% down</p>
-            </div>
-            <div class="scenario-card" onclick="loadScenario('investment')">
-                <h3>Investment Property</h3>
-                <p>$250,000 with 25% down</p>
-            </div>
-            <div class="scenario-card" onclick="loadScenario('condo')">
-                <h3>Condo Purchase</h3>
-                <p>$200,000 with 10% down</p>
-            </div>
-        </div>
-    </div>
-    
-
-        <!-- Footer placeholder -->
-        <div id="footer-component"></div>
+    <div id="footer-component"></div>
 
     <script>
-        // Keep your existing JavaScript functions
-        // Add new scenario loading function
         function loadScenario(type) {
     const scenarios = {
         firstTime: {
@@ -478,36 +679,35 @@
                 alert('An error occurred during calculation. Please check your inputs.');
             }
         }
+    // Update the chart creation function to use Chart.js instead of Plotly
+    function createChart(principal, totalInterest, annualTax, annualInsurance, term) {
+        const ctx = document.getElementById('paymentChart').getContext('2d');
+        const taxInsurance = (annualTax + annualInsurance) * term;
 
-        function createChart(principal, totalInterest, annualTax, annualInsurance, term) {
-            const taxInsurance = (annualTax + annualInsurance) * term;
-
-            const data = [{
-                values: [principal, totalInterest, taxInsurance],
-                labels: ['Principal', 'Interest', 'Tax & Insurance'],
-                type: 'pie',
-                hole: 0.4,
-                marker: {
-                    colors: ['#2196F3', '#FF9800', '#4CAF50']
-                }
-            }];
-
-            const layout = {
-                title: 'Total Payment Breakdown',
-                height: 400,
-                showlegend: true
-            };
-
-            Plotly.newPlot('paymentChart', data, layout);
+        if (window.mortgageChart) {
+            window.mortgageChart.destroy();
         }
 
-        // Add event listeners and initial calculation
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('input').forEach(input => {
-                input.addEventListener('input', calculateMortgage);
-            });
-            calculateMortgage();
+        window.mortgageChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Principal', 'Interest', 'Tax & Insurance'],
+                datasets: [{
+                    data: [principal, totalInterest, taxInsurance],
+                    backgroundColor: ['#4f46e5', '#0ea5e9', '#10b981']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
         });
+    }
     </script>
 </body>
 </html>
