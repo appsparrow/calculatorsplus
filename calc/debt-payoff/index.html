@@ -435,17 +435,17 @@
             // Fade in
             newDebt.style.opacity = '1';
         });
-        
-        // Add debt button functionality
-        document.getElementById('addDebtBtn').addEventListener('click', () => {
-            const debtList = document.getElementById('debtList');
-            const template = debtList.querySelector('.debt-item');
-            const newDebt = template.cloneNode(true);
 
-            // Clear the values
-            newDebt.querySelectorAll('input').forEach(input => input.value = '');
-            debtList.appendChild(newDebt);
-        });
+        // Add debt button functionality
+        // document.getElementById('addDebtBtn').addEventListener('click', () => {
+        //     const debtList = document.getElementById('debtList');
+        //     const template = debtList.querySelector('.debt-item');
+        //     const newDebt = template.cloneNode(true);
+
+        //     // Clear the values
+        //     newDebt.querySelectorAll('input').forEach(input => input.value = '');
+        //     debtList.appendChild(newDebt);
+        // });
 
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
