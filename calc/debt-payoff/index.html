@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,6 +65,7 @@
         }
     </style>
 </head>
+
 <body>
     <div id="header-component"></div>
     <div class="app-container">
@@ -181,226 +183,274 @@
 
     <script>
 
-let payoffChart;
+        let payoffChart;
 
-function calculate() {
-    // Get all debt inputs
-    const debts = [];
-    const debtItems = document.querySelectorAll('.debt-item');
-    
-    debtItems.forEach(item => {
-        const name = item.querySelector('.debt-name').value;
-        const balance = parseFloat(item.querySelector('.debt-balance').value) || 0;
-        const rate = parseFloat(item.querySelector('.debt-rate').value) || 0;
-        const payment = parseFloat(item.querySelector('.debt-payment').value) || 0;
-        
-        if (balance > 0) {
-            debts.push({ name, balance, rate, payment });
-        }
-    });
+        function calculate() {
+            // Get all debt inputs
+            const debts = [];
+            const debtItems = document.querySelectorAll('.debt-item');
 
-    const strategy = document.getElementById('strategy').value;
-    const extraPayment = parseFloat(document.getElementById('extraPayment').value) || 0;
+            debtItems.forEach(item => {
+                const name = item.querySelector('.debt-name').value;
+                const balance = parseFloat(item.querySelector('.debt-balance').value) || 0;
+                const rate = parseFloat(item.querySelector('.debt-rate').value) || 0;
+                const payment = parseFloat(item.querySelector('.debt-payment').value) || 0;
 
-    // Calculate payoff schedule
-    const payoffSchedule = calculatePayoffSchedule(debts, strategy, extraPayment);
-    
-    // Update results
-    updateResults(payoffSchedule);
-    
-    // Update charts
-    updatePayoffChart(payoffSchedule);
-    updatePaymentBreakdownChart(payoffSchedule);
-}
-
-function calculatePayoffSchedule(debts, strategy, extraPayment) {
-    let schedule = [];
-    let totalDebt = debts.reduce((sum, debt) => sum + debt.balance, 0);
-    let monthlyPayment = debts.reduce((sum, debt) => sum + debt.payment, 0) + extraPayment;
-    
-    // Sort debts based on strategy
-    if (strategy === 'avalanche') {
-        debts.sort((a, b) => b.rate - a.rate);
-    } else {
-        debts.sort((a, b) => a.balance - b.balance);
-    }
-
-    let month = 0;
-    let currentBalances = debts.map(debt => debt.balance);
-    
-    while (currentBalances.some(balance => balance > 0) && month < 360) {
-        let monthData = {
-            month: month,
-            totalBalance: currentBalances.reduce((sum, balance) => sum + balance, 0),
-            balances: [...currentBalances],
-            interestPaid: 0,
-            principalPaid: 0
-        };
-
-        // Calculate interest and apply payments
-        debts.forEach((debt, index) => {
-            if (currentBalances[index] > 0) {
-                let interest = (currentBalances[index] * (debt.rate / 100)) / 12;
-                monthData.interestPaid += interest;
-                currentBalances[index] += interest;
-                
-                let payment = debt.payment;
-                if (index === 0) payment += extraPayment; // Apply extra payment to first debt
-                
-                if (payment > currentBalances[index]) {
-                    payment = currentBalances[index];
+                if (balance > 0) {
+                    debts.push({ name, balance, rate, payment });
                 }
-                
-                currentBalances[index] -= payment;
-                monthData.principalPaid += payment - interest;
+            });
+
+            const strategy = document.getElementById('strategy').value;
+            const extraPayment = parseFloat(document.getElementById('extraPayment').value) || 0;
+
+            // Calculate payoff schedule
+            const payoffSchedule = calculatePayoffSchedule(debts, strategy, extraPayment);
+
+            // Update results
+            updateResults(payoffSchedule);
+
+            // Update charts
+            updatePayoffChart(payoffSchedule);
+            updatePaymentBreakdownChart(payoffSchedule);
+        }
+
+        function calculatePayoffSchedule(debts, strategy, extraPayment) {
+            let schedule = [];
+            let totalDebt = debts.reduce((sum, debt) => sum + debt.balance, 0);
+            let monthlyPayment = debts.reduce((sum, debt) => sum + debt.payment, 0) + extraPayment;
+
+            // Sort debts based on strategy
+            if (strategy === 'avalanche') {
+                debts.sort((a, b) => b.rate - a.rate);
+            } else {
+                debts.sort((a, b) => a.balance - b.balance);
+            }
+
+            let month = 0;
+            let currentBalances = debts.map(debt => debt.balance);
+
+            while (currentBalances.some(balance => balance > 0) && month < 360) {
+                let monthData = {
+                    month: month,
+                    totalBalance: currentBalances.reduce((sum, balance) => sum + balance, 0),
+                    balances: [...currentBalances],
+                    interestPaid: 0,
+                    principalPaid: 0
+                };
+
+                // Calculate interest and apply payments
+                debts.forEach((debt, index) => {
+                    if (currentBalances[index] > 0) {
+                        let interest = (currentBalances[index] * (debt.rate / 100)) / 12;
+                        monthData.interestPaid += interest;
+                        currentBalances[index] += interest;
+
+                        let payment = debt.payment;
+                        if (index === 0) payment += extraPayment; // Apply extra payment to first debt
+
+                        if (payment > currentBalances[index]) {
+                            payment = currentBalances[index];
+                        }
+
+                        currentBalances[index] -= payment;
+                        monthData.principalPaid += payment - interest;
+                    }
+                });
+
+                schedule.push(monthData);
+                month++;
+            }
+
+            return schedule;
+        }
+
+        function updateResults(schedule) {
+            const lastMonth = schedule[schedule.length - 1];
+            const totalInterest = schedule.reduce((sum, month) => sum + month.interestPaid, 0);
+            const totalPrincipal = schedule.reduce((sum, month) => sum + month.principalPaid, 0);
+
+            document.getElementById('totalDebt').textContent = formatCurrency(schedule[0].totalBalance);
+            document.getElementById('totalInterest').textContent = formatCurrency(totalInterest);
+            document.getElementById('monthsToFree').textContent = schedule.length;
+
+            const debtFreeDate = new Date();
+            debtFreeDate.setMonth(debtFreeDate.getMonth() + schedule.length);
+            document.getElementById('debtFreeDate').textContent = debtFreeDate.toLocaleDateString('en-US', {
+                month: 'long',
+                year: 'numeric'
+            });
+        }
+
+        function updatePayoffChart(schedule) {
+            const ctx = document.getElementById('payoffChart').getContext('2d');
+
+            if (payoffChart) {
+                payoffChart.destroy();
+            }
+
+            payoffChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: schedule.map(data => `Month ${data.month}`),
+                    datasets: [{
+                        label: 'Total Debt Balance',
+                        data: schedule.map(data => data.totalBalance),
+                        borderColor: '#4f46e5',
+                        backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Debt Payoff Progress'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: value => formatCurrency(value)
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Preset scenarios
+        function loadScenario(type) {
+            const scenarios = {
+                creditCards: {
+                    debts: [
+                        { name: "Credit Card 1", balance: 5000, rate: 19.99, payment: 150 },
+                        { name: "Credit Card 2", balance: 3000, rate: 24.99, payment: 100 }
+                    ],
+                    extraPayment: 200,
+                    strategy: 'avalanche'
+                },
+                studentLoans: {
+                    debts: [
+                        { name: "Federal Loan", balance: 20000, rate: 4.5, payment: 220 },
+                        { name: "Private Loan", balance: 15000, rate: 6.8, payment: 180 }
+                    ],
+                    extraPayment: 300,
+                    strategy: 'avalanche'
+                },
+                mixedDebt: {
+                    debts: [
+                        { name: "Credit Card", balance: 4000, rate: 22.99, payment: 120 },
+                        { name: "Car Loan", balance: 12000, rate: 5.9, payment: 300 },
+                        { name: "Personal Loan", balance: 8000, rate: 12.5, payment: 200 }
+                    ],
+                    extraPayment: 250,
+                    strategy: 'snowball'
+                }
+            };
+
+            const scenario = scenarios[type];
+            if (!scenario) return;
+
+            // Clear existing debt items
+            const debtList = document.getElementById('debtList');
+            const template = debtList.querySelector('.debt-item');
+            while (debtList.children.length > 2) { // Keep header and template
+                debtList.removeChild(debtList.lastChild);
+            }
+
+            // Add scenario debts
+            scenario.debts.forEach(debt => {
+                const newDebt = template.cloneNode(true);
+                newDebt.querySelector('.debt-name').value = debt.name;
+                newDebt.querySelector('.debt-balance').value = debt.balance;
+                newDebt.querySelector('.debt-rate').value = debt.rate;
+                newDebt.querySelector('.debt-payment').value = debt.payment;
+                debtList.appendChild(newDebt);
+            });
+
+            document.getElementById('strategy').value = scenario.strategy;
+            document.getElementById('extraPayment').value = scenario.extraPayment;
+
+            calculate();
+        }
+
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(value);
+        }
+
+
+         // Add new functionality for removing debt rows
+         document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('remove-debt')) {
+                const debtItem = event.target.closest('.debt-item');
+                const debtList = document.getElementById('debtList');
+
+                // Don't remove if it's the last debt item
+                if (debtList.querySelectorAll('.debt-item').length <= 1) {
+                    alert('You must keep at least one debt entry.');
+                    return;
+                }
+
+                // Add animation class
+                debtItem.classList.add('removing');
+
+                // Remove after animation
+                setTimeout(() => {
+                    debtItem.remove();
+                    calculate(); // Recalculate after removing
+                }, 300);
             }
         });
 
-        schedule.push(monthData);
-        month++;
-    }
+        // Modify add debt button functionality to include remove button functionality
+        document.getElementById('addDebtBtn').addEventListener('click', () => {
+            const debtList = document.getElementById('debtList');
+            const template = debtList.querySelector('.debt-item');
+            const newDebt = template.cloneNode(true);
 
-    return schedule;
-}
+            // Clear the values
+            newDebt.querySelectorAll('input').forEach(input => input.value = '');
 
-function updateResults(schedule) {
-    const lastMonth = schedule[schedule.length - 1];
-    const totalInterest = schedule.reduce((sum, month) => sum + month.interestPaid, 0);
-    const totalPrincipal = schedule.reduce((sum, month) => sum + month.principalPaid, 0);
-    
-    document.getElementById('totalDebt').textContent = formatCurrency(schedule[0].totalBalance);
-    document.getElementById('totalInterest').textContent = formatCurrency(totalInterest);
-    document.getElementById('monthsToFree').textContent = schedule.length;
-    
-    const debtFreeDate = new Date();
-    debtFreeDate.setMonth(debtFreeDate.getMonth() + schedule.length);
-    document.getElementById('debtFreeDate').textContent = debtFreeDate.toLocaleDateString('en-US', {
-        month: 'long',
-        year: 'numeric'
-    });
-}
+            // Ensure remove button is properly set up
+            const removeBtn = newDebt.querySelector('.remove-debt');
+            removeBtn.innerHTML = '×';
 
-function updatePayoffChart(schedule) {
-    const ctx = document.getElementById('payoffChart').getContext('2d');
-    
-    if (payoffChart) {
-        payoffChart.destroy();
-    }
+            // Add with animation
+            newDebt.style.opacity = '0';
+            debtList.appendChild(newDebt);
 
-    payoffChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: schedule.map(data => `Month ${data.month}`),
-            datasets: [{
-                label: 'Total Debt Balance',
-                data: schedule.map(data => data.totalBalance),
-                borderColor: '#4f46e5',
-                backgroundColor: 'rgba(79, 70, 229, 0.1)',
-                fill: true,
-                tension: 0.4
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                title: {
-                    display: true,
-                    text: 'Debt Payoff Progress'
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        callback: value => formatCurrency(value)
-                    }
-                }
-            }
-        }
-    });
-}
+            // Trigger reflow
+            newDebt.offsetHeight;
 
-// Preset scenarios
-function loadScenario(type) {
-    const scenarios = {
-        creditCards: {
-            debts: [
-                { name: "Credit Card 1", balance: 5000, rate: 19.99, payment: 150 },
-                { name: "Credit Card 2", balance: 3000, rate: 24.99, payment: 100 }
-            ],
-            extraPayment: 200,
-            strategy: 'avalanche'
-        },
-        studentLoans: {
-            debts: [
-                { name: "Federal Loan", balance: 20000, rate: 4.5, payment: 220 },
-                { name: "Private Loan", balance: 15000, rate: 6.8, payment: 180 }
-            ],
-            extraPayment: 300,
-            strategy: 'avalanche'
-        },
-        mixedDebt: {
-            debts: [
-                { name: "Credit Card", balance: 4000, rate: 22.99, payment: 120 },
-                { name: "Car Loan", balance: 12000, rate: 5.9, payment: 300 },
-                { name: "Personal Loan", balance: 8000, rate: 12.5, payment: 200 }
-            ],
-            extraPayment: 250,
-            strategy: 'snowball'
-        }
-    };
+            // Fade in
+            newDebt.style.opacity = '1';
+        });
+        
+        // Add debt button functionality
+        document.getElementById('addDebtBtn').addEventListener('click', () => {
+            const debtList = document.getElementById('debtList');
+            const template = debtList.querySelector('.debt-item');
+            const newDebt = template.cloneNode(true);
 
-    const scenario = scenarios[type];
-    if (!scenario) return;
+            // Clear the values
+            newDebt.querySelectorAll('input').forEach(input => input.value = '');
+            debtList.appendChild(newDebt);
+        });
 
-    // Clear existing debt items
-    const debtList = document.getElementById('debtList');
-    const template = debtList.querySelector('.debt-item');
-    while (debtList.children.length > 2) { // Keep header and template
-        debtList.removeChild(debtList.lastChild);
-    }
-
-    // Add scenario debts
-    scenario.debts.forEach(debt => {
-        const newDebt = template.cloneNode(true);
-        newDebt.querySelector('.debt-name').value = debt.name;
-        newDebt.querySelector('.debt-balance').value = debt.balance;
-        newDebt.querySelector('.debt-rate').value = debt.rate;
-        newDebt.querySelector('.debt-payment').value = debt.payment;
-        debtList.appendChild(newDebt);
-    });
-
-    document.getElementById('strategy').value = scenario.strategy;
-    document.getElementById('extraPayment').value = scenario.extraPayment;
-
-    calculate();
-}
-
-function formatCurrency(value) {
-    return new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0
-    }).format(value);
-}
-
-// Add debt button functionality
-document.getElementById('addDebtBtn').addEventListener('click', () => {
-    const debtList = document.getElementById('debtList');
-    const template = debtList.querySelector('.debt-item');
-    const newDebt = template.cloneNode(true);
-    
-    // Clear the values
-    newDebt.querySelectorAll('input').forEach(input => input.value = '');
-    debtList.appendChild(newDebt);
-});
-
-// Initialize
-document.addEventListener('DOMContentLoaded', () => {
-    calculate();
-});
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            calculate();
+        });
         // Add tab switching functionality
         document.querySelectorAll('.calc-tab').forEach(tab => {
             tab.addEventListener('click', () => {
@@ -416,4 +466,5 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     </script>
 </body>
+
 </html>
