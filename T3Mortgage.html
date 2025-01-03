@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mortgage Calculator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="assets/components.js"></script>
+    <link rel="stylesheet" href="assets/common.css">
+    <!-- Use the same styles from T3.html -->
+    <style>
+    /* Copy all styles from T3.html template */
+    :root {
+            --primary: #4f46e5;
+            --primary-light: #818cf8;
+            --secondary: #0ea5e9;
+            --accent: #06b6d4;
+            --background: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .app-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            width: 100%;
+            flex: 1;
+        }
+
+        .calculator-nav {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+            scrollbar-width: none;
+        }
+
+        .calculator-nav::-webkit-scrollbar {
+            display: none;
+        }
+
+        .calc-tab {
+            padding: 1rem 1.5rem;
+            background: var(--card-bg);
+            border-radius: 12px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            color: var(--text-light);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .calc-tab.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+        }
+
+        .calc-tab:hover:not(.active) {
+            border-color: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .calculator-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .calculator-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: var(--background);
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .calc-button {
+            width: 100%;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .calc-button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .results-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-top: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .result-item {
+            padding: 1rem;
+            background: var(--background);
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .result-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .result-label {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .chart-container {
+            width: 100%;
+            height: 300px;
+            margin-top: 2rem;
+        }
+
+        .scenarios-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .scenario-card {
+            background: var(--background);
+            padding: 1rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .scenario-card:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        @media (max-width: 768px) {
+            .app-container {
+                padding: 1rem;
+            }
+
+            .calculator-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .result-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .scenarios-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* Animations */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: slideIn 0.3s ease forwards;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--background);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-light);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+
+        /* Previous CSS remains the same until media queries */
+
+        @media (max-width: 1024px) {
+            .app-container {
+                padding: 1rem;
+                width: 100%;
+                overflow-x: hidden;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .app-container {
+                padding: 0.5rem;
+            }
+
+            .calculator-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .calculator-card {
+                padding: 1rem;
+                width: 100%;
+                margin: 0;
+            }
+
+            .result-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .scenarios-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.5rem;
+            }
+
+            .card-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.5rem;
+            }
+
+            .input-group {
+                margin-bottom: 1rem;
+            }
+
+            .chart-container {
+                height: 250px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .calculator-nav {
+                padding: 0.5rem 0;
+                margin-bottom: 1rem;
+                gap: 0.5rem;
+            }
+
+            .calc-tab {
+                padding: 0.75rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .card-title {
+                font-size: 1.1rem;
+            }
+
+            .input-label {
+                font-size: 0.85rem;
+            }
+
+            .input-field {
+                padding: 0.5rem;
+                font-size: 0.9rem;
+            }
+
+            .result-value {
+                font-size: 1.25rem;
+            }
+
+            .result-label {
+                font-size: 0.8rem;
+            }
+
+            .scenarios-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .scenario-card {
+                padding: 0.75rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Fix horizontal scrolling issues */
+        body {
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        .calculator-nav {
+            max-width: 100vw;
+            margin: 0 auto;
+            padding-bottom: 0.5rem;
+        }
+
+        /* Ensure content doesn't overflow */
+        * {
+            max-width: 100%;
+        }
+
+        /* Make cards full width on mobile */
+        .calculator-card {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* Adjust chart responsiveness */
+        .chart-container {
+            width: 100% !important;
+            position: relative;
+            max-width: 100vw;
+        }
+
+        canvas {
+            max-width: 100% !important;
+            height: auto !important;
+        }    </style>
+</head>
+<body>
+    <div id="header-component"></div>
+    <div class="app-container">
+        <!-- Calculator Navigation -->
+        <div class="calculator-nav">
+            <div class="calc-tab">
+                <i class="fas fa-calculator"></i> Investment
+            </div>
+            <div class="calc-tab active">
+                <i class="fas fa-home"></i> Mortgage
+            </div>
+            <div class="calc-tab">
+                <i class="fas fa-coins"></i> Savings
+            </div>
+        </div>
+
+        <!-- Calculator Grid -->
+        <div class="calculator-grid">
+            <!-- Input Card -->
+            <div class="calculator-card animate-in">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <h2 class="card-title">Mortgage Calculator</h2>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Home Price ($)</label>
+                    <input type="number" class="input-field" id="homePrice" value="300000">
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Down Payment ($)</label>
+                    <input type="number" class="input-field" id="downPayment" value="60000">
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Interest Rate (%)</label>
+                    <input type="number" class="input-field" id="interestRate" value="6.5">
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Loan Term (Years)</label>
+                    <input type="number" class="input-field" id="loanTerm" value="30">
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Property Tax ($/year)</label>
+                    <input type="number" class="input-field" id="propertyTax" value="3600">
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Insurance ($/year)</label>
+                    <input type="number" class="input-field" id="insurance" value="1200">
+                </div>
+
+                <button class="calc-button" onclick="calculateMortgage()">
+                    Calculate <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+
+            <!-- Results Card -->
+            <div class="calculator-card animate-in" style="animation-delay: 0.1s;">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <h2 class="card-title">Results & Analysis</h2>
+                </div>
+
+                <div class="result-grid">
+                    <div class="result-item">
+                        <div class="result-value" id="monthlyPI">\$0</div>
+                        <div class="result-label">Monthly P&I</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-value" id="monthlyPITI">\$0</div>
+                        <div class="result-label">Monthly PITI</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-value" id="totalInterest">\$0</div>
+                        <div class="result-label">Total Interest</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-value" id="totalCost">\$0</div>
+                        <div class="result-label">Total Cost</div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="paymentChart"></canvas>
+                </div>
+
+                <h3 style="margin: 1.5rem 0 1rem;">Common Scenarios</h3>
+                <div class="scenarios-grid">
+                    <div class="scenario-card" onclick="loadScenario('firstTime')">
+                        First-Time Buyer
+                    </div>
+                    <div class="scenario-card" onclick="loadScenario('conventional')">
+                        Conventional
+                    </div>
+                    <div class="scenario-card" onclick="loadScenario('jumbo')">
+                        Jumbo Loan
+                    </div>
+                    <div class="scenario-card" onclick="loadScenario('va')">
+                        VA Loan
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="footer-component"></div>
+
+    <script>
+        function loadScenario(type) {
+    const scenarios = {
+        firstTime: {
+            homePrice: 300000,
+            downPayment: 10500, // 3.5% down
+            interestRate: 7.0,
+            loanTerm: 30,
+            propertyTax: 3600,
+            insurance: 1800 // Higher due to PMI
+        },
+        conventional: {
+            homePrice: 400000,
+            downPayment: 80000, // 20% down
+            interestRate: 6.5,
+            loanTerm: 30,
+            propertyTax: 4800,
+            insurance: 1200
+        },
+        jumbo: {
+            homePrice: 800000,
+            downPayment: 160000, // 20% down
+            interestRate: 6.8, // Slightly higher for jumbo
+            loanTerm: 30,
+            propertyTax: 9600,
+            insurance: 2400
+        },
+        va: {
+            homePrice: 400000,
+            downPayment: 0, // 0% down
+            interestRate: 6.25, // Often lower for VA
+            loanTerm: 30,
+            propertyTax: 4800,
+            insurance: 1000
+        },
+        refinance: {
+            homePrice: 350000,
+            downPayment: 70000,
+            interestRate: 5.5, // Lower refinance rate
+            loanTerm: 30,
+            propertyTax: 4200,
+            insurance: 1100
+        },
+        fifteenYear: {
+            homePrice: 350000,
+            downPayment: 70000, // 20% down
+            interestRate: 5.75, // Lower for 15-year
+            loanTerm: 15,
+            propertyTax: 4200,
+            insurance: 1100
+        },
+        investment: {
+            homePrice: 250000,
+            downPayment: 62500, // 25% down
+            interestRate: 7.5, // Higher for investment
+            loanTerm: 30,
+            propertyTax: 3000,
+            insurance: 1500
+        },
+        condo: {
+            homePrice: 200000,
+            downPayment: 20000, // 10% down
+            interestRate: 6.75,
+            loanTerm: 30,
+            propertyTax: 2400,
+            insurance: 1000
+        }
+    };
+
+    const scenario = scenarios[type];
+    if (scenario) {
+        Object.keys(scenario).forEach(key => {
+            document.getElementById(key).value = scenario[key];
+        });
+        calculateMortgage();
+    }
+}
+
+
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(value);
+        }
+
+        function validateInputs(values) {
+            const { homePrice, downPayment, interestRate, loanTerm } = values;
+
+            if (homePrice <= 0) {
+                alert('Home price must be greater than 0');
+                return false;
+            }
+            if (downPayment < 0 || downPayment >= homePrice) {
+                alert('Down payment must be between 0 and home price');
+                return false;
+            }
+            if (interestRate <= 0 || interestRate >= 30) {
+                alert('Interest rate must be between 0 and 30');
+                return false;
+            }
+            if (loanTerm <= 0 || loanTerm > 50) {
+                alert('Loan term must be between 1 and 50 years');
+                return false;
+            }
+            return true;
+        }
+
+        function calculateMortgage() {
+            const values = {
+                homePrice: parseFloat(document.getElementById('homePrice').value) || 0,
+                downPayment: parseFloat(document.getElementById('downPayment').value) || 0,
+                interestRate: parseFloat(document.getElementById('interestRate').value) || 0,
+                loanTerm: parseFloat(document.getElementById('loanTerm').value) || 0,
+                propertyTax: parseFloat(document.getElementById('propertyTax').value) || 0,
+                insurance: parseFloat(document.getElementById('insurance').value) || 0
+            };
+
+            if (!validateInputs(values)) return;
+
+            try {
+                const loanAmount = values.homePrice - values.downPayment;
+                const monthlyRate = (values.interestRate / 100) / 12;
+                const numberOfPayments = values.loanTerm * 12;
+
+                const monthlyPI = loanAmount * 
+                    (monthlyRate * Math.pow(1 + monthlyRate, numberOfPayments)) / 
+                    (Math.pow(1 + monthlyRate, numberOfPayments) - 1);
+
+                const monthlyTax = values.propertyTax / 12;
+                const monthlyInsurance = values.insurance / 12;
+                const monthlyPITI = monthlyPI + monthlyTax + monthlyInsurance;
+                const totalInterest = (monthlyPI * numberOfPayments) - loanAmount;
+                const totalCost = (monthlyPITI * numberOfPayments) + values.downPayment;
+
+                document.getElementById('monthlyPI').textContent = formatCurrency(monthlyPI);
+                document.getElementById('monthlyPITI').textContent = formatCurrency(monthlyPITI);
+                document.getElementById('totalInterest').textContent = formatCurrency(totalInterest);
+                document.getElementById('totalCost').textContent = formatCurrency(totalCost);
+
+                createChart(loanAmount, totalInterest, values.propertyTax, values.insurance, values.loanTerm);
+            } catch (error) {
+                console.error('Calculation error:', error);
+                alert('An error occurred during calculation. Please check your inputs.');
+            }
+        }
+    // Update the chart creation function to use Chart.js instead of Plotly
+    function createChart(principal, totalInterest, annualTax, annualInsurance, term) {
+        const ctx = document.getElementById('paymentChart').getContext('2d');
+        const taxInsurance = (annualTax + annualInsurance) * term;
+
+        if (window.mortgageChart) {
+            window.mortgageChart.destroy();
+        }
+
+        window.mortgageChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Principal', 'Interest', 'Tax & Insurance'],
+                datasets: [{
+                    data: [principal, totalInterest, taxInsurance],
+                    backgroundColor: ['#4f46e5', '#0ea5e9', '#10b981']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    }
+    </script>
+</body>
+</html>

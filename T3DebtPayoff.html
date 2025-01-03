@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debt Payoff Calculator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="assets/components.js"></script>
+    <link rel="stylesheet" href="assets/common.css">
+    <link rel="stylesheet" href="T3Styles.css">
+
+    <!-- Include all the CSS from the template you provided -->
+    <style>
+        /* Copy all the CSS from your template */
+
+        /* Additional styles for debt calculator */
+        .debt-list {
+            background: var(--background);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .debt-header {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 40px;
+            gap: 1rem;
+            padding: 0.5rem;
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        .debt-item {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 40px;
+            gap: 1rem;
+            padding: 0.5rem;
+            align-items: center;
+        }
+
+        .remove-debt {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: none;
+            background: var(--error);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .add-debt {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 1.5rem;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="header-component"></div>
+    <div class="app-container">
+        <!-- Calculator Navigation -->
+        <div class="calculator-nav">
+            <div class="calc-tab">
+                <i class="fas fa-calculator"></i> Investment
+            </div>
+            <div class="calc-tab">
+                <i class="fas fa-home"></i> Mortgage
+            </div>
+            <div class="calc-tab active">
+                <i class="fas fa-file-invoice-dollar"></i> Debt Payoff
+            </div>
+        </div>
+
+        <!-- Calculator Grid -->
+        <div class="calculator-grid">
+            <!-- Input Card -->
+            <div class="calculator-card animate-in">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                    </div>
+                    <h2 class="card-title">Debt Payoff Calculator</h2>
+                </div>
+
+                <div class="debt-list" id="debtList">
+                    <div class="debt-header">
+                        <div>Debt Name</div>
+                        <div>Balance ($)</div>
+                        <div>Rate (%)</div>
+                        <div>Payment ($)</div>
+                        <div></div>
+                    </div>
+                    <div class="debt-item">
+                        <input type="text" class="input-field debt-name" placeholder="e.g., Credit Card 1">
+                        <input type="number" class="input-field debt-balance" placeholder="0">
+                        <input type="number" class="input-field debt-rate" placeholder="0">
+                        <input type="number" class="input-field debt-payment" placeholder="0">
+                        <button class="remove-debt">×</button>
+                    </div>
+                </div>
+
+                <button class="add-debt" id="addDebtBtn">
+                    <i class="fas fa-plus"></i> Add Another Debt
+                </button>
+
+                <div class="input-group">
+                    <label class="input-label">Repayment Strategy</label>
+                    <select class="input-field" id="strategy">
+                        <option value="avalanche">Debt Avalanche (Highest Interest First)</option>
+                        <option value="snowball">Debt Snowball (Lowest Balance First)</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Extra Monthly Payment ($)</label>
+                    <input type="number" class="input-field" id="extraPayment" value="0">
+                </div>
+
+                <button class="calc-button" onclick="calculate()">
+                    Calculate Plan <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+
+            <!-- Results Card -->
+            <div class="calculator-card animate-in" style="animation-delay: 0.1s;">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <h2 class="card-title">Results & Analysis</h2>
+                </div>
+
+                <div class="result-grid">
+                    <div class="result-item">
+                        <div class="result-value" id="totalDebt">\$0</div>
+                        <div class="result-label">Total Debt</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-value" id="totalInterest">\$0</div>
+                        <div class="result-label">Total Interest</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-value" id="monthsToFree">0</div>
+                        <div class="result-label">Months to Debt-Free</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-value" id="debtFreeDate">-</div>
+                        <div class="result-label">Debt-Free Date</div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="payoffChart"></canvas>
+                </div>
+
+                <h3 style="margin: 1.5rem 0 1rem;">Common Scenarios</h3>
+                <div class="scenarios-grid">
+                    <div class="scenario-card" onclick="loadScenario('creditCards')">
+                        Credit Cards
+                    </div>
+                    <div class="scenario-card" onclick="loadScenario('studentLoans')">
+                        Student Loans
+                    </div>
+                    <div class="scenario-card" onclick="loadScenario('mixedDebt')">
+                        Mixed Debt
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="footer-component"></div>
+
+    <script>
+
+let payoffChart;
+
+function calculate() {
+    // Get all debt inputs
+    const debts = [];
+    const debtItems = document.querySelectorAll('.debt-item');
+    
+    debtItems.forEach(item => {
+        const name = item.querySelector('.debt-name').value;
+        const balance = parseFloat(item.querySelector('.debt-balance').value) || 0;
+        const rate = parseFloat(item.querySelector('.debt-rate').value) || 0;
+        const payment = parseFloat(item.querySelector('.debt-payment').value) || 0;
+        
+        if (balance > 0) {
+            debts.push({ name, balance, rate, payment });
+        }
+    });
+
+    const strategy = document.getElementById('strategy').value;
+    const extraPayment = parseFloat(document.getElementById('extraPayment').value) || 0;
+
+    // Calculate payoff schedule
+    const payoffSchedule = calculatePayoffSchedule(debts, strategy, extraPayment);
+    
+    // Update results
+    updateResults(payoffSchedule);
+    
+    // Update charts
+    updatePayoffChart(payoffSchedule);
+    updatePaymentBreakdownChart(payoffSchedule);
+}
+
+function calculatePayoffSchedule(debts, strategy, extraPayment) {
+    let schedule = [];
+    let totalDebt = debts.reduce((sum, debt) => sum + debt.balance, 0);
+    let monthlyPayment = debts.reduce((sum, debt) => sum + debt.payment, 0) + extraPayment;
+    
+    // Sort debts based on strategy
+    if (strategy === 'avalanche') {
+        debts.sort((a, b) => b.rate - a.rate);
+    } else {
+        debts.sort((a, b) => a.balance - b.balance);
+    }
+
+    let month = 0;
+    let currentBalances = debts.map(debt => debt.balance);
+    
+    while (currentBalances.some(balance => balance > 0) && month < 360) {
+        let monthData = {
+            month: month,
+            totalBalance: currentBalances.reduce((sum, balance) => sum + balance, 0),
+            balances: [...currentBalances],
+            interestPaid: 0,
+            principalPaid: 0
+        };
+
+        // Calculate interest and apply payments
+        debts.forEach((debt, index) => {
+            if (currentBalances[index] > 0) {
+                let interest = (currentBalances[index] * (debt.rate / 100)) / 12;
+                monthData.interestPaid += interest;
+                currentBalances[index] += interest;
+                
+                let payment = debt.payment;
+                if (index === 0) payment += extraPayment; // Apply extra payment to first debt
+                
+                if (payment > currentBalances[index]) {
+                    payment = currentBalances[index];
+                }
+                
+                currentBalances[index] -= payment;
+                monthData.principalPaid += payment - interest;
+            }
+        });
+
+        schedule.push(monthData);
+        month++;
+    }
+
+    return schedule;
+}
+
+function updateResults(schedule) {
+    const lastMonth = schedule[schedule.length - 1];
+    const totalInterest = schedule.reduce((sum, month) => sum + month.interestPaid, 0);
+    const totalPrincipal = schedule.reduce((sum, month) => sum + month.principalPaid, 0);
+    
+    document.getElementById('totalDebt').textContent = formatCurrency(schedule[0].totalBalance);
+    document.getElementById('totalInterest').textContent = formatCurrency(totalInterest);
+    document.getElementById('monthsToFree').textContent = schedule.length;
+    
+    const debtFreeDate = new Date();
+    debtFreeDate.setMonth(debtFreeDate.getMonth() + schedule.length);
+    document.getElementById('debtFreeDate').textContent = debtFreeDate.toLocaleDateString('en-US', {
+        month: 'long',
+        year: 'numeric'
+    });
+}
+
+function updatePayoffChart(schedule) {
+    const ctx = document.getElementById('payoffChart').getContext('2d');
+    
+    if (payoffChart) {
+        payoffChart.destroy();
+    }
+
+    payoffChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: schedule.map(data => `Month ${data.month}`),
+            datasets: [{
+                label: 'Total Debt Balance',
+                data: schedule.map(data => data.totalBalance),
+                borderColor: '#4f46e5',
+                backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Debt Payoff Progress'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: value => formatCurrency(value)
+                    }
+                }
+            }
+        }
+    });
+}
+
+// Preset scenarios
+function loadScenario(type) {
+    const scenarios = {
+        creditCards: {
+            debts: [
+                { name: "Credit Card 1", balance: 5000, rate: 19.99, payment: 150 },
+                { name: "Credit Card 2", balance: 3000, rate: 24.99, payment: 100 }
+            ],
+            extraPayment: 200,
+            strategy: 'avalanche'
+        },
+        studentLoans: {
+            debts: [
+                { name: "Federal Loan", balance: 20000, rate: 4.5, payment: 220 },
+                { name: "Private Loan", balance: 15000, rate: 6.8, payment: 180 }
+            ],
+            extraPayment: 300,
+            strategy: 'avalanche'
+        },
+        mixedDebt: {
+            debts: [
+                { name: "Credit Card", balance: 4000, rate: 22.99, payment: 120 },
+                { name: "Car Loan", balance: 12000, rate: 5.9, payment: 300 },
+                { name: "Personal Loan", balance: 8000, rate: 12.5, payment: 200 }
+            ],
+            extraPayment: 250,
+            strategy: 'snowball'
+        }
+    };
+
+    const scenario = scenarios[type];
+    if (!scenario) return;
+
+    // Clear existing debt items
+    const debtList = document.getElementById('debtList');
+    const template = debtList.querySelector('.debt-item');
+    while (debtList.children.length > 2) { // Keep header and template
+        debtList.removeChild(debtList.lastChild);
+    }
+
+    // Add scenario debts
+    scenario.debts.forEach(debt => {
+        const newDebt = template.cloneNode(true);
+        newDebt.querySelector('.debt-name').value = debt.name;
+        newDebt.querySelector('.debt-balance').value = debt.balance;
+        newDebt.querySelector('.debt-rate').value = debt.rate;
+        newDebt.querySelector('.debt-payment').value = debt.payment;
+        debtList.appendChild(newDebt);
+    });
+
+    document.getElementById('strategy').value = scenario.strategy;
+    document.getElementById('extraPayment').value = scenario.extraPayment;
+
+    calculate();
+}
+
+function formatCurrency(value) {
+    return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    }).format(value);
+}
+
+// Add debt button functionality
+document.getElementById('addDebtBtn').addEventListener('click', () => {
+    const debtList = document.getElementById('debtList');
+    const template = debtList.querySelector('.debt-item');
+    const newDebt = template.cloneNode(true);
+    
+    // Clear the values
+    newDebt.querySelectorAll('input').forEach(input => input.value = '');
+    debtList.appendChild(newDebt);
+});
+
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+    calculate();
+});
+        // Add tab switching functionality
+        document.querySelectorAll('.calc-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelector('.calc-tab.active').classList.remove('active');
+                tab.classList.add('active');
+            });
+        });
+
+        // Initialize calculator on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Load initial scenario
+            loadScenario('creditCards');
+        });
+    </script>
+</body>
+</html>
