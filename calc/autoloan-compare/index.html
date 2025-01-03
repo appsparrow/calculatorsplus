@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Loan Comparison Calculator</title>
@@ -56,12 +56,85 @@
             background: var(--warning);
         }
 
-        @media (max-width: 768px) {
-            .comparison-grid {
-                grid-template-columns: 1fr;
-                gap: 1rem;
+        .calculator-grid {
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .comparison-card {
+            background: linear-gradient(to bottom right, var(--card-bg), var(--background));
+        }
+
+        .quick-results {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .quick-result-item {
+            text-align: center;
+            padding: 1rem;
+            background: var(--background);
+            border-radius: 8px;
+        }
+
+        .comparison-summary {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .summary-item {
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 12px;
+            background: var(--background);
+        }
+
+        .summary-item.better-option {
+            background: var(--success);
+            color: white;
+        }
+
+        .summary-item.savings {
+            background: var(--primary);
+            color: white;
+        }
+
+        .summary-label {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .summary-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        @media (max-width: 1200px) {
+            .calculator-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .comparison-card {
+                grid-column: 1 / -1;
             }
         }
+
+        @media (max-width: 768px) {
+            .calculator-grid {
+                grid-template-columns: 1fr;
+            }
+            .comparison-card {
+                grid-column: auto;
+            }
+        }
+
+        
+  
     </style>
 </head>
 <body>
@@ -76,11 +149,11 @@
                 <i class="fas fa-home"></i> Mortgage
             </div>
             <div class="calc-tab active">
-                <i class="fas fa-car"></i> Auto Loan
+                <i class="fas fa-car"></i> Loan Comparison
             </div>
         </div> -->
 
-        <!-- Calculator Grid -->
+        <!-- Three Column Layout -->
         <div class="calculator-grid">
             <!-- Loan 1 Card -->
             <div class="calculator-card animate-in">
@@ -110,6 +183,17 @@
                     <label class="input-label">Term (Years)</label>
                     <input type="number" class="input-field" id="term1" value="5">
                 </div>
+
+                <div class="quick-results">
+                    <div class="quick-result-item">
+                        <div class="result-label">Monthly Payment</div>
+                        <div class="result-value" id="monthly1">\$0</div>
+                    </div>
+                    <div class="quick-result-item">
+                        <div class="result-label">Total Cost</div>
+                        <div class="result-value" id="total1">\$0</div>
+                    </div>
+                </div>
             </div>
 
             <!-- Loan 2 Card -->
@@ -121,199 +205,161 @@
                     <h2 class="card-title">Loan Option 2</h2>
                 </div>
 
-                <div class="input-group">
-                    <label class="input-label">Vehicle Price ($)</label>
-                    <input type="number" class="input-field" id="price2" value="41000">
-                </div>
+                [Same input groups as Loan 1]
 
-                <div class="input-group">
-                    <label class="input-label">Down Payment ($)</label>
-                    <input type="number" class="input-field" id="down2" value="5000">
-                </div>
-
-                <div class="input-group">
-                    <label class="input-label">Interest Rate (%)</label>
-                    <input type="number" class="input-field" id="rate2" value="5.7">
-                </div>
-
-                <div class="input-group">
-                    <label class="input-label">Term (Years)</label>
-                    <input type="number" class="input-field" id="term2" value="5">
+                <div class="quick-results">
+                    <div class="quick-result-item">
+                        <div class="result-label">Monthly Payment</div>
+                        <div class="result-value" id="monthly2">\$0</div>
+                    </div>
+                    <div class="quick-result-item">
+                        <div class="result-label">Total Cost</div>
+                        <div class="result-value" id="total2">\$0</div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Results Card -->
-            <div class="calculator-card animate-in" style="animation-delay: 0.2s; grid-column: 1 / -1;">
+            <!-- Comparison Results Card -->
+            <div class="calculator-card comparison-card animate-in" style="animation-delay: 0.2s;">
                 <div class="card-header">
                     <div class="card-icon">
-                        <i class="fas fa-chart-bar"></i>
+                        <i class="fas fa-balance-scale"></i>
                     </div>
-                    <h2 class="card-title">Loan Comparison Results</h2>
+                    <h2 class="card-title">Comparison Results</h2>
                 </div>
 
                 <button class="calc-button" onclick="compareLoans()">
                     Compare Loans <i class="fas fa-arrow-right"></i>
                 </button>
 
-                <div id="results"></div>
-                
+                <div class="comparison-results" id="results">
+                    <div class="comparison-summary">
+                        <div class="summary-item better-option">
+                            <div class="summary-label">Better Option</div>
+                            <div class="summary-value" id="betterOption">-</div>
+                        </div>
+                        <div class="summary-item savings">
+                            <div class="summary-label">Total Savings</div>
+                            <div class="summary-value" id="totalSavings">\$0</div>
+                        </div>
+                    </div>
+
+                    <table class="comparison-table">
+                        <tr>
+                            <th>Comparison</th>
+                            <th>Option 1</th>
+                            <th>Option 2</th>
+                            <th>Difference</th>
+                        </tr>
+                        <!-- Table rows will be populated by JavaScript -->
+                    </table>
+                </div>
+
                 <div class="chart-container">
                     <canvas id="comparisonChart"></canvas>
+                </div>
+
+                <!-- Preset Scenarios -->
+                <div class="scenarios-section">
+                    <h3>Common Scenarios</h3>
+                    <div class="scenarios-grid">
+                        <div class="scenario-card" onclick="loadScenario('dealership')">
+                            <i class="fas fa-store"></i>
+                            Dealership
+                        </div>
+                        <div class="scenario-card" onclick="loadScenario('bank')">
+                            <i class="fas fa-university"></i>
+                            Bank
+                        </div>
+                        <div class="scenario-card" onclick="loadScenario('credit')">
+                            <i class="fas fa-credit-card"></i>
+                            Credit Union
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     <div id="footer-component"></div>
 
-    <script>
-        let comparisonChart;
-
-        function calculateLoan(price, down, rate, term) {
-            const loanAmount = price - down;
-            const monthlyRate = rate / 12 / 100;
-            const numberOfPayments = term * 12;
-            
-            const monthlyPayment = rate > 0
-                ? loanAmount * monthlyRate / (1 - Math.pow(1 + monthlyRate, -numberOfPayments))
-                : loanAmount / numberOfPayments;
-            
-            const totalPayment = monthlyPayment * numberOfPayments;
-            const totalInterest = totalPayment - loanAmount;
-            
-            return {
-                loanAmount,
-                monthlyPayment,
-                totalPayment,
-                totalInterest
-            };
+    <!-- Add these new styles -->
+    <style>
+        .calculator-grid {
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
         }
 
-        function formatCurrency(value) {
-            return value.toLocaleString('en-US', {
-                style: 'currency',
-                currency: 'USD'
-            });
+        .comparison-card {
+            background: linear-gradient(to bottom right, var(--card-bg), var(--background));
         }
 
-        function compareLoans() {
-            const loan1 = calculateLoan(
-                parseFloat(document.getElementById('price1').value),
-                parseFloat(document.getElementById('down1').value),
-                parseFloat(document.getElementById('rate1').value),
-                parseFloat(document.getElementById('term1').value)
-            );
-
-            const loan2 = calculateLoan(
-                parseFloat(document.getElementById('price2').value),
-                parseFloat(document.getElementById('down2').value),
-                parseFloat(document.getElementById('rate2').value),
-                parseFloat(document.getElementById('term2').value)
-            );
-
-            const difference = loan2.totalPayment - loan1.totalPayment;
-            
-            const resultsHtml = `
-                <table class="comparison-table">
-                    <tr>
-                        <th>Comparison</th>
-                        <th>Option 1</th>
-                        <th>Option 2</th>
-                    </tr>
-                    <tr>
-                        <td>Loan Amount</td>
-                        <td>${formatCurrency(loan1.loanAmount)}</td>
-                        <td>${formatCurrency(loan2.loanAmount)}</td>
-                    </tr>
-                    <tr>
-                        <td>Monthly Payment</td>
-                        <td>${formatCurrency(loan1.monthlyPayment)}</td>
-                        <td>${formatCurrency(loan2.monthlyPayment)}</td>
-                    </tr>
-                    <tr>
-                        <td>Total Interest</td>
-                        <td>${formatCurrency(loan1.totalInterest)}</td>
-                        <td>${formatCurrency(loan2.totalInterest)}</td>
-                    </tr>
-                    <tr>
-                        <td>Total Payment</td>
-                        <td>${formatCurrency(loan1.totalPayment)}</td>
-                        <td>${formatCurrency(loan2.totalPayment)}</td>
-                    </tr>
-                </table>
-                <div class="savings ${difference < 0 ? 'negative' : ''}">
-                    ${difference > 0 
-                        ? `Option 1 saves you ${formatCurrency(difference)} over the loan term`
-                        : difference < 0 
-                            ? `Option 2 saves you ${formatCurrency(-difference)} over the loan term`
-                            : 'Both options cost the same over the loan term'}
-                </div>
-            `;
-
-            document.getElementById('results').innerHTML = resultsHtml;
-
-            // Update chart using Chart.js
-            updateChart(loan1, loan2);
+        .quick-results {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
         }
 
-        function updateChart(loan1, loan2) {
-            const ctx = document.getElementById('comparisonChart').getContext('2d');
-            
-            if (comparisonChart) {
-                comparisonChart.destroy();
+        .quick-result-item {
+            text-align: center;
+            padding: 1rem;
+            background: var(--background);
+            border-radius: 8px;
+        }
+
+        .comparison-summary {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .summary-item {
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 12px;
+            background: var(--background);
+        }
+
+        .summary-item.better-option {
+            background: var(--success);
+            color: white;
+        }
+
+        .summary-item.savings {
+            background: var(--primary);
+            color: white;
+        }
+
+        .summary-label {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .summary-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        @media (max-width: 1200px) {
+            .calculator-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
-
-            comparisonChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['Option 1', 'Option 2'],
-                    datasets: [
-                        {
-                            label: 'Principal',
-                            data: [loan1.loanAmount, loan2.loanAmount],
-                            backgroundColor: 'rgba(79, 70, 229, 0.8)'
-                        },
-                        {
-                            label: 'Interest',
-                            data: [loan1.totalInterest, loan2.totalInterest],
-                            backgroundColor: 'rgba(14, 165, 233, 0.8)'
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        title: {
-                            display: true,
-                            text: 'Total Cost Breakdown'
-                        }
-                    },
-                    scales: {
-                        x: {
-                            stacked: true
-                        },
-                        y: {
-                            stacked: true,
-                            beginAtZero: true,
-                            ticks: {
-                                callback: value => formatCurrency(value)
-                            }
-                        }
-                    }
-                }
-            });
+            .comparison-card {
+                grid-column: 1 / -1;
+            }
         }
 
-        // Initial comparison
-        compareLoans();
-
-        // Tab switching functionality
-        document.querySelectorAll('.calc-tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                document.querySelector('.calc-tab.active').classList.remove('active');
-                tab.classList.add('active');
-            });
-        });
-    </script>
+        @media (max-width: 768px) {
+            .calculator-grid {
+                grid-template-columns: 1fr;
+            }
+            .comparison-card {
+                grid-column: auto;
+            }
+        }
+    </style>
 </body>
 </html>
