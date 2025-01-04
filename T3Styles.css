@@ -34,7 +34,7 @@ body {
 
 .app-container {
     max-width: 1400px;
-    margin: 80px auto;
+    margin: 70px auto;
     padding: 2rem;
     width: 100%;
     flex: 1;
@@ -78,7 +78,7 @@ body {
 
 .calculator-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 2fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 2rem;
 }
 
