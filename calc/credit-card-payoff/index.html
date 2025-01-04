@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,6 +13,7 @@
 
 
 </head>
+
 <body>
     <div id="header-component"></div>
     <div class="app-container">
@@ -102,47 +104,47 @@
                 </div>
 
                 <!-- Replace the existing scenarios-grid div with this -->
-<div class="scenarios-grid">
-    <div class="scenario-card" onclick="loadScenario('extraPayment')">
-        <i class="fas fa-plus-circle"></i>
-        <div class="scenario-title">Extra Payment</div>
-        <div class="scenario-content" id="extraPayment">
-            <p>New payoff time: <span class="time">-</span></p>
-            <p>Interest saved: <span class="savings">-</span></p>
-            <p>Months saved: <span class="months">-</span></p>
-        </div>
-    </div>
+                <div class="scenarios-grid">
+                    <div class="scenario-card" onclick="loadScenario('extraPayment')">
+                        <i class="fas fa-plus-circle"></i>
+                        <div class="scenario-title">Extra Payment</div>
+                        <div class="scenario-content" id="extraPayment">
+                            <p>New payoff time: <span class="time">-</span></p>
+                            <p>Interest saved: <span class="savings">-</span></p>
+                            <p>Months saved: <span class="months">-</span></p>
+                        </div>
+                    </div>
 
-    <div class="scenario-card" onclick="loadScenario('lumpSum')">
-        <i class="fas fa-money-bill-wave"></i>
-        <div class="scenario-title">Lump Sum</div>
-        <div class="scenario-content" id="lumpSum">
-            <p>New payoff time: <span class="time">-</span></p>
-            <p>Interest saved: <span class="savings">-</span></p>
-            <p>Months saved: <span class="months">-</span></p>
-        </div>
-    </div>
+                    <div class="scenario-card" onclick="loadScenario('lumpSum')">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <div class="scenario-title">Lump Sum</div>
+                        <div class="scenario-content" id="lumpSum">
+                            <p>New payoff time: <span class="time">-</span></p>
+                            <p>Interest saved: <span class="savings">-</span></p>
+                            <p>Months saved: <span class="months">-</span></p>
+                        </div>
+                    </div>
 
-    <div class="scenario-card" onclick="loadScenario('accelerated')">
-        <i class="fas fa-fast-forward"></i>
-        <div class="scenario-title">Accelerated</div>
-        <div class="scenario-content" id="accelerated">
-            <p>New payoff time: <span class="time">-</span></p>
-            <p>Interest saved: <span class="savings">-</span></p>
-            <p>Months saved: <span class="months">-</span></p>
-        </div>
-    </div>
+                    <div class="scenario-card" onclick="loadScenario('accelerated')">
+                        <i class="fas fa-fast-forward"></i>
+                        <div class="scenario-title">Accelerated</div>
+                        <div class="scenario-content" id="accelerated">
+                            <p>New payoff time: <span class="time">-</span></p>
+                            <p>Interest saved: <span class="savings">-</span></p>
+                            <p>Months saved: <span class="months">-</span></p>
+                        </div>
+                    </div>
 
-    <div class="scenario-card" onclick="loadScenario('debtAvalanche')">
-        <i class="fas fa-snowflake"></i>
-        <div class="scenario-title">Debt Avalanche</div>
-        <div class="scenario-content" id="debtAvalanche">
-            <p>New payoff time: <span class="time">-</span></p>
-            <p>Interest saved: <span class="savings">-</span></p>
-            <p>Months saved: <span class="months">-</span></p>
-        </div>
-    </div>
-</div>
+                    <div class="scenario-card" onclick="loadScenario('debtAvalanche')">
+                        <i class="fas fa-snowflake"></i>
+                        <div class="scenario-title">Debt Avalanche</div>
+                        <div class="scenario-content" id="debtAvalanche">
+                            <p>New payoff time: <span class="time">-</span></p>
+                            <p>Interest saved: <span class="savings">-</span></p>
+                            <p>Months saved: <span class="months">-</span></p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -204,39 +206,39 @@
         }
 
         .scenario-card {
-    background: var(--background);
-    padding: 1.5rem;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
+            background: var(--background);
+            padding: 1.5rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
 
-.scenario-card i {
-    font-size: 1.5rem;
-    color: var(--primary);
-    margin-bottom: 0.5rem;
-}
+        .scenario-card i {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
 
-.scenario-title {
-    font-weight: 600;
-    margin-bottom: 1rem;
-}
+        .scenario-title {
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
 
-.scenario-content {
-    font-size: 0.9rem;
-    color: var(--text-light);
-}
+        .scenario-content {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
 
-.scenario-content p {
-    display: flex;
-    justify-content: space-between;
-    margin: 0.5rem 0;
-}
+        .scenario-content p {
+            display: flex;
+            justify-content: space-between;
+            margin: 0.5rem 0;
+        }
 
-.scenario-content span {
-    color: var(--primary);
-    font-weight: 500;
-}
+        .scenario-content span {
+            color: var(--primary);
+            font-weight: 500;
+        }
 
 
 
@@ -249,276 +251,312 @@
 
     <script>
         class CreditCardCalculator {
-    constructor() {
-        this.chart = null;
-        this.initializeEventListeners();
-        this.initializeChart();
-    }
-
-    initializeEventListeners() {
-        document.getElementById('calculateBtn').addEventListener('click', () => this.calculate());
-        
-        // Input validation
-        ['balance', 'apr', 'payment'].forEach(id => {
-            const input = document.getElementById(id);
-            input.addEventListener('input', () => this.validateInput(input));
-        });
-
-        // Scenario inputs
-        document.getElementById('extraMonthlyInput').addEventListener('input', (e) => {
-            this.recalculateScenario('extra', parseFloat(e.target.value));
-        });
-
-        document.getElementById('lumpSumInput').addEventListener('input', (e) => {
-            this.recalculateScenario('lump', parseFloat(e.target.value));
-        });
-    }
-
-    validateInput(input) {
-        const value = parseFloat(input.value);
-        if (isNaN(value) || value < 0) {
-            input.classList.add('error');
-            return false;
-        }
-        input.classList.remove('error');
-        return true;
-    }
-
-    formatCurrency(amount) {
-        return new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD',
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0
-        }).format(amount);
-    }
-
-    calculateAmortization(balance, annualRate, monthlyPayment) {
-        const monthlyRate = annualRate / 100 / 12;
-        let currentBalance = balance;
-        let month = 0;
-        let totalInterest = 0;
-        const schedule = [];
-
-        while (currentBalance > 0 && month < 360) {
-            const monthlyInterest = currentBalance * monthlyRate;
-            const principalPayment = Math.min(monthlyPayment - monthlyInterest, currentBalance);
-
-            if (monthlyPayment <= monthlyInterest) {
-                throw new Error("Payment too small to cover monthly interest.");
+            constructor() {
+                this.chart = null;
+                // Initialize immediately when constructed
+                this.initializeChart();
+                this.initializeEventListeners();
+                // Calculate initial results
+                this.calculate();
             }
 
-            totalInterest += monthlyInterest;
-            currentBalance -= principalPayment;
+            initializeEventListeners() {
+                document.getElementById('calculateBtn').addEventListener('click', () => this.calculate());
 
-            schedule.push({
-                month: month + 1,
-                balance: Math.max(0, currentBalance),
-                interest: monthlyInterest,
-                principal: principalPayment
-            });
+                // Input validation
+                ['balance', 'apr', 'payment'].forEach(id => {
+                    const input = document.getElementById(id);
+                    input.addEventListener('input', () => this.validateInput(input));
+                });
+            }
 
-            month++;
-        }
+            calculateScenarios(balance, apr, payment) {
+                const baseResult = this.calculateAmortization(balance, apr, payment);
 
-        return {
-            months: month,
-            totalInterest: totalInterest,
-            totalPaid: balance + totalInterest,
-            schedule: schedule
-        };
-    }
+                // Extra Payment Scenario
+                try {
+                    const extraAmount = 100;
+                    const extraPaymentResult = this.calculateAmortization(balance, apr, payment + extraAmount);
+                    this.updateScenarioResults('extraPayment', baseResult, extraPaymentResult);
+                } catch (error) {
+                    this.clearScenarioResults('extraPayment');
+                }
 
-    initializeChart() {
-        const ctx = document.getElementById('payoffChart').getContext('2d');
-        this.chart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: [],
-                datasets: [{
-                    label: 'Balance',
-                    data: [],
-                    borderColor: 'var(--primary)',
-                    backgroundColor: 'rgba(79, 70, 229, 0.1)',
-                    fill: true,
-                    tension: 0.4
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            callback: value => this.formatCurrency(value)
-                        }
-                    }
+                // Lump Sum Scenario
+                try {
+                    const lumpSum = balance * 0.2;
+                    const lumpSumResult = this.calculateAmortization(balance - lumpSum, apr, payment);
+                    this.updateScenarioResults('lumpSum', baseResult, lumpSumResult);
+                } catch (error) {
+                    this.clearScenarioResults('lumpSum');
+                }
+
+                // Accelerated Scenario
+                try {
+                    const acceleratedResult = this.calculateAmortization(balance, apr, payment * 1.5);
+                    this.updateScenarioResults('accelerated', baseResult, acceleratedResult);
+                } catch (error) {
+                    this.clearScenarioResults('accelerated');
+                }
+
+                // Debt Avalanche Scenario
+                try {
+                    const avalancheResult = this.calculateAmortization(balance, apr, payment * 2);
+                    this.updateScenarioResults('debtAvalanche', baseResult, avalancheResult);
+                } catch (error) {
+                    this.clearScenarioResults('debtAvalanche');
                 }
             }
+
+        
+
+            validateInput(input) {
+                const value = parseFloat(input.value);
+                if (isNaN(value) || value < 0) {
+                    input.classList.add('error');
+                    return false;
+                }
+                input.classList.remove('error');
+                return true;
+            }
+
+            formatCurrency(amount) {
+                return new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD',
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                }).format(amount);
+            }
+
+            calculateAmortization(balance, annualRate, monthlyPayment) {
+                const monthlyRate = annualRate / 100 / 12;
+                let currentBalance = balance;
+                let month = 0;
+                let totalInterest = 0;
+                const schedule = [];
+
+                while (currentBalance > 0 && month < 360) {
+                    const monthlyInterest = currentBalance * monthlyRate;
+                    const principalPayment = Math.min(monthlyPayment - monthlyInterest, currentBalance);
+
+                    if (monthlyPayment <= monthlyInterest) {
+                        throw new Error("Payment too small to cover monthly interest.");
+                    }
+
+                    totalInterest += monthlyInterest;
+                    currentBalance -= principalPayment;
+
+                    schedule.push({
+                        month: month + 1,
+                        balance: Math.max(0, currentBalance),
+                        interest: monthlyInterest,
+                        principal: principalPayment
+                    });
+
+                    month++;
+                }
+
+                return {
+                    months: month,
+                    totalInterest: totalInterest,
+                    totalPaid: balance + totalInterest,
+                    schedule: schedule
+                };
+            }
+
+            initializeChart() {
+                const ctx = document.getElementById('payoffChart').getContext('2d');
+                this.chart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: [],
+                        datasets: [{
+                            label: 'Balance',
+                            data: [],
+                            borderColor: 'var(--primary)',
+                            backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: value => this.formatCurrency(value)
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            updateChart(schedule) {
+                const labels = schedule.map(entry => `Month ${entry.month}`);
+                const balances = schedule.map(entry => entry.balance);
+
+                this.chart.data.labels = labels;
+                this.chart.data.datasets[0].data = balances;
+                this.chart.update();
+            }
+
+            calculate() {
+                try {
+                    const balance = parseFloat(document.getElementById('balance').value);
+                    const apr = parseFloat(document.getElementById('apr').value);
+                    const payment = parseFloat(document.getElementById('payment').value);
+
+                    if (!this.validateInputs(balance, apr, payment)) return;
+
+                    const result = this.calculateAmortization(balance, apr, payment);
+                    this.updateResults(result);
+                    this.updateChart(result.schedule);
+                    this.calculateScenarios(balance, apr, payment);
+
+                } catch (error) {
+                    console.error('Calculation error:', error);
+                    alert(error.message);
+                }
+            }
+
+            validateInputs(balance, apr, payment) {
+                if (isNaN(balance) || balance <= 0) {
+                    alert('Please enter a valid balance amount.');
+                    return false;
+                }
+                if (isNaN(apr) || apr < 0) {
+                    alert('Please enter a valid APR.');
+                    return false;
+                }
+                if (isNaN(payment) || payment <= 0) {
+                    alert('Please enter a valid monthly payment.');
+                    return false;
+                }
+                return true;
+            }
+
+            updateResults(result) {
+                document.getElementById('timeToPayoff').textContent =
+                    this.formatMonths(result.months);
+                document.getElementById('totalInterest').textContent =
+                    this.formatCurrency(result.totalInterest);
+                document.getElementById('totalAmount').textContent =
+                    this.formatCurrency(result.totalPaid);
+
+                const payoffDate = new Date();
+                payoffDate.setMonth(payoffDate.getMonth() + result.months);
+                document.getElementById('payoffDate').textContent =
+                    payoffDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+            }
+
+            formatMonths(totalMonths) {
+                const years = Math.floor(totalMonths / 12);
+                const months = totalMonths % 12;
+                if (years === 0) return `${months} month${months !== 1 ? 's' : ''}`;
+                if (months === 0) return `${years} year${years !== 1 ? 's' : ''}`;
+                return `${years} year${years !== 1 ? 's' : ''}, ${months} month${months !== 1 ? 's' : ''}`;
+            }
+
+            calculateScenarios(balance, apr, payment, baseResult) {
+                // Extra Payment Scenario
+                try {
+                    const extraAmount = 100; // Default extra payment
+                    const extraPaymentResult = this.calculateAmortization(balance, apr, payment + extraAmount);
+                    this.updateScenarioResults('extraPayment', baseResult, extraPaymentResult);
+                } catch (error) {
+                    this.clearScenarioResults('extraPayment');
+                }
+
+                // Lump Sum Scenario
+                try {
+                    const lumpSum = balance * 0.2; // 20% of balance
+                    const reducedBalance = Math.max(0, balance - lumpSum);
+                    const lumpSumResult = this.calculateAmortization(reducedBalance, apr, payment);
+                    this.updateScenarioResults('lumpSum', baseResult, lumpSumResult);
+                } catch (error) {
+                    this.clearScenarioResults('lumpSum');
+                }
+
+                // Accelerated Payment Scenario
+                try {
+                    const acceleratedPayment = payment * 1.5; // 50% more payment
+                    const acceleratedResult = this.calculateAmortization(balance, apr, acceleratedPayment);
+                    this.updateScenarioResults('accelerated', baseResult, acceleratedResult);
+                } catch (error) {
+                    this.clearScenarioResults('accelerated');
+                }
+
+                // Debt Avalanche Scenario (assuming this is highest interest debt)
+                try {
+                    const avalanchePayment = payment * 2; // Double payment
+                    const avalancheResult = this.calculateAmortization(balance, apr, avalanchePayment);
+                    this.updateScenarioResults('debtAvalanche', baseResult, avalancheResult);
+                } catch (error) {
+                    this.clearScenarioResults('debtAvalanche');
+                }
+            }
+
+            updateScenarioResults(scenarioId, baseResult, newResult) {
+                const element = document.getElementById(scenarioId);
+                if (!element) return;
+
+                const monthsSaved = baseResult.months - newResult.months;
+                const interestSaved = baseResult.totalInterest - newResult.totalInterest;
+
+                element.querySelector('.time').textContent = this.formatMonths(newResult.months);
+                element.querySelector('.savings').textContent = this.formatCurrency(interestSaved);
+                element.querySelector('.months').textContent = `${monthsSaved} month${monthsSaved !== 1 ? 's' : ''}`;
+            }
+
+            clearScenarioResults(scenarioId) {
+                const element = document.getElementById(scenarioId);
+                if (!element) return;
+
+                element.querySelector('.time').textContent = '-';
+                element.querySelector('.savings').textContent = '-';
+                element.querySelector('.months').textContent = '-';
+            }
+
+            loadScenario(type) {
+                const scenarios = {
+                    extraPayment: { balance: 10000, apr: 18.99, payment: 400 },
+                    lumpSum: { balance: 15000, apr: 15.99, payment: 500 },
+                    accelerated: { balance: 20000, apr: 21.99, payment: 600 },
+                    debtAvalanche: { balance: 25000, apr: 24.99, payment: 800 }
+                };
+
+                const scenario = scenarios[type];
+                if (scenario) {
+                    document.getElementById('balance').value = scenario.balance;
+                    document.getElementById('apr').value = scenario.apr;
+                    document.getElementById('payment').value = scenario.payment;
+                    this.calculate();
+                }
+            }
+        }
+
+        // Initialize calculator when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            window.calculator = new CreditCardCalculator();
         });
-    }
 
-    updateChart(schedule) {
-        const labels = schedule.map(entry => `Month ${entry.month}`);
-        const balances = schedule.map(entry => entry.balance);
-
-        this.chart.data.labels = labels;
-        this.chart.data.datasets[0].data = balances;
-        this.chart.update();
-    }
-
-    calculate() {
-        try {
-            const balance = parseFloat(document.getElementById('balance').value);
-            const apr = parseFloat(document.getElementById('apr').value);
-            const payment = parseFloat(document.getElementById('payment').value);
-
-            if (!this.validateInputs(balance, apr, payment)) return;
-
-            const result = this.calculateAmortization(balance, apr, payment);
-            this.updateResults(result);
-            this.updateChart(result.schedule);
-            this.calculateScenarios(balance, apr, payment);
-
-        } catch (error) {
-            alert(error.message);
+        // Update the onclick handlers in HTML to use the calculator instance
+        function loadScenario(type) {
+            window.calculator.loadScenario(type);
         }
-    }
-
-    validateInputs(balance, apr, payment) {
-        if (isNaN(balance) || balance <= 0) {
-            alert('Please enter a valid balance amount.');
-            return false;
-        }
-        if (isNaN(apr) || apr < 0) {
-            alert('Please enter a valid APR.');
-            return false;
-        }
-        if (isNaN(payment) || payment <= 0) {
-            alert('Please enter a valid monthly payment.');
-            return false;
-        }
-        return true;
-    }
-
-    updateResults(result) {
-        document.getElementById('timeToPayoff').textContent = 
-            this.formatMonths(result.months);
-        document.getElementById('totalInterest').textContent = 
-            this.formatCurrency(result.totalInterest);
-        document.getElementById('totalAmount').textContent = 
-            this.formatCurrency(result.totalPaid);
-
-        const payoffDate = new Date();
-        payoffDate.setMonth(payoffDate.getMonth() + result.months);
-        document.getElementById('payoffDate').textContent =
-            payoffDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-    }
-
-    formatMonths(totalMonths) {
-        const years = Math.floor(totalMonths / 12);
-        const months = totalMonths % 12;
-        if (years === 0) return `${months} month${months !== 1 ? 's' : ''}`;
-        if (months === 0) return `${years} year${years !== 1 ? 's' : ''}`;
-        return `${years} year${years !== 1 ? 's' : ''}, ${months} month${months !== 1 ? 's' : ''}`;
-    }
-
-    calculateScenarios(balance, apr, payment, baseResult) {
-        // Extra Payment Scenario
-        try {
-            const extraAmount = 100; // Default extra payment
-            const extraPaymentResult = this.calculateAmortization(balance, apr, payment + extraAmount);
-            this.updateScenarioResults('extraPayment', baseResult, extraPaymentResult);
-        } catch (error) {
-            this.clearScenarioResults('extraPayment');
-        }
-
-        // Lump Sum Scenario
-        try {
-            const lumpSum = balance * 0.2; // 20% of balance
-            const reducedBalance = Math.max(0, balance - lumpSum);
-            const lumpSumResult = this.calculateAmortization(reducedBalance, apr, payment);
-            this.updateScenarioResults('lumpSum', baseResult, lumpSumResult);
-        } catch (error) {
-            this.clearScenarioResults('lumpSum');
-        }
-
-        // Accelerated Payment Scenario
-        try {
-            const acceleratedPayment = payment * 1.5; // 50% more payment
-            const acceleratedResult = this.calculateAmortization(balance, apr, acceleratedPayment);
-            this.updateScenarioResults('accelerated', baseResult, acceleratedResult);
-        } catch (error) {
-            this.clearScenarioResults('accelerated');
-        }
-
-        // Debt Avalanche Scenario (assuming this is highest interest debt)
-        try {
-            const avalanchePayment = payment * 2; // Double payment
-            const avalancheResult = this.calculateAmortization(balance, apr, avalanchePayment);
-            this.updateScenarioResults('debtAvalanche', baseResult, avalancheResult);
-        } catch (error) {
-            this.clearScenarioResults('debtAvalanche');
-        }
-    }
-
-    updateScenarioResults(scenarioId, baseResult, newResult) {
-        const element = document.getElementById(scenarioId);
-        if (!element) return;
-
-        const monthsSaved = baseResult.months - newResult.months;
-        const interestSaved = baseResult.totalInterest - newResult.totalInterest;
-
-        element.querySelector('.time').textContent = this.formatMonths(newResult.months);
-        element.querySelector('.savings').textContent = this.formatCurrency(interestSaved);
-        element.querySelector('.months').textContent = `${monthsSaved} month${monthsSaved !== 1 ? 's' : ''}`;
-    }
-
-    clearScenarioResults(scenarioId) {
-        const element = document.getElementById(scenarioId);
-        if (!element) return;
-
-        element.querySelector('.time').textContent = '-';
-        element.querySelector('.savings').textContent = '-';
-        element.querySelector('.months').textContent = '-';
-    }
-
-    loadScenario(type) {
-        const scenarios = {
-            extraPayment: { balance: 10000, apr: 18.99, payment: 400 },
-            lumpSum: { balance: 15000, apr: 15.99, payment: 500 },
-            accelerated: { balance: 20000, apr: 21.99, payment: 600 },
-            debtAvalanche: { balance: 25000, apr: 24.99, payment: 800 }
-        };
-
-        const scenario = scenarios[type];
-        if (scenario) {
-            document.getElementById('balance').value = scenario.balance;
-            document.getElementById('apr').value = scenario.apr;
-            document.getElementById('payment').value = scenario.payment;
-            this.calculate();
-        }
-    }
-}
-
-// Initialize calculator when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    window.calculator = new CreditCardCalculator();
-});
-
-// Update the onclick handlers in HTML to use the calculator instance
-function loadScenario(type) {
-    window.calculator.loadScenario(type);
-}
 
 
     </script>
 
 </body>
+
 </html>
