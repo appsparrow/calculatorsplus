@@ -13,100 +13,48 @@
 
     <!-- Keep all the CSS from your T3 template and add these specific styles -->
     <style>
-        .comparison-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
+ .comparison-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
 
-        .comparison-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1.5rem;
-            background: var(--card-bg);
-            border-radius: 12px;
-            overflow: hidden;
-        }
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1.5rem;
+    background: var(--card-bg);
+    border-radius: 12px;
+    overflow: hidden;
+}
 
-        .comparison-table th, 
-        .comparison-table td {
-            padding: 1rem;
-            text-align: right;
-            border: 1px solid var(--border);
-        }
+.comparison-table th, 
+.comparison-table td {
+    padding: 1rem;
+    text-align: right;
+    border: 1px solid var(--border);
+}
 
-        .comparison-table th {
-            background: var(--background);
-            text-align: left;
-            color: var(--text-light);
-            font-weight: 600;
-        }
+.comparison-table th {
+    background: var(--background);
+    text-align: left;
+    color: var(--text-light);
+    font-weight: 600;
+}
 
-        .savings {
-            margin-top: 1.5rem;
-            padding: 1rem;
-            background: var(--success);
-            color: white;
-            border-radius: 8px;
-            font-weight: 500;
-        }
+.savings {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: var(--success);
+    color: white;
+    border-radius: 8px;
+    font-weight: 500;
+}
 
-        .savings.negative {
-            background: var(--warning);
-        }
-
-        .comparison-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .comparison-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1.5rem;
-            background: var(--card-bg);
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        .comparison-table th, 
-        .comparison-table td {
-            padding: 1rem;
-            text-align: right;
-            border: 1px solid var(--border);
-        }
-
-        .comparison-table th {
-            background: var(--background);
-            text-align: left;
-            color: var(--text-light);
-            font-weight: 600;
-        }
-
-        .savings {
-            margin-top: 1.5rem;
-            padding: 1rem;
-            background: var(--success);
-            color: white;
-            border-radius: 8px;
-            font-weight: 500;
-        }
-
-        .savings.negative {
-            background: var(--warning);
-        }
-
-        
-
-        @media (max-width: 768px) {
-            .comparison-grid {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-        }
+.savings.negative {
+    background: var(--warning);
+}
     </style>
 </head>
 <body>

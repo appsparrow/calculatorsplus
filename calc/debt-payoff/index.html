@@ -13,56 +13,54 @@
 
     <!-- Include all the CSS from the template you provided -->
     <style>
-        /* Copy all the CSS from your template */
+  
+  .debt-list {
+    background: var(--background);
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+}
 
-        /* Additional styles for debt calculator */
-        .debt-list {
-            background: var(--background);
-            border-radius: 12px;
-            padding: 1rem;
-            margin-bottom: 1.5rem;
-        }
+.debt-header {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 40px;
+    gap: 1rem;
+    padding: 0.5rem;
+    font-weight: 600;
+    color: var(--text-light);
+}
 
-        .debt-header {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr 40px;
-            gap: 1rem;
-            padding: 0.5rem;
-            font-weight: 600;
-            color: var(--text-light);
-        }
+.debt-item {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 40px;
+    gap: 1rem;
+    padding: 0.5rem;
+    align-items: center;
+}
 
-        .debt-item {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr 40px;
-            gap: 1rem;
-            padding: 0.5rem;
-            align-items: center;
-        }
+.remove-debt {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: none;
+    background: var(--error);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-        .remove-debt {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            border: none;
-            background: var(--error);
-            color: white;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .add-debt {
-            background: var(--success);
-            color: white;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-bottom: 1.5rem;
-            width: 100%;
-        }
+.add-debt {
+    background: var(--success);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 1.5rem;
+    width: 100%;
+}
     </style>
 </head>
 
