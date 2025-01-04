@@ -5,6 +5,7 @@
     --accent: #06b6d4;
     --background: #f8fafc;
     --card-bg: #ffffff;
+    --card-bg-med: #f0f0f0;
     --text: #1e293b;
     --text-light: #64748b;
     --border: #e2e8f0;
@@ -217,7 +218,7 @@ body {
 }
 
 .scenario-card:hover {
-    background: var(--secondary);
+    background: var(--card-bg-med);
     color: white;
     transform: translateY(-3px);
 }
