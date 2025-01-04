@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,149 +7,57 @@
     <script src="/assets/components.js"></script>
     <link rel="stylesheet" href="/assets/common.css">
     <link rel="stylesheet" href="/T3Styles.css">
- 
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-
-<script>
-
-
-
-document.getElementById('calculateBtn').addEventListener('click', calculateCalories);
-
-function calculateCalories() {
-    const age = parseInt(document.getElementById('age').value);
-    const gender = document.getElementById('gender').value;
-    const heightFeet = parseInt(document.getElementById('heightFeet').value);
-    const heightInches = parseInt(document.getElementById('heightInches').value);
-    const weight = parseInt(document.getElementById('weight').value);
-    const activity = document.getElementById('activity').value;
-
-    const height = heightFeet * 12 + heightInches; // Convert height to inches
-
-    // Calculate BMR (Basal Metabolic Rate)
-    let bmr;
-if (gender === 'male') {
-    bmr = (10 * (weight / 2.205)) + (6.25 * (height * 2.54)) - (5 * age) + 5;
-} else {
-    bmr = (10 * (weight / 2.205)) + (6.25 * (height * 2.54)) - (5 * age) - 161;
-}
-
-    // Adjust BMR based on activity level
-    const activityMultiplier = {
-        sedentary: 1.2,
-        light: 1.375,
-        moderate: 1.55,
-        active: 1.725,
-        'very-active': 1.9
-    };
-    const tdee = bmr * activityMultiplier[activity]; // Total Daily Energy Expenditure
-
-    // Calculate calorie needs
-    const maintain = Math.round(tdee);
-    const mildLoss = Math.round(tdee * 0.9);
-    const loss = Math.round(tdee * 0.8);
-    const extremeLoss = Math.round(tdee * 0.61);
-
-    // Update results
-    document.getElementById('maintainCalories').textContent = `${maintain} Calories/day`;
-    document.getElementById('mildLossCalories').textContent = `${mildLoss} Calories/day`;
-    document.getElementById('lossCalories').textContent = `${loss} Calories/day`;
-    document.getElementById('extremeLossCalories').textContent = `${extremeLoss} Calories/day`;
-
-    // Macronutrient breakdown
-    const protein = Math.round(maintain * 0.3 / 4); // 30% of calories, 4 cal/gram
-    const carbs = Math.round(maintain * 0.5 / 4); // 50% of calories, 4 cal/gram
-    const fiber = Math.round(weight * 0.14); // 14g per 1000 calories
-
-    document.getElementById('proteinIntake').textContent = `${protein}g/day`;
-    document.getElementById('carbIntake').textContent = `${carbs}g/day`;
-    document.getElementById('fiberIntake').textContent = `${fiber}g/day`;
-
-    // Update chart
-    updateChart([maintain, mildLoss, loss, extremeLoss]);
-}
-
-
-function updateChart(data) {
-    const ctx = document.getElementById('calorieChart').getContext('2d');
-    if (window.calorieChart) {
-        window.calorieChart.destroy();
-    }
-    window.calorieChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Maintain', 'Mild Loss', 'Loss', 'Extreme Loss'],
-            datasets: [{
-                label: 'Calories/day',
-                data: data,
-                backgroundColor: ['#4f46e5', '#818cf8', '#0ea5e9', '#06b6d4']
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { display: false }
-            },
-            scales: {
-                y: { beginAtZero: true }
-            }
+    <style>
+        .height-inputs {
+            display: flex;
+            gap: 1rem;
         }
-    });
-}
-</script>
 
-<style>
+        .height-inputs .input-field {
+            flex: 1;
+        }
 
-.height-inputs {
-    display: flex;
-    gap: 1rem;
-}
+        .chart-container {
+            height: 300px;
+            margin-top: 2rem;
+            position: relative;
+        }
 
-.height-inputs .input-field {
-    flex: 1;
-}
+        .scenarios-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
 
-.chart-container {
-    height: 300px;
-    margin-top: 2rem;
-}
+        .scenario-card-inactive {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
 
-.scenarios-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.5rem;
-    margin-top: 1.5rem;
-}
+        .scenario-card-inactive:hover {
+            transform: translateY(-5px);
+        }
 
-.scenario-card {
-    background: var(--card-bg);
-    padding: 1.5rem;
-    border-radius: 12px;
-    text-align: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    transition: transform 0.3s ease;
-}
+        .scenario-card-inactive h3 {
+            font-size: 1.25rem;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
 
-.scenario-card:hover {
-    transform: translateY(-5px);
-}
-
-.scenario-card h3 {
-    font-size: 1.25rem;
-    color: var(--text);
-    margin-bottom: 0.5rem;
-}
-
-.scenario-card p {
-    font-size: 1rem;
-    color: var(--primary);
-    font-weight: 600;
-}
-
-</style>
+        .scenario-card-inactive p {
+            font-size: 1rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+    </style>
 </head>
 
 <body>
@@ -297,11 +204,117 @@ function updateChart(data) {
     </div>
     <div id="footer-component"></div>
 
-    <script src="calorie-calc.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize the chart with empty data
+            updateChart([0, 0, 0, 0]);
+            
+            // Add event listener to calculate button
+            document.getElementById('calculateBtn').addEventListener('click', calculateCalories);
+        });
+
+        function calculateCalories() {
+            const age = parseInt(document.getElementById('age').value);
+            const gender = document.getElementById('gender').value;
+            const heightFeet = parseInt(document.getElementById('heightFeet').value);
+            const heightInches = parseInt(document.getElementById('heightInches').value);
+            const weight = parseInt(document.getElementById('weight').value);
+            const activity = document.getElementById('activity').value;
+
+            const height = heightFeet * 12 + heightInches;
+
+            // Calculate BMR
+            let bmr;
+            if (gender === 'male') {
+                bmr = (10 * (weight / 2.205)) + (6.25 * (height * 2.54)) - (5 * age) + 5;
+            } else {
+                bmr = (10 * (weight / 2.205)) + (6.25 * (height * 2.54)) - (5 * age) - 161;
+            }
+
+            // Activity multipliers
+            const activityMultiplier = {
+                sedentary: 1.2,
+                light: 1.375,
+                moderate: 1.55,
+                active: 1.725,
+                'very-active': 1.9
+            };
+
+            const tdee = bmr * activityMultiplier[activity];
+
+            // Calculate calorie needs
+            const maintain = Math.round(tdee);
+            const mildLoss = Math.round(tdee * 0.9);
+            const loss = Math.round(tdee * 0.8);
+            const extremeLoss = Math.round(tdee * 0.61);
+
+            // Update results
+            document.getElementById('maintainCalories').textContent = `${maintain} Calories/day`;
+            document.getElementById('mildLossCalories').textContent = `${mildLoss} Calories/day`;
+            document.getElementById('lossCalories').textContent = `${loss} Calories/day`;
+            document.getElementById('extremeLossCalories').textContent = `${extremeLoss} Calories/day`;
+
+            // Calculate macronutrients
+            const protein = Math.round(maintain * 0.3 / 4);
+            const carbs = Math.round(maintain * 0.5 / 4);
+            const fiber = Math.round(weight * 0.14);
+
+            // Update macronutrient display
+            document.getElementById('proteinIntake').textContent = `${protein}g/day`;
+            document.getElementById('carbIntake').textContent = `${carbs}g/day`;
+            document.getElementById('fiberIntake').textContent = `${fiber}g/day`;
+
+            // Update chart
+            updateChart([maintain, mildLoss, loss, extremeLoss]);
+        }
+
+        function updateChart(data) {
+            const ctx = document.getElementById('calorieChart').getContext('2d');
+            
+            // Destroy existing chart if it exists
+            if (window.calorieChart) {
+                window.calorieChart.destroy();
+            }
+
+            // Create new chart
+            window.calorieChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Maintain', 'Mild Loss', 'Loss', 'Extreme Loss'],
+                    datasets: [{
+                        label: 'Calories/day',
+                        data: data,
+                        backgroundColor: [
+                            'var(--primary)',
+                            'var(--primary-light)',
+                            'var(--secondary)',
+                            'var(--accent)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
 </body>
-
 </html>
-
-
-
-
