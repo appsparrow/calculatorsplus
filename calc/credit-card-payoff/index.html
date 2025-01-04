@@ -116,7 +116,8 @@
                         </div>
                     </div>
 
-                    <div class="scenario-card-static" onclick="loadScenario('lumpSum')">
+                    <div class="scenario-card-static">
+                        <!-- <div class="scenario-card-static" onclick="loadScenario('lumpSum')"> -->
                         <i class="fas fa-money-bill-wave"></i>
                         <div class="scenario-title">Lump Sum Payment</div>
                         <div class="scenario-description">Add a one-time payment of \$2,000</div>
@@ -127,7 +128,8 @@
                         </div>
                     </div>
 
-                    <div class="scenario-card-static" onclick="loadScenario('accelerated')">
+                    <div class="scenario-card-static" >
+                        <!-- <div class="scenario-card-static" onclick="loadScenario('accelerated')"></div> -->
                         <i class="fas fa-fast-forward"></i>
                         <div class="scenario-title">Bi-Weekly Payments</div>
                         <div class="scenario-description">Pay half your monthly payment every two weeks</div>
@@ -138,7 +140,9 @@
                         </div>
                     </div>
 
-                    <div class="scenario-card-static" onclick="loadScenario('debtAvalanche')">
+                    <div class="scenario-card-static" >
+                        <!-- <div class="scenario-card-static" onclick="loadScenario('debtAvalanche')"> -->
+
                         <i class="fas fa-snowflake"></i>
                         <div class="scenario-title">Debt Avalanche</div>
                         <div class="scenario-description">Focus all extra money on this highest-interest debt</div>
@@ -579,9 +583,9 @@
         });
 
         // Update the onclick handlers in HTML to use the calculator instance
-        function loadScenario(type) {
-            window.calculator.loadScenario(type);
-        }
+        // function loadScenario(type) {
+        //     window.calculator.loadScenario(type);
+        // }
 
 
     </script>
