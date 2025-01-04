@@ -198,6 +198,7 @@ body {
 }
 
 
+
 .payment-scenarios {
     margin-top: 2rem;
     padding: 1rem;
@@ -209,6 +210,15 @@ body {
     color: #333;
     text-align: center;
 }
+
+
+.scenarios-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Change from auto-fit to explicit 4 columns */
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
 
 .scenario-card {
     background: #fff;
@@ -245,5 +255,17 @@ body {
     margin: 0.5rem 0;
 }
 
+
+@media (max-width: 1200px) {
+    .scenarios-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .scenarios-grid {
+        grid-template-columns: 1fr;
+    }
+}
 
 
