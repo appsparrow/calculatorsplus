@@ -218,7 +218,7 @@ body {
 }
 
 .scenario-card:hover {
-    background: var(--card-bg-med);
+    background: var(--background);
     color: white;
     transform: translateY(-3px);
 }
