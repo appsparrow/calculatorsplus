@@ -108,6 +108,7 @@
                     <div class="scenario-card" onclick="loadScenario('extraPayment')">
                         <i class="fas fa-plus-circle"></i>
                         <div class="scenario-title">Extra Payment</div>
+                        <div class="scenario-description">Add \$200 extra to your monthly payment</div>
                         <div class="scenario-content" id="extraPayment">
                             <p>New payoff time: <span class="time">-</span></p>
                             <p>Interest saved: <span class="savings">-</span></p>
@@ -117,7 +118,8 @@
 
                     <div class="scenario-card" onclick="loadScenario('lumpSum')">
                         <i class="fas fa-money-bill-wave"></i>
-                        <div class="scenario-title">Lump Sum</div>
+                        <div class="scenario-title">Lump Sum Payment</div>
+                        <div class="scenario-description">Add a one-time payment of \$2,000</div>
                         <div class="scenario-content" id="lumpSum">
                             <p>New payoff time: <span class="time">-</span></p>
                             <p>Interest saved: <span class="savings">-</span></p>
@@ -127,7 +129,8 @@
 
                     <div class="scenario-card" onclick="loadScenario('accelerated')">
                         <i class="fas fa-fast-forward"></i>
-                        <div class="scenario-title">Accelerated</div>
+                        <div class="scenario-title">Bi-Weekly Payments</div>
+                        <div class="scenario-description">Pay half your monthly payment every two weeks</div>
                         <div class="scenario-content" id="accelerated">
                             <p>New payoff time: <span class="time">-</span></p>
                             <p>Interest saved: <span class="savings">-</span></p>
@@ -138,6 +141,7 @@
                     <div class="scenario-card" onclick="loadScenario('debtAvalanche')">
                         <i class="fas fa-snowflake"></i>
                         <div class="scenario-title">Debt Avalanche</div>
+                        <div class="scenario-description">Focus all extra money on this highest-interest debt</div>
                         <div class="scenario-content" id="debtAvalanche">
                             <p>New payoff time: <span class="time">-</span></p>
                             <p>Interest saved: <span class="savings">-</span></p>
@@ -240,6 +244,12 @@
             font-weight: 500;
         }
 
+        .scenario-description {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
 
 
         @media (max-width: 1024px) {
@@ -308,7 +318,7 @@
                 }
             }
 
-        
+
 
             validateInput(input) {
                 const value = parseFloat(input.value);
@@ -466,38 +476,39 @@
                 return `${years} year${years !== 1 ? 's' : ''}, ${months} month${months !== 1 ? 's' : ''}`;
             }
 
-            calculateScenarios(balance, apr, payment, baseResult) {
-                // Extra Payment Scenario
+            calculateScenarios(balance, apr, payment) {
+                const baseResult = this.calculateAmortization(balance, apr, payment);
+
+                // Extra Payment Scenario (\$200 extra per month)
                 try {
-                    const extraAmount = 100; // Default extra payment
+                    const extraAmount = 200; // \$200 extra payment
                     const extraPaymentResult = this.calculateAmortization(balance, apr, payment + extraAmount);
                     this.updateScenarioResults('extraPayment', baseResult, extraPaymentResult);
                 } catch (error) {
                     this.clearScenarioResults('extraPayment');
                 }
 
-                // Lump Sum Scenario
+                // Lump Sum Scenario (\$2000 one-time payment)
                 try {
-                    const lumpSum = balance * 0.2; // 20% of balance
-                    const reducedBalance = Math.max(0, balance - lumpSum);
-                    const lumpSumResult = this.calculateAmortization(reducedBalance, apr, payment);
+                    const lumpSum = 2000; // \$2000 lump sum
+                    const lumpSumResult = this.calculateAmortization(balance - lumpSum, apr, payment);
                     this.updateScenarioResults('lumpSum', baseResult, lumpSumResult);
                 } catch (error) {
                     this.clearScenarioResults('lumpSum');
                 }
 
-                // Accelerated Payment Scenario
+                // Accelerated Payment Scenario (bi-weekly payments = ~13 monthly payments per year)
                 try {
-                    const acceleratedPayment = payment * 1.5; // 50% more payment
+                    const acceleratedPayment = payment * 13 / 12; // Equivalent of bi-weekly payments
                     const acceleratedResult = this.calculateAmortization(balance, apr, acceleratedPayment);
                     this.updateScenarioResults('accelerated', baseResult, acceleratedResult);
                 } catch (error) {
                     this.clearScenarioResults('accelerated');
                 }
 
-                // Debt Avalanche Scenario (assuming this is highest interest debt)
+                // Debt Avalanche Scenario (double monthly payment)
                 try {
-                    const avalanchePayment = payment * 2; // Double payment
+                    const avalanchePayment = payment * 2; // Double payment for debt avalanche
                     const avalancheResult = this.calculateAmortization(balance, apr, avalanchePayment);
                     this.updateScenarioResults('debtAvalanche', baseResult, avalancheResult);
                 } catch (error) {
