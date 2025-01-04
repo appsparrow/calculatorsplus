@@ -223,6 +223,21 @@ body {
     transform: translateY(-3px);
 }
 
+.scenario-card-static {
+    background: var(--background);
+    padding: 1rem;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.scenario-card-static:hover {
+    background: var(--background);
+    color: white;
+    transform: translateY(-3px);
+}
+
 @media (max-width: 768px) {
     .app-container {
         padding: 1rem;
