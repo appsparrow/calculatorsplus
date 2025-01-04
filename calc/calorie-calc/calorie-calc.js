@@ -53,47 +53,6 @@ if (gender === 'male') {
     updateChart([maintain, mildLoss, loss, extremeLoss]);
 }
 
-/// Added last... This might need to be removed
-document.addEventListener('DOMContentLoaded', () => {
-    // Example data for the chart
-    const data = [2500, 2200, 2000, 1800]; // Replace with your actual data
-
-    // Get the canvas context
-    const ctx = document.getElementById('calorieChart').getContext('2d');
-
-    // Destroy the previous chart instance if it exists
-    if (window.calorieChart) {
-        window.calorieChart.destroy();
-    }
-
-    // Create a new chart
-    window.calorieChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Maintain', 'Mild Loss', 'Loss', 'Extreme Loss'],
-            datasets: [{
-                label: 'Calories/day',
-                data: data,
-                backgroundColor: [
-                    'var(--primary)',
-                    'var(--primary-light)',
-                    'var(--secondary)',
-                    'var(--accent)'
-                ]
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { display: false }
-            },
-            scales: {
-                y: { beginAtZero: true }
-            }
-        }
-    });
-});
-
 
 function updateChart(data) {
     const ctx = document.getElementById('calorieChart').getContext('2d');
