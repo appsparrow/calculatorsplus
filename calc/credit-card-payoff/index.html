@@ -101,38 +101,48 @@
                     <h2 class="card-title">Payment Scenarios</h2>
                 </div>
 
-                <div class="scenarios-grid">
-                    <!-- Extra Payment Scenario -->
-                    <div class="scenario-item">
-                        <h3><i class="fas fa-plus-circle"></i> Extra Monthly Payment</h3>
-                        <div class="scenario-input">
-                            <label>Additional amount: $</label>
-                            <input type="number" id="extraMonthlyInput" value="100">
-                        </div>
-                        <div class="scenario-results" id="extraPayment">
-                            <p>New payoff time: <span class="time">-</span></p>
-                            <p>Interest saved: <span class="savings">-</span></p>
-                            <p>Months saved: <span class="months">-</span></p>
-                        </div>
-                    </div>
+                <!-- Replace the existing scenarios-grid div with this -->
+<div class="scenarios-grid">
+    <div class="scenario-card" onclick="loadScenario('extraPayment')">
+        <i class="fas fa-plus-circle"></i>
+        <div class="scenario-title">Extra Payment</div>
+        <div class="scenario-content" id="extraPayment">
+            <p>New payoff time: <span class="time">-</span></p>
+            <p>Interest saved: <span class="savings">-</span></p>
+            <p>Months saved: <span class="months">-</span></p>
+        </div>
+    </div>
 
-                    <!-- Lump Sum Scenario -->
-                    <div class="scenario-item">
-                        <h3><i class="fas fa-money-bill-wave"></i> One-Time Payment</h3>
-                        <div class="scenario-input">
-                            <label>Lump sum: $</label>
-                            <input type="number" id="lumpSumInput" value="5000">
-                        </div>
-                        <div class="scenario-results" id="lumpSum">
-                            <p>New payoff time: <span class="time">-</span></p>
-                            <p>Interest saved: <span class="savings">-</span></p>
-                            <p>Months saved: <span class="months">-</span></p>
-                        </div>
-                    </div>
+    <div class="scenario-card" onclick="loadScenario('lumpSum')">
+        <i class="fas fa-money-bill-wave"></i>
+        <div class="scenario-title">Lump Sum</div>
+        <div class="scenario-content" id="lumpSum">
+            <p>New payoff time: <span class="time">-</span></p>
+            <p>Interest saved: <span class="savings">-</span></p>
+            <p>Months saved: <span class="months">-</span></p>
+        </div>
+    </div>
 
-                    <!-- Additional scenarios... -->
-                    [Previous scenario cards with updated styling]
-                </div>
+    <div class="scenario-card" onclick="loadScenario('accelerated')">
+        <i class="fas fa-fast-forward"></i>
+        <div class="scenario-title">Accelerated</div>
+        <div class="scenario-content" id="accelerated">
+            <p>New payoff time: <span class="time">-</span></p>
+            <p>Interest saved: <span class="savings">-</span></p>
+            <p>Months saved: <span class="months">-</span></p>
+        </div>
+    </div>
+
+    <div class="scenario-card" onclick="loadScenario('debtAvalanche')">
+        <i class="fas fa-snowflake"></i>
+        <div class="scenario-title">Debt Avalanche</div>
+        <div class="scenario-content" id="debtAvalanche">
+            <p>New payoff time: <span class="time">-</span></p>
+            <p>Interest saved: <span class="savings">-</span></p>
+            <p>Months saved: <span class="months">-</span></p>
+        </div>
+    </div>
+</div>
             </div>
         </div>
     </div>
@@ -192,6 +202,43 @@
             color: var(--primary);
             font-weight: 500;
         }
+
+        .scenario-card {
+    background: var(--background);
+    padding: 1.5rem;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.scenario-card i {
+    font-size: 1.5rem;
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+}
+
+.scenario-title {
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.scenario-content {
+    font-size: 0.9rem;
+    color: var(--text-light);
+}
+
+.scenario-content p {
+    display: flex;
+    justify-content: space-between;
+    margin: 0.5rem 0;
+}
+
+.scenario-content span {
+    color: var(--primary);
+    font-weight: 500;
+}
+
+
 
         @media (max-width: 1024px) {
             .calculator-grid {
@@ -382,24 +429,42 @@
         return `${years} year${years !== 1 ? 's' : ''}, ${months} month${months !== 1 ? 's' : ''}`;
     }
 
-    recalculateScenario(type, value) {
-        const balance = parseFloat(document.getElementById('balance').value);
-        const apr = parseFloat(document.getElementById('apr').value);
-        const payment = parseFloat(document.getElementById('payment').value);
-
+    calculateScenarios(balance, apr, payment, baseResult) {
+        // Extra Payment Scenario
         try {
-            const baseResult = this.calculateAmortization(balance, apr, payment);
-            
-            if (type === 'extra') {
-                const extraPaymentResult = this.calculateAmortization(balance, apr, payment + value);
-                this.updateScenarioResults('extraPayment', baseResult, extraPaymentResult);
-            } else if (type === 'lump') {
-                const reducedBalance = Math.max(0, balance - value);
-                const lumpSumResult = this.calculateAmortization(reducedBalance, apr, payment);
-                this.updateScenarioResults('lumpSum', baseResult, lumpSumResult);
-            }
+            const extraAmount = 100; // Default extra payment
+            const extraPaymentResult = this.calculateAmortization(balance, apr, payment + extraAmount);
+            this.updateScenarioResults('extraPayment', baseResult, extraPaymentResult);
         } catch (error) {
-            console.error(error);
+            this.clearScenarioResults('extraPayment');
+        }
+
+        // Lump Sum Scenario
+        try {
+            const lumpSum = balance * 0.2; // 20% of balance
+            const reducedBalance = Math.max(0, balance - lumpSum);
+            const lumpSumResult = this.calculateAmortization(reducedBalance, apr, payment);
+            this.updateScenarioResults('lumpSum', baseResult, lumpSumResult);
+        } catch (error) {
+            this.clearScenarioResults('lumpSum');
+        }
+
+        // Accelerated Payment Scenario
+        try {
+            const acceleratedPayment = payment * 1.5; // 50% more payment
+            const acceleratedResult = this.calculateAmortization(balance, apr, acceleratedPayment);
+            this.updateScenarioResults('accelerated', baseResult, acceleratedResult);
+        } catch (error) {
+            this.clearScenarioResults('accelerated');
+        }
+
+        // Debt Avalanche Scenario (assuming this is highest interest debt)
+        try {
+            const avalanchePayment = payment * 2; // Double payment
+            const avalancheResult = this.calculateAmortization(balance, apr, avalanchePayment);
+            this.updateScenarioResults('debtAvalanche', baseResult, avalancheResult);
+        } catch (error) {
+            this.clearScenarioResults('debtAvalanche');
         }
     }
 
@@ -414,12 +479,43 @@
         element.querySelector('.savings').textContent = this.formatCurrency(interestSaved);
         element.querySelector('.months').textContent = `${monthsSaved} month${monthsSaved !== 1 ? 's' : ''}`;
     }
+
+    clearScenarioResults(scenarioId) {
+        const element = document.getElementById(scenarioId);
+        if (!element) return;
+
+        element.querySelector('.time').textContent = '-';
+        element.querySelector('.savings').textContent = '-';
+        element.querySelector('.months').textContent = '-';
+    }
+
+    loadScenario(type) {
+        const scenarios = {
+            extraPayment: { balance: 10000, apr: 18.99, payment: 400 },
+            lumpSum: { balance: 15000, apr: 15.99, payment: 500 },
+            accelerated: { balance: 20000, apr: 21.99, payment: 600 },
+            debtAvalanche: { balance: 25000, apr: 24.99, payment: 800 }
+        };
+
+        const scenario = scenarios[type];
+        if (scenario) {
+            document.getElementById('balance').value = scenario.balance;
+            document.getElementById('apr').value = scenario.apr;
+            document.getElementById('payment').value = scenario.payment;
+            this.calculate();
+        }
+    }
 }
 
 // Initialize calculator when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    new CreditCardCalculator();
+    window.calculator = new CreditCardCalculator();
 });
+
+// Update the onclick handlers in HTML to use the calculator instance
+function loadScenario(type) {
+    window.calculator.loadScenario(type);
+}
 
 
     </script>
