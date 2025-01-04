@@ -6,9 +6,10 @@
     <title>Credit Card Payoff Calculator</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="assets/components.js"></script>
-    <link rel="stylesheet" href="assets/common.css">
-    <link rel="stylesheet" href="T3Styles.css">
+    <script src="/assets/components.js"></script>
+    <link rel="stylesheet" href="/assets/common.css">
+    <link rel="stylesheet" href="/T3Styles.css">
+
 
 </head>
 <body>
@@ -64,7 +65,7 @@
                     <div class="card-icon">
                         <i class="fas fa-chart-line"></i>
                     </div>
-                    <h2 class="card-title">Payoff Analysis</h2>
+                    <h2 class="card-title">Payment Summary</h2>
                 </div>
 
                 <div class="result-grid">
@@ -91,8 +92,8 @@
                 </div>
             </div>
 
-            <!-- Scenarios Card (Full Width) -->
-            <div class="calculator-card scenarios-card animate-in" style="animation-delay: 0.2s;">
+            <!-- Scenarios Card -->
+            <div class="calculator-card scenarios-card animate-in" style="animation-delay: 0.2s; grid-column: 1 / -1;">
                 <div class="card-header">
                     <div class="card-icon">
                         <i class="fas fa-lightbulb"></i>
@@ -129,7 +130,8 @@
                         </div>
                     </div>
 
-                    <!-- Other scenarios... -->
+                    <!-- Additional scenarios... -->
+                    [Previous scenario cards with updated styling]
                 </div>
             </div>
         </div>
@@ -137,14 +139,14 @@
     <div id="footer-component"></div>
 
     <style>
-        /* Add T3 theme specific styles here */
+        /* Add T3 theme-specific styles */
         .calculator-grid {
             grid-template-columns: repeat(2, 1fr);
             gap: 2rem;
         }
 
         .scenarios-card {
-            grid-column: 1 / -1;
+            margin-top: 2rem;
         }
 
         .scenarios-grid {
@@ -199,8 +201,228 @@
     </style>
 
     <script>
-        // Add your JavaScript code here
-        [Previous JavaScript code with Chart.js instead of Plotly]
+        class CreditCardCalculator {
+    constructor() {
+        this.chart = null;
+        this.initializeEventListeners();
+        this.initializeChart();
+    }
+
+    initializeEventListeners() {
+        document.getElementById('calculateBtn').addEventListener('click', () => this.calculate());
+        
+        // Input validation
+        ['balance', 'apr', 'payment'].forEach(id => {
+            const input = document.getElementById(id);
+            input.addEventListener('input', () => this.validateInput(input));
+        });
+
+        // Scenario inputs
+        document.getElementById('extraMonthlyInput').addEventListener('input', (e) => {
+            this.recalculateScenario('extra', parseFloat(e.target.value));
+        });
+
+        document.getElementById('lumpSumInput').addEventListener('input', (e) => {
+            this.recalculateScenario('lump', parseFloat(e.target.value));
+        });
+    }
+
+    validateInput(input) {
+        const value = parseFloat(input.value);
+        if (isNaN(value) || value < 0) {
+            input.classList.add('error');
+            return false;
+        }
+        input.classList.remove('error');
+        return true;
+    }
+
+    formatCurrency(amount) {
+        return new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
+        }).format(amount);
+    }
+
+    calculateAmortization(balance, annualRate, monthlyPayment) {
+        const monthlyRate = annualRate / 100 / 12;
+        let currentBalance = balance;
+        let month = 0;
+        let totalInterest = 0;
+        const schedule = [];
+
+        while (currentBalance > 0 && month < 360) {
+            const monthlyInterest = currentBalance * monthlyRate;
+            const principalPayment = Math.min(monthlyPayment - monthlyInterest, currentBalance);
+
+            if (monthlyPayment <= monthlyInterest) {
+                throw new Error("Payment too small to cover monthly interest.");
+            }
+
+            totalInterest += monthlyInterest;
+            currentBalance -= principalPayment;
+
+            schedule.push({
+                month: month + 1,
+                balance: Math.max(0, currentBalance),
+                interest: monthlyInterest,
+                principal: principalPayment
+            });
+
+            month++;
+        }
+
+        return {
+            months: month,
+            totalInterest: totalInterest,
+            totalPaid: balance + totalInterest,
+            schedule: schedule
+        };
+    }
+
+    initializeChart() {
+        const ctx = document.getElementById('payoffChart').getContext('2d');
+        this.chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Balance',
+                    data: [],
+                    borderColor: 'var(--primary)',
+                    backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: value => this.formatCurrency(value)
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    updateChart(schedule) {
+        const labels = schedule.map(entry => `Month ${entry.month}`);
+        const balances = schedule.map(entry => entry.balance);
+
+        this.chart.data.labels = labels;
+        this.chart.data.datasets[0].data = balances;
+        this.chart.update();
+    }
+
+    calculate() {
+        try {
+            const balance = parseFloat(document.getElementById('balance').value);
+            const apr = parseFloat(document.getElementById('apr').value);
+            const payment = parseFloat(document.getElementById('payment').value);
+
+            if (!this.validateInputs(balance, apr, payment)) return;
+
+            const result = this.calculateAmortization(balance, apr, payment);
+            this.updateResults(result);
+            this.updateChart(result.schedule);
+            this.calculateScenarios(balance, apr, payment);
+
+        } catch (error) {
+            alert(error.message);
+        }
+    }
+
+    validateInputs(balance, apr, payment) {
+        if (isNaN(balance) || balance <= 0) {
+            alert('Please enter a valid balance amount.');
+            return false;
+        }
+        if (isNaN(apr) || apr < 0) {
+            alert('Please enter a valid APR.');
+            return false;
+        }
+        if (isNaN(payment) || payment <= 0) {
+            alert('Please enter a valid monthly payment.');
+            return false;
+        }
+        return true;
+    }
+
+    updateResults(result) {
+        document.getElementById('timeToPayoff').textContent = 
+            this.formatMonths(result.months);
+        document.getElementById('totalInterest').textContent = 
+            this.formatCurrency(result.totalInterest);
+        document.getElementById('totalAmount').textContent = 
+            this.formatCurrency(result.totalPaid);
+
+        const payoffDate = new Date();
+        payoffDate.setMonth(payoffDate.getMonth() + result.months);
+        document.getElementById('payoffDate').textContent =
+            payoffDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    }
+
+    formatMonths(totalMonths) {
+        const years = Math.floor(totalMonths / 12);
+        const months = totalMonths % 12;
+        if (years === 0) return `${months} month${months !== 1 ? 's' : ''}`;
+        if (months === 0) return `${years} year${years !== 1 ? 's' : ''}`;
+        return `${years} year${years !== 1 ? 's' : ''}, ${months} month${months !== 1 ? 's' : ''}`;
+    }
+
+    recalculateScenario(type, value) {
+        const balance = parseFloat(document.getElementById('balance').value);
+        const apr = parseFloat(document.getElementById('apr').value);
+        const payment = parseFloat(document.getElementById('payment').value);
+
+        try {
+            const baseResult = this.calculateAmortization(balance, apr, payment);
+            
+            if (type === 'extra') {
+                const extraPaymentResult = this.calculateAmortization(balance, apr, payment + value);
+                this.updateScenarioResults('extraPayment', baseResult, extraPaymentResult);
+            } else if (type === 'lump') {
+                const reducedBalance = Math.max(0, balance - value);
+                const lumpSumResult = this.calculateAmortization(reducedBalance, apr, payment);
+                this.updateScenarioResults('lumpSum', baseResult, lumpSumResult);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    updateScenarioResults(scenarioId, baseResult, newResult) {
+        const element = document.getElementById(scenarioId);
+        if (!element) return;
+
+        const monthsSaved = baseResult.months - newResult.months;
+        const interestSaved = baseResult.totalInterest - newResult.totalInterest;
+
+        element.querySelector('.time').textContent = this.formatMonths(newResult.months);
+        element.querySelector('.savings').textContent = this.formatCurrency(interestSaved);
+        element.querySelector('.months').textContent = `${monthsSaved} month${monthsSaved !== 1 ? 's' : ''}`;
+    }
+}
+
+// Initialize calculator when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    new CreditCardCalculator();
+});
+
+
     </script>
+
 </body>
 </html>
