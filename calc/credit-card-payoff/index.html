@@ -10,7 +10,6 @@
     <script src="/assets/components.js"></script>
     <link rel="stylesheet" href="/assets/common.css">
     <link rel="stylesheet" href="/T3Styles.css">
-    <link rel="stylesheet" href="credit-card-payoff-styles.css">
 
 
 </head>
@@ -160,7 +159,22 @@
     <div id="footer-component"></div>
 
     <style>
-       
+        .scenarios-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .scenario-item {
+            background: var(--background);
+            padding: 1.5rem;
+            border-radius: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .scenario-item:hover {
+            transform: translateY(-5px);
+        }
     </style>
 
     <script>
