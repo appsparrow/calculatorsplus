@@ -235,60 +235,6 @@
             transform: translateY(-3px);
         }
 
-
-        .payment-scenarios {
-    margin-top: 2rem;
-    padding: 1rem;
-}
-
-.payment-scenarios h2 {
-    font-size: 1.5rem;
-    margin-bottom: 1.5rem;
-    color: #333;
-}
-
-.scenario-card {
-    background: #fff;
-    border: 1px solid #e2e8f0;
-    border-radius: 0.5rem;
-    padding: 1.5rem;
-    margin-bottom: 1rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.scenario-card h3 {
-    font-size: 1.25rem;
-    color: #2d3748;
-    margin-bottom: 0.5rem;
-}
-
-.scenario-card p {
-    color: #718096;
-    margin-bottom: 1rem;
-}
-
-.scenario-results {
-    margin-top: 1rem;
-    color: #4a5568;
-}
-
-.scenario-results div {
-    margin: 0.5rem 0;
-}
-
-/* Optional: Add responsive design for larger screens */
-@media (min-width: 768px) {
-    .payment-scenarios {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1rem;
-    }
-    
-    .payment-scenarios h2 {
-        grid-column: 1 / -1;
-    }
-}
-
         @media (max-width: 768px) {
             .app-container {
                 padding: 1rem;
@@ -469,7 +415,75 @@
         canvas {
             max-width: 100% !important;
             height: auto !important;
-        }    </style>
+        }   
+        
+        
+        
+
+        .payment-scenarios {
+    margin-top: 2rem;
+    padding: 1rem;
+}
+
+.payment-scenarios h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: #333;
+    text-align: center;
+}
+
+.scenario-card {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.scenario-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.scenario-card h3 {
+    font-size: 1.25rem;
+    color: #2d3748;
+    margin-bottom: 0.5rem;
+}
+
+.scenario-card p {
+    color: #718096;
+    margin-bottom: 1rem;
+}
+
+.scenario-results {
+    margin-top: 1rem;
+    color: #4a5568;
+}
+
+.scenario-results div {
+    margin: 0.5rem 0;
+}
+
+/* Optional: Add responsive design for larger screens */
+@media (min-width: 768px) {
+    .payment-scenarios {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+    
+    .payment-scenarios h2 {
+        grid-column: 1 / -1;
+    }
+}
+        
+        
+        
+        
+        </style>
 </head>
 <body>
     <div id="header-component"></div>
@@ -583,53 +597,56 @@
             </div>
         </div>
 
+
         <div class="payment-scenarios">
-            <h2>Payment Scenarios</h2>
+            <h2>Common Scenarios</h2>
             
             <div class="scenario-card">
-                <h3>Extra Payment</h3>
-                <p>Add \$200 extra to your monthly payment</p>
+                <h3>First-Time Buyer</h3>
+                <p>Explore mortgage options tailored for first-time homebuyers with lower down payments and flexible terms.</p>
                 
                 <div class="scenario-results">
                     <div>New payoff time: -</div>
                     <div>Interest saved: -</div>
-                    <div>Months saved: -</div>
+                    <div>Monthly payment: -</div>
                 </div>
             </div>
         
             <div class="scenario-card">
-                <h3>Lump Sum Payment</h3>
-                <p>Add a one-time payment of \$2,000</p>
+                <h3>Conventional Loan</h3>
+                <p>Standard mortgage option with competitive rates for buyers with good credit and a stable income.</p>
                 
                 <div class="scenario-results">
                     <div>New payoff time: -</div>
                     <div>Interest saved: -</div>
-                    <div>Months saved: -</div>
+                    <div>Monthly payment: -</div>
                 </div>
             </div>
         
             <div class="scenario-card">
-                <h3>Bi-Weekly Payments</h3>
-                <p>Pay half your monthly payment every two weeks</p>
+                <h3>Jumbo Loan</h3>
+                <p>For homes that exceed conforming loan limits, offering flexible terms for high-value properties.</p>
                 
                 <div class="scenario-results">
                     <div>New payoff time: -</div>
                     <div>Interest saved: -</div>
-                    <div>Months saved: -</div>
+                    <div>Monthly payment: -</div>
                 </div>
             </div>
         
             <div class="scenario-card">
-                <h3>15-Year Mortgage</h3>
-                <p>Switch to a 15-year term instead of 30-year</p>
+                <h3>VA Loan</h3>
+                <p>Exclusive to veterans and active-duty military, offering no down payment and competitive interest rates.</p>
                 
                 <div class="scenario-results">
                     <div>New payoff time: -</div>
                     <div>Interest saved: -</div>
-                    <div>Monthly increase: -</div>
+                    <div>Monthly payment: -</div>
                 </div>
             </div>
         </div>
+
+
 
     </div>
     <div id="footer-component"></div>
