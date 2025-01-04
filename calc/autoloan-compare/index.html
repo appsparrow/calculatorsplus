@@ -56,6 +56,51 @@
             background: var(--warning);
         }
 
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .comparison-table th, 
+        .comparison-table td {
+            padding: 1rem;
+            text-align: right;
+            border: 1px solid var(--border);
+        }
+
+        .comparison-table th {
+            background: var(--background);
+            text-align: left;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
+        .savings {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: var(--success);
+            color: white;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        .savings.negative {
+            background: var(--warning);
+        }
+
+        
+
         @media (max-width: 768px) {
             .comparison-grid {
                 grid-template-columns: 1fr;
@@ -66,21 +111,8 @@
 </head>
 <body>
     <div id="header-component"></div>
+    
     <div class="app-container">
-        <!-- Calculator Navigation -->
-        <!-- <div class="calculator-nav">
-            <div class="calc-tab">
-                <i class="fas fa-calculator"></i> Investment
-            </div>
-            <div class="calc-tab">
-                <i class="fas fa-home"></i> Mortgage
-            </div>
-            <div class="calc-tab active">
-                <i class="fas fa-car"></i> Auto Loan
-            </div>
-        </div> -->
-
-        <!-- Calculator Grid -->
         <div class="calculator-grid">
             <!-- Loan 1 Card -->
             <div class="calculator-card animate-in">
@@ -113,7 +145,7 @@
             </div>
 
             <!-- Loan 2 Card -->
-            <div class="calculator-card animate-in" style="animation-delay: 0.1s;">
+            <div class="calculator-card animate-in">
                 <div class="card-header">
                     <div class="card-icon">
                         <i class="fas fa-car"></i>
@@ -142,8 +174,8 @@
                 </div>
             </div>
 
-            <!-- Results Card -->
-            <div class="calculator-card animate-in" style="animation-delay: 0.2s; grid-column: 1 / -1;">
+            <!-- Results Card (Now on the side) -->
+            <div class="calculator-card animate-in results-card">
                 <div class="card-header">
                     <div class="card-icon">
                         <i class="fas fa-chart-bar"></i>
@@ -156,13 +188,14 @@
                 </button>
 
                 <div id="results"></div>
-                
+
                 <div class="chart-container">
                     <canvas id="comparisonChart"></canvas>
                 </div>
             </div>
         </div>
     </div>
+
     <div id="footer-component"></div>
 
     <script>
