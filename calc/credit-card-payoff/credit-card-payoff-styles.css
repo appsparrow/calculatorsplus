@@ -1,122 +1,16 @@
+.scenarios-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
 
-        /* Add T3 theme-specific styles */
-        .calculator-grid {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 2rem;
-        }
+.scenario-item {
+    background: var(--background);
+    padding: 1.5rem;
+    border-radius: 12px;
+    transition: transform 0.3s ease;
+}
 
-        .scenarios-card {
-            margin-top: 2rem;
-        }
-
-        .scenarios-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .scenario-item {
-            background: var(--background);
-            padding: 1.5rem;
-            border-radius: 12px;
-            transition: transform 0.3s ease;
-        }
-
-        .scenario-item:hover {
-            transform: translateY(-5px);
-        }
-
-
-
-        .scenario-input {
-            margin: 1rem 0;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .scenario-input input {
-            width: 120px;
-            padding: 0.5rem;
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            font-size: 0.9rem;
-        }
-
-        .scenario-results p {
-            display: flex;
-            justify-content: space-between;
-            margin: 0.5rem 0;
-            color: var(--text-light);
-        }
-
-        .scenario-results span {
-            color: var(--primary);
-            font-weight: 500;
-        }
-
-        .scenario-card {
-            background: var(--background);
-            padding: 1.5rem;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-
-        .scenario-card i {
-            font-size: 1.5rem;
-            color: var(--primary);
-            margin-bottom: 0.5rem;
-        }
-
-        .scenario-card-static {
-            background: var(--background);
-            padding: 1rem;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
-        }
-
-        .scenario-card-static:hover {
-            /* background: var(--background);
-            color: rgb(21, 21, 21);
-            transform: translateY(-3px); */
-        }
-
-        .scenario-title {
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-
-        .scenario-content {
-            font-size: 0.9rem;
-            color: var(--text-light);
-        }
-
-        .scenario-content p {
-            display: flex;
-            justify-content: space-between;
-            margin: 0.5rem 0;
-        }
-
-        .scenario-content span {
-            color: var(--primary);
-            font-weight: 500;
-        }
-
-        .scenario-description {
-            font-size: 0.9rem;
-            color: var(--text-light);
-            margin-bottom: 1rem;
-            line-height: 1.4;
-        }
-
-
-        @media (max-width: 1024px) {
-            .calculator-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-   
+.scenario-item:hover {
+    transform: translateY(-5px);
+}
