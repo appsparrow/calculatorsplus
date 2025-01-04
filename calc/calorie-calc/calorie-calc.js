@@ -12,11 +12,11 @@ function calculateCalories() {
 
     // Calculate BMR (Basal Metabolic Rate)
     let bmr;
-    if (gender === 'male') {
-        bmr = 66 + (6.23 * weight) + (12.7 * height) - (6.8 * age);
-    } else {
-        bmr = 655 + (4.35 * weight) + (4.7 * height) - (4.7 * age);
-    }
+if (gender === 'male') {
+    bmr = (10 * (weight / 2.205)) + (6.25 * (height * 2.54)) - (5 * age) + 5;
+} else {
+    bmr = (10 * (weight / 2.205)) + (6.25 * (height * 2.54)) - (5 * age) - 161;
+}
 
     // Adjust BMR based on activity level
     const activityMultiplier = {
