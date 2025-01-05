@@ -1,12 +1,11 @@
-// Declare chart variables globally
+// Declare macro chart variable globally
 let macroChart = null;
 
 // Add click event listener for calculate button
 document.getElementById('calculateBtn').addEventListener('click', calculateCalories);
 
-// Initialize charts when DOM is loaded
+// Initialize macro chart when DOM is loaded
 document.addEventListener('DOMContentLoaded', function () {
-    // Initialize macro chart
     const macroCtx = document.getElementById('macroChart').getContext('2d');
     if (macroCtx) {
         macroChart = new Chart(macroCtx, {
@@ -50,34 +49,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
-
-// Function to update the calorie bar chart
-function updateChart(data) {
-    const ctx = document.getElementById('calorieChart').getContext('2d');
-    if (window.calorieChart) {
-        window.calorieChart.destroy();
-    }
-    window.calorieChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Maintain', 'Mild Loss', 'Loss', 'Extreme Loss'],
-            datasets: [{
-                label: 'Calories/day',
-                data: data,
-                backgroundColor: ['#4f46e5', '#818cf8', '#0ea5e9', '#06b6d4']
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { display: false }
-            },
-            scales: {
-                y: { beginAtZero: true }
-            }
-        }
-    });
-}
 
 // Function to update the macronutrient chart
 function updateMacroChart(protein, carbs, fiber) {
@@ -135,11 +106,11 @@ function calculateCalories() {
     const carbs = Math.round(maintain * 0.5 / 4);
     const fiber = Math.round(weight * 0.14);
 
+    // Update macronutrient display
     document.getElementById('proteinIntake').textContent = `${protein}g/day`;
     document.getElementById('carbIntake').textContent = `${carbs}g/day`;
     document.getElementById('fiberIntake').textContent = `${fiber}g/day`;
 
-    // Update both charts
-    updateChart([maintain, mildLoss, loss, extremeLoss]);
+    // Update macro chart
     updateMacroChart(protein, carbs, fiber);
 }
