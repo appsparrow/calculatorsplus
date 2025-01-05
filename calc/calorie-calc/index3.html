@@ -6,8 +6,8 @@
     <title>Calorie Calculator</title>
     
     <!-- Remove the missing file references -->
-    <!-- <script src="/assets/components.js"></script> -->
-    <!-- <link rel="stylesheet" href="/assets/common.css"> -->
+    <script src="/assets/components.js"></script>
+    <link rel="stylesheet" href="/assets/common.css">
     
     <!-- Add Chart.js before your custom scripts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
@@ -47,8 +47,148 @@
 </head>
 
 <body>
-    <!-- Your existing HTML structure -->
-    
+    <div id="header-component"></div>
+    <div class="app-container">
+        <!-- Navigation Tabs -->
+        <!-- <div class="calculator-nav">
+            <div class="calc-tab">
+                <i class="fas fa-calculator"></i> Mortgage
+            </div>
+            <div class="calc-tab">
+                <i class="fas fa-car"></i> Loan Comparison
+            </div>
+            <div class="calc-tab active">
+                <i class="fas fa-utensils"></i> Calorie Calculator
+            </div>
+        </div> -->
+
+        <!-- Main Grid Layout -->
+        <div class="calculator-grid">
+            <!-- Input Section -->
+            <div class="calculator-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <h2 class="card-title">Calorie Calculator</h2>
+                </div>
+                <div class="input-group">
+                    <label class="input-label" for="age">Age</label>
+                    <input type="number" class="input-field" id="age" min="15" max="80" value="27">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Gender</label>
+                    <select class="input-field" id="gender">
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Height</label>
+                    <div class="height-inputs">
+                        <input type="number" class="input-field" id="heightFeet" min="4" max="7" value="5"
+                            placeholder="Feet">
+                        <input type="number" class="input-field" id="heightInches" min="0" max="11" value="10"
+                            placeholder="Inches">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label class="input-label" for="weight">Weight (lbs)</label>
+                    <input type="number" class="input-field" id="weight" min="50" max="500" value="203">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Activity Level</label>
+                    <select class="input-field" id="activity">
+                        <option value="sedentary">Sedentary: little or no exercise</option>
+                        <option value="light">Light: exercise 1-3 times/week</option>
+                        <option value="moderate" selected>Moderate: exercise 4-5 times/week</option>
+                        <option value="active">Active: daily exercise or intense exercise 3-4 times/week</option>
+                        <option value="very-active">Very Active: intense exercise 6-7 times/week</option>
+                    </select>
+                </div>
+                <button class="calc-button" id="calculateBtn">Calculate Calories</button>
+            </div>
+
+            <!-- Results Section -->
+            <div class="calculator-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <h2 class="card-title">Calorie Results</h2>
+                </div>
+                <div class="result-grid">
+                    <div class="result-item">
+                        <div class="result-value" id="maintainCalories">-</div>
+                        <div class="result-label">Maintain Weight</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-value" id="mildLossCalories">-</div>
+                        <div class="result-label">Mild Weight Loss (0.5 lb/week)</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-value" id="lossCalories">-</div>
+                        <div class="result-label">Weight Loss (1 lb/week)</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-value" id="extremeLossCalories">-</div>
+                        <div class="result-label">Extreme Weight Loss (2 lb/week)</div>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="calorieChart"></canvas>
+                </div>
+
+                <div class="calculator-card scenarios-card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <h2 class="card-title">Macronutrient Breakdown</h2>
+                    </div>
+                    <div class="scenarios-grid">
+                        <div class="scenario-card-inactive">
+                            <h3>Protein</h3>
+                            <p id="proteinIntake">-</p>
+                        </div>
+                        <div class="scenario-card-inactive">
+                            <h3>Carbohydrates</h3>
+                            <p id="carbIntake">-</p>
+                        </div>
+                        <div class="scenario-card-inactive">
+                            <h3>Fiber</h3>
+                            <p id="fiberIntake">-</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scenarios Section -->
+        <!-- <div class="calculator-card scenarios-card">
+            <div class="card-header">
+                <div class="card-icon">
+                    <i class="fas fa-info-circle"></i>
+                </div>
+                <h2 class="card-title">Macronutrient Breakdown</h2>
+            </div>
+            <div class="scenarios-grid">
+                <div class="scenario-card">
+                    <h3>Protein</h3>
+                    <p id="proteinIntake">-</p>
+                </div>
+                <div class="scenario-card">
+                    <h3>Carbohydrates</h3>
+                    <p id="carbIntake">-</p>
+                </div>
+                <div class="scenario-card">
+                    <h3>Fiber</h3>
+                    <p id="fiberIntake">-</p>
+                </div>
+            </div>
+        </div> -->
+    </div>
+    <div id="footer-component"></div>    
     <!-- Replace the external script with inline JavaScript -->
     <script>
         // Initialize chart variable
