@@ -305,6 +305,11 @@
                 calculateBtn.addEventListener('click', calculateCalories);
             }
 
+        
+
+
+        });
+
             // Add this function to update the macro chart
 function updateMacroChart(protein, carbs, fiber) {
     if (!macroChart) {
@@ -315,9 +320,6 @@ function updateMacroChart(protein, carbs, fiber) {
     macroChart.data.datasets[0].data = [protein, carbs, fiber];
     macroChart.update();
 }
-
-
-        });
 
 
 
