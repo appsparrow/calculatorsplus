@@ -3,249 +3,235 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculator Template</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <title>Auto Loan Comparison</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="T3styles.css">
+    
     <style>
-        :root {
-            --primary-color: #2563eb;
-            --secondary-color: #1e40af;
-            --background-color: #f8fafc;
-            --text-color: #1f2937;
+        .comparison-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-        }
-
-        body {
-            background-color: var(--background-color);
-            color: var(--text-color);
-            line-height: 1.6;
-        }
-
-        header {
-            background-color: white;
-            padding: 1rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
+        .loan-card {
+            background: var(--card-bg);
+            border-radius: 16px;
             padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
         }
 
-        .calculator-title {
-            font-size: 2rem;
-            margin-bottom: 2rem;
-            color: var(--primary-color);
+        .loan-card:hover {
+            transform: translateY(-5px);
         }
 
-        .input-section {
-            background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            margin-bottom: 2rem;
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text);
         }
 
         .input-group {
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
         }
 
-        label {
+        .input-label {
             display: block;
             margin-bottom: 0.5rem;
-            font-weight: 500;
+            color: var(--text-light);
+            font-size: 0.9rem;
         }
 
-        input {
+        .input-field {
             width: 100%;
             padding: 0.75rem;
-            border: 1px solid #e5e7eb;
-            border-radius: 4px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
             font-size: 1rem;
+            transition: all 0.3s ease;
+            background: var(--background);
         }
 
-        .results-section {
-            background: white;
-            padding: 2rem;
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .calc-button {
+            width: 100%;
+            padding: 0.75rem;
+            border: none;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            margin-bottom: 2rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
-        .chart-container {
-            background: white;
+        .calc-button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .results-card {
+            background: var(--card-bg);
+            border-radius: 16px;
             padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            margin-bottom: 2rem;
+            margin-top: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         }
 
-        .scenarios {
+        .result-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
+            gap: 1.5rem;
             margin-bottom: 2rem;
         }
 
-        .scenario-card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: transform 0.2s;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        .result-item {
+            padding: 1rem;
+            background: var(--background);
+            border-radius: 12px;
+            text-align: center;
         }
 
-        .scenario-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        .result-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
         }
 
-        button {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background-color 0.2s;
-        }
-
-        button:hover {
-            background-color: var(--secondary-color);
+        .result-label {
+            color: var(--text-light);
+            font-size: 0.9rem;
         }
     </style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <h1>Calculator App</h1>
+    <div class="app-container">
+        <h1>Auto Loan Comparison Calculator</h1>
+        <div class="comparison-container">
+            <!-- Loan Option 1 -->
+            <div class="loan-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-car"></i>
+                    </div>
+                    <h2 class="card-title">Loan Option 1</h2>
+                </div>
+                <div class="input-group">
+                    <label class="input-label" for="vehiclePrice1">Vehicle Price ($)</label>
+                    <input type="number" id="vehiclePrice1" class="input-field" placeholder="Enter vehicle price">
+                </div>
+                <div class="input-group">
+                    <label class="input-label" for="downPayment1">Down Payment ($)</label>
+                    <input type="number" id="downPayment1" class="input-field" placeholder="Enter down payment">
+                </div>
+                <div class="input-group">
+                    <label class="input-label" for="interestRate1">Interest Rate (%)</label>
+                    <input type="number" id="interestRate1" class="input-field" placeholder="Enter interest rate">
+                </div>
+                <div class="input-group">
+                    <label class="input-label" for="term1">Term (Years)</label>
+                    <input type="number" id="term1" class="input-field" placeholder="Enter loan term">
+                </div>
+            </div>
+
+            <!-- Loan Option 2 -->
+            <div class="loan-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-car-side"></i>
+                    </div>
+                    <h2 class="card-title">Loan Option 2</h2>
+                </div>
+                <div class="input-group">
+                    <label class="input-label" for="vehiclePrice2">Vehicle Price ($)</label>
+                    <input type="number" id="vehiclePrice2" class="input-field" placeholder="Enter vehicle price">
+                </div>
+                <div class="input-group">
+                    <label class="input-label" for="downPayment2">Down Payment ($)</label>
+                    <input type="number" id="downPayment2" class="input-field" placeholder="Enter down payment">
+                </div>
+                <div class="input-group">
+                    <label class="input-label" for="interestRate2">Interest Rate (%)</label>
+                    <input type="number" id="interestRate2" class="input-field" placeholder="Enter interest rate">
+                </div>
+                <div class="input-group">
+                    <label class="input-label" for="term2">Term (Years)</label>
+                    <input type="number" id="term2" class="input-field" placeholder="Enter loan term">
+                </div>
+            </div>
         </div>
-    </header>
 
-    <main class="container">
-        <h2 class="calculator-title">Investment Calculator</h2>
+        <!-- Compare Button -->
+        <button class="calc-button" onclick="compareLoans()">Compare Loans</button>
 
-        <section class="input-section">
-            <div class="input-group">
-                <label for="initial">Initial Investment ($)</label>
-                <input type="number" id="initial" min="0">
+        <!-- Results Section -->
+        <div class="results-card">
+            <h2>Loan Comparison Results</h2>
+            <div class="result-grid">
+                <div class="result-item">
+                    <div class="result-value" id="monthlyPayment1">$0</div>
+                    <div class="result-label">Monthly Payment (Loan 1)</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-value" id="monthlyPayment2">$0</div>
+                    <div class="result-label">Monthly Payment (Loan 2)</div>
+                </div>
             </div>
-            <div class="input-group">
-                <label for="monthly">Monthly Contribution ($)</label>
-                <input type="number" id="monthly" min="0">
-            </div>
-            <div class="input-group">
-                <label for="years">Investment Period (Years)</label>
-                <input type="number" id="years" min="1">
-            </div>
-            <button onclick="calculate()">Calculate</button>
-        </section>
-
-        <section class="results-section">
-            <h3>Results</h3>
-            <div id="results"></div>
-        </section>
-
-        <section class="chart-container">
-            <canvas id="resultChart"></canvas>
-        </section>
-
-        <section class="scenarios">
-            <div class="scenario-card" onclick="loadScenario('conservative')">
-                <h3>Conservative</h3>
-                <p>Low risk, steady growth</p>
-            </div>
-            <div class="scenario-card" onclick="loadScenario('moderate')">
-                <h3>Moderate</h3>
-                <p>Balanced risk and return</p>
-            </div>
-            <div class="scenario-card" onclick="loadScenario('aggressive')">
-                <h3>Aggressive</h3>
-                <p>Higher risk, higher potential</p>
-            </div>
-        </section>
-    </main>
+        </div>
+    </div>
 
     <script>
-        let chart;
+        function compareLoans() {
+            // Example calculation logic
+            const vehiclePrice1 = parseFloat(document.getElementById('vehiclePrice1').value) || 0;
+            const downPayment1 = parseFloat(document.getElementById('downPayment1').value) || 0;
+            const interestRate1 = parseFloat(document.getElementById('interestRate1').value) || 0;
+            const term1 = parseFloat(document.getElementById('term1').value) || 0;
 
-        function calculate() {
-            const initial = parseFloat(document.getElementById('initial').value) || 0;
-            const monthly = parseFloat(document.getElementById('monthly').value) || 0;
-            const years = parseInt(document.getElementById('years').value) || 0;
+            const vehiclePrice2 = parseFloat(document.getElementById('vehiclePrice2').value) || 0;
+            const downPayment2 = parseFloat(document.getElementById('downPayment2').value) || 0;
+            const interestRate2 = parseFloat(document.getElementById('interestRate2').value) || 0;
+            const term2 = parseFloat(document.getElementById('term2').value) || 0;
 
-            // Sample calculation (replace with your actual calculation logic)
-            const finalAmount = initial + (monthly * 12 * years);
+            const monthlyPayment1 = calculateMonthlyPayment(vehiclePrice1, downPayment1, interestRate1, term1);
+            const monthlyPayment2 = calculateMonthlyPayment(vehiclePrice2, downPayment2, interestRate2, term2);
 
-            // Display results
-            document.getElementById('results').innerHTML = `
-                <p>Initial Investment: $${initial.toLocaleString()}</p>
-                <p>Total Contributions: $${(monthly * 12 * years).toLocaleString()}</p>
-                <p>Final Amount: $${finalAmount.toLocaleString()}</p>
-            `;
-
-            updateChart(years, initial, finalAmount);
+            document.getElementById('monthlyPayment1').textContent = `$${monthlyPayment1.toFixed(2)}`;
+            document.getElementById('monthlyPayment2').textContent = `$${monthlyPayment2.toFixed(2)}`;
         }
 
-        function updateChart(years, initial, final) {
-            const ctx = document.getElementById('resultChart').getContext('2d');
-
-            // Destroy existing chart if it exists
-            if (chart) {
-                chart.destroy();
-            }
-
-            // Create new chart
-            chart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: Array.from({length: years + 1}, (_, i) => `Year ${i}`),
-                    datasets: [{
-                        label: 'Investment Growth',
-                        data: Array.from({length: years + 1}, (_, i) => 
-                            initial + (final - initial) * (i / years)
-                        ),
-                        borderColor: '#2563eb',
-                        tension: 0.1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                        },
-                        title: {
-                            display: true,
-                            text: 'Investment Growth Over Time'
-                        }
-                    }
-                }
-            });
-        }
-
-        function loadScenario(type) {
-            // Sample scenarios (replace with your actual scenarios)
-            const scenarios = {
-                conservative: { initial: 10000, monthly: 500, years: 10 },
-                moderate: { initial: 20000, monthly: 1000, years: 15 },
-                aggressive: { initial: 30000, monthly: 2000, years: 20 }
-            };
-
-            const scenario = scenarios[type];
-            document.getElementById('initial').value = scenario.initial;
-            document.getElementById('monthly').value = scenario.monthly;
-            document.getElementById('years').value = scenario.years;
-
-            calculate();
+        function calculateMonthlyPayment(vehiclePrice, downPayment, interestRate, term) {
+            const loanAmount = vehiclePrice - downPayment;
+            const monthlyRate = interestRate / 100 / 12;
+            const numberOfPayments = term * 12;
+            return (loanAmount * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -numberOfPayments));
         }
     </script>
 </body>
