@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calorie Calculator</title>
+    
+    <!-- Remove the missing file references -->
+    <!-- <script src="/assets/components.js"></script> -->
+    <!-- <link rel="stylesheet" href="/assets/common.css"> -->
+    
+    <!-- Add Chart.js before your custom scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Include your T3Styles directly if possible, or add the styles inline -->
+    <link rel="stylesheet" href="/T3Styles.css">
+
+    <style>
+        /* Add the root variables and basic styles here from your CSS */
+        :root {
+            --primary: #4f46e5;
+            --primary-light: #818cf8;
+            --secondary: #0ea5e9;
+            --accent: #06b6d4;
+            --background: #f8fafc;
+            --card-bg: #ffff;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+        }
+
+        /* Add specific chart styles */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: var(--card-bg);
+            border-radius: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Your existing HTML structure -->
+    
+    <!-- Replace the external script with inline JavaScript -->
+    <script>
+        // Initialize chart variable
+        let calorieChart = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initial chart setup
+            const ctx = document.getElementById('calorieChart');
+            if (ctx) {
+                calorieChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Maintain', 'Mild Loss', 'Loss', 'Extreme Loss'],
+                        datasets: [{
+                            label: 'Calories/day',
+                            data: [0, 0, 0, 0],
+                            backgroundColor: [
+                                '#4f46e5',
+                                '#818cf8',
+                                '#0ea5e9',
+                                '#06b6d4'
+                            ],
+                            borderRadius: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: {
+                                    color: 'rgba(0, 0, 0, 0.1)'
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    display: false
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Add event listener to calculate button
+            const calculateBtn = document.getElementById('calculateBtn');
+            if (calculateBtn) {
+                calculateBtn.addEventListener('click', calculateCalories);
+            }
+        });
+
+        function updateChart(data) {
+            if (!calorieChart) {
+                console.error('Chart not initialized');
+                return;
+            }
+
+            calorieChart.data.datasets[0].data = data;
+            calorieChart.update();
+        }
+
+        function calculateCalories() {
+            const age = parseInt(document.getElementById('age').value);
+            const gender = document.getElementById('gender').value;
+            const heightFeet = parseInt(document.getElementById('heightFeet').value);
+            const heightInches = parseInt(document.getElementById('heightInches').value);
+            const weight = parseInt(document.getElementById('weight').value);
+            const activity = document.getElementById('activity').value;
+
+            const height = heightFeet * 12 + heightInches;
+
+            // Calculate BMR
+            let bmr;
+            if (gender === 'male') {
+                bmr = (10 * (weight / 2.205)) + (6.25 * (height * 2.54)) - (5 * age) + 5;
+            } else {
+                bmr = (10 * (weight / 2.205)) + (6.25 * (height * 2.54)) - (5 * age) - 161;
+            }
+
+            // Activity multipliers
+            const activityMultiplier = {
+                sedentary: 1.2,
+                light: 1.375,
+                moderate: 1.55,
+                active: 1.725,
+                'very-active': 1.9
+            };
+
+            const tdee = bmr * activityMultiplier[activity];
+
+            // Calculate calorie needs
+            const maintain = Math.round(tdee);
+            const mildLoss = Math.round(tdee * 0.9);
+            const loss = Math.round(tdee * 0.8);
+            const extremeLoss = Math.round(tdee * 0.61);
+
+            // Update results
+            document.getElementById('maintainCalories').textContent = `${maintain} Calories/day`;
+            document.getElementById('mildLossCalories').textContent = `${mildLoss} Calories/day`;
+            document.getElementById('lossCalories').textContent = `${loss} Calories/day`;
+            document.getElementById('extremeLossCalories').textContent = `${extremeLoss} Calories/day`;
+
+            // Calculate macronutrients
+            const protein = Math.round(maintain * 0.3 / 4);
+            const carbs = Math.round(maintain * 0.5 / 4);
+            const fiber = Math.round(weight * 0.14);
+
+            // Update macronutrient display
+            document.getElementById('proteinIntake').textContent = `${protein}g/day`;
+            document.getElementById('carbIntake').textContent = `${carbs}g/day`;
+            document.getElementById('fiberIntake').textContent = `${fiber}g/day`;
+
+            // Update chart
+            updateChart([maintain, mildLoss, loss, extremeLoss]);
+        }
+    </script>
+</body>
+</html>
