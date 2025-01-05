@@ -105,9 +105,7 @@
                         <div class="result-label">Extreme Weight Loss (2 lb/week)</div>
                     </div>
                 </div>
-                <div class="chart-container">
-                    <canvas id="calorieChart"></canvas>
-                </div>
+
 
                 <div class="calculator-card scenarios-card">
                     <div class="card-header">
@@ -130,6 +128,10 @@
                             <p id="fiberIntake">28g/day</p>
                         </div>
                     </div>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="calorieChart"></canvas>
                 </div>
             </div>
         </div>
@@ -167,86 +169,7 @@
     <script>
 
 
-// Add this variable at the top with your calorieChart variable
-let macroChart = null;
-
-document.addEventListener('DOMContentLoaded', function() {
-    // Your existing chart initialization code...
-
-    // Initialize macro chart
-    const macroCtx = document.getElementById('macroChart');
-    if (macroCtx) {
-        macroChart = new Chart(macroCtx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Protein', 'Carbohydrates', 'Fiber'],
-                datasets: [{
-                    data: [0, 0, 0],
-                    backgroundColor: [
-                        '#4f46e5',  // Primary
-                        '#0ea5e9',  // Secondary
-                        '#06b6d4'   // Accent
-                    ],
-                    borderWidth: 0,
-                    hoverOffset: 4
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            padding: 20,
-                            font: {
-                                size: 12
-                            }
-                        }
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return `${context.label}: ${context.raw}g`;
-                            }
-                        }
-                    }
-                },
-                cutout: '60%'
-            }
-        });
-    }
-});
-
-// Add this function to update the macro chart
-function updateMacroChart(protein, carbs, fiber) {
-    if (!macroChart) {
-        console.error('Macro chart not initialized');
-        return;
-    }
-
-    macroChart.data.datasets[0].data = [protein, carbs, fiber];
-    macroChart.update();
-}
-
-// Update your calculateCalories function to include the macro chart update
-function calculateCalories() {
-    // ... existing calculation code ...
-
-    // Calculate macronutrients
-    const protein = Math.round(maintain * 0.3 / 4);
-    const carbs = Math.round(maintain * 0.5 / 4);
-    const fiber = Math.round(weight * 0.14);
-
-    // Update macronutrient display
-    document.getElementById('proteinIntake').textContent = `${protein}g/day`;
-    document.getElementById('carbIntake').textContent = `${carbs}g/day`;
-    document.getElementById('fiberIntake').textContent = `${fiber}g/day`;
-
-    // Update both charts
-    updateChart([maintain, mildLoss, loss, extremeLoss]);
-    updateMacroChart(protein, carbs, fiber);
-}
+       
     </script>
 </body>
 
