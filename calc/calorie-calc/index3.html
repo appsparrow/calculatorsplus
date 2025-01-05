@@ -432,7 +432,19 @@
             updateMacroChart(protein, carbs, fiber);
 
 
+
+
         }
+
+        function selectScenario(element) {
+    // Remove selected class from all cards
+    document.querySelectorAll('.macro-card').forEach(card => {
+        card.classList.remove('selected');
+    });
+    
+    // Add selected class to clicked card
+    element.classList.add('selected');
+}
     </script>
 </body>
 
