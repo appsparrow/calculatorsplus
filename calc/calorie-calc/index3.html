@@ -43,6 +43,14 @@
             background: var(--card-bg);
             border-radius: 12px;
         }
+        .macro-chart-container {
+    position: relative;
+    height: 250px;
+    width: 100%;
+    max-width: 400px;
+    margin: 1rem auto;
+    padding: 1rem;
+}
     </style>
 </head>
 
@@ -139,28 +147,34 @@
                     <canvas id="calorieChart"></canvas>
                 </div>
 
+
                 <div class="calculator-card scenarios-card">
-                    <div class="card-header">
-                        <div class="card-icon">
-                            <i class="fas fa-info-circle"></i>
-                        </div>
-                        <h2 class="card-title">Macronutrient Breakdown</h2>
-                    </div>
-                    <div class="scenarios-grid">
-                        <div class="scenario-card-inactive">
-                            <h3>Protein</h3>
-                            <p id="proteinIntake">-</p>
-                        </div>
-                        <div class="scenario-card-inactive">
-                            <h3>Carbohydrates</h3>
-                            <p id="carbIntake">-</p>
-                        </div>
-                        <div class="scenario-card-inactive">
-                            <h3>Fiber</h3>
-                            <p id="fiberIntake">-</p>
-                        </div>
-                    </div>
-                </div>
+    <div class="card-header">
+        <div class="card-icon">
+            <i class="fas fa-info-circle"></i>
+        </div>
+        <h2 class="card-title">Macronutrient Breakdown</h2>
+    </div>
+    <!-- Add this chart container before the scenarios-grid -->
+    <div class="macro-chart-container">
+        <canvas id="macroChart"></canvas>
+    </div>
+    <div class="scenarios-grid">
+        <div class="scenario-card-inactive">
+            <h3>Protein</h3>
+            <p id="proteinIntake">-</p>
+        </div>
+        <div class="scenario-card-inactive">
+            <h3>Carbohydrates</h3>
+            <p id="carbIntake">-</p>
+        </div>
+        <div class="scenario-card-inactive">
+            <h3>Fiber</h3>
+            <p id="fiberIntake">-</p>
+        </div>
+    </div>
+</div>
+
             </div>
         </div>
 
@@ -193,6 +207,7 @@
     <script>
         // Initialize chart variable
         let calorieChart = null;
+        let macroChart = null;
 
         document.addEventListener('DOMContentLoaded', function() {
             // Initial chart setup
@@ -239,12 +254,73 @@
                 });
             }
 
+            const macroCtx = document.getElementById('macroChart');
+    if (macroCtx) {
+        macroChart = new Chart(macroCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Protein', 'Carbohydrates', 'Fiber'],
+                datasets: [{
+                    data: [0, 0, 0],
+                    backgroundColor: [
+                        '#4f46e5',  // Primary
+                        '#0ea5e9',  // Secondary
+                        '#06b6d4'   // Accent
+                    ],
+                    borderWidth: 0,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 20,
+                            font: {
+                                size: 12
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `${context.label}: ${context.raw}g`;
+                            }
+                        }
+                    }
+                },
+                cutout: '60%'
+            }
+        });
+    }
+
+            
+
             // Add event listener to calculate button
             const calculateBtn = document.getElementById('calculateBtn');
             if (calculateBtn) {
                 calculateBtn.addEventListener('click', calculateCalories);
             }
+
+            // Add this function to update the macro chart
+function updateMacroChart(protein, carbs, fiber) {
+    if (!macroChart) {
+        console.error('Macro chart not initialized');
+        return;
+    }
+
+    macroChart.data.datasets[0].data = [protein, carbs, fiber];
+    macroChart.update();
+}
+
+
         });
+
+
+
 
         function updateChart(data) {
             if (!calorieChart) {
@@ -298,18 +374,23 @@
             document.getElementById('extremeLossCalories').textContent = `${extremeLoss} Calories/day`;
 
             // Calculate macronutrients
-            const protein = Math.round(maintain * 0.3 / 4);
-            const carbs = Math.round(maintain * 0.5 / 4);
-            const fiber = Math.round(weight * 0.14);
+    const protein = Math.round(maintain * 0.3 / 4);
+    const carbs = Math.round(maintain * 0.5 / 4);
+    const fiber = Math.round(weight * 0.14);
 
-            // Update macronutrient display
-            document.getElementById('proteinIntake').textContent = `${protein}g/day`;
-            document.getElementById('carbIntake').textContent = `${carbs}g/day`;
-            document.getElementById('fiberIntake').textContent = `${fiber}g/day`;
+    // Update macronutrient display
+    document.getElementById('proteinIntake').textContent = `${protein}g/day`;
+    document.getElementById('carbIntake').textContent = `${carbs}g/day`;
+    document.getElementById('fiberIntake').textContent = `${fiber}g/day`;
 
-            // Update chart
-            updateChart([maintain, mildLoss, loss, extremeLoss]);
+    // Update both charts
+    updateChart([maintain, mildLoss, loss, extremeLoss]);
+    updateMacroChart(protein, carbs, fiber);
+
+            
         }
     </script>
 </body>
 </html>
+
+
