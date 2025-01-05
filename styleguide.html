@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T3 Style Guide</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/T3Styles.css">
+    <style>
+        .style-section {
+            margin: 3rem 0;
+            padding: 2rem;
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: var(--text);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .color-item {
+            padding: 1rem;
+            border-radius: 8px;
+            color: white;
+        }
+
+        .code-block {
+            background: var(--background);
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            font-family: monospace;
+        }
+
+        .component-demo {
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: var(--background);
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <h1 style="margin-bottom: 2rem;">T3 Style Guide</h1>
+
+        <!-- Color Palette -->
+        <section class="style-section">
+            <h2 class="section-title">Color Palette</h2>
+            <div class="color-grid">
+                <div class="color-item" style="background: var(--primary);">
+                    Primary<br>#4f46e5
+                </div>
+                <div class="color-item" style="background: var(--primary-light);">
+                    Primary Light<br>#818cf8
+                </div>
+                <div class="color-item" style="background: var(--secondary);">
+                    Secondary<br>#0ea5e9
+                </div>
+                <div class="color-item" style="background: var(--accent);">
+                    Accent<br>#06b6d4
+                </div>
+                <div class="color-item" style="background: var(--success);">
+                    Success<br>#10b981
+                </div>
+                <div class="color-item" style="background: var(--warning);">
+                    Warning<br>#f59e0b
+                </div>
+                <div class="color-item" style="background: var(--error);">
+                    Error<br>#ef4444
+                </div>
+                <div class="color-item" style="background: var(--text); color: white;">
+                    Text<br>#1e293b
+                </div>
+                <div class="color-item" style="background: var(--text-light); color: white;">
+                    Text Light<br>#64748b
+                </div>
+                <div class="color-item" style="background: var(--border); color: var(--text);">
+                    Border<br>#e2e8f0
+                </div>
+            </div>
+        </section>
+
+        <!-- Typography -->
+        <section class="style-section">
+            <h2 class="section-title">Typography</h2>
+            <div class="component-demo">
+                <h1 class="card-title">Heading 1 - Card Title (1.25rem)</h1>
+                <h2>Heading 2 (1.5rem)</h2>
+                <h3>Heading 3 (1.25rem)</h3>
+                <p class="input-label">Input Label (0.9rem)</p>
+                <p>Regular Text (1rem)</p>
+                <p class="tile-description">Description Text (0.9rem)</p>
+            </div>
+        </section>
+
+        <!-- Buttons -->
+        <section class="style-section">
+            <h2 class="section-title">Buttons</h2>
+            <div class="component-demo">
+                <button class="calc-button">Primary Button</button>
+            </div>
+        </section>
+
+        <!-- Input Fields -->
+        <section class="style-section">
+            <h2 class="section-title">Input Fields</h2>
+            <div class="component-demo">
+                <div class="input-group">
+                    <label class="input-label">Sample Input</label>
+                    <input type="text" class="input-field" placeholder="Enter value">
+                </div>
+            </div>
+        </section>
+
+        <!-- Cards -->
+        <section class="style-section">
+            <h2 class="section-title">Cards</h2>
+            
+            <!-- Calculator Card -->
+            <div class="component-demo">
+                <div class="calculator-card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-calculator"></i>
+                        </div>
+                        <h2 class="card-title">Calculator Card</h2>
+                    </div>
+                    <p>Calculator card content goes here</p>
+                </div>
+            </div>
+
+            <!-- Macro Tiles -->
+            <div class="component-demo">
+                <div class="macro-tiles">
+                    <div class="macro-tile">
+                        <div class="tile-icon">
+                            <i class="fas fa-dumbbell"></i>
+                        </div>
+                        <div class="tile-content">
+                            <h3>Sample Tile</h3>
+                            <div class="tile-value">
+                                100<span>units</span>
+                            </div>
+                            <p class="tile-description">Description text goes here</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Result Cards -->
+            <div class="component-demo">
+                <div class="result-grid">
+                    <div class="result-item">
+                        <div class="result-value">1,234</div>
+                        <div class="result-label">Sample Result</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Navigation -->
+        <section class="style-section">
+            <h2 class="section-title">Navigation</h2>
+            <div class="component-demo">
+                <div class="calculator-nav">
+                    <div class="calc-tab active">Active Tab</div>
+                    <div class="calc-tab">Inactive Tab</div>
+                    <div class="calc-tab">Another Tab</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Charts -->
+        <section class="style-section">
+            <h2 class="section-title">Chart Containers</h2>
+            <div class="component-demo">
+                <div class="chart-container">
+                    Chart Container (300px height)
+                </div>
+                <div class="macro-chart-container">
+                    Macro Chart Container (250px height)
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
