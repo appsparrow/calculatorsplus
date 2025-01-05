@@ -33,8 +33,6 @@
             --warning: #f59e0b;
             --error: #ef4444;
         }
-
- 
     </style>
 </head>
 
@@ -139,67 +137,50 @@
                         </div>
                         <h2 class="card-title">Macronutrient Breakdown</h2>
                     </div>
-                    <!-- Add this chart container before the scenarios-grid -->
-                    <div class="macro-chart-container">
-                        <canvas id="macroChart"></canvas>
+
+
+
+
+                    <div class="macro-tiles">
+                        <div class="macro-tile">
+                            <div class="tile-icon">
+                                <i class="fas fa-dumbbell"></i>
+                            </div>
+                            <div class="tile-content">
+                                <h3>Protein</h3>
+                                <div class="tile-value">
+                                    221<span>g/day</span>
+                                </div>
+                                <p class="tile-description">Essential for muscle growth and repair</p>
+                            </div>
+                        </div>
+
+                        <div class="macro-tile">
+                            <div class="tile-icon">
+                                <i class="fas fa-bread-slice"></i>
+                            </div>
+                            <div class="tile-content">
+                                <h3>Carbohydrates</h3>
+                                <div class="tile-value">
+                                    369<span>g/day</span>
+                                </div>
+                                <p class="tile-description">Primary energy source for your body</p>
+                            </div>
+                        </div>
+
+                        <div class="macro-tile">
+                            <div class="tile-icon">
+                                <i class="fas fa-seedling"></i>
+                            </div>
+                            <div class="tile-content">
+                                <h3>Fiber</h3>
+                                <div class="tile-value">
+                                    28<span>g/day</span>
+                                </div>
+                                <p class="tile-description">Supports digestive health</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="scenarios-grid">
-                        <div class="scenario-card">
-                            <h3>Protein</h3>
-                            <p id="proteinIntake">-</p>
-                        </div>
-                        <div class="scenario-card">
-                            <h3>Carbohydrates</h3>
-                            <p id="carbIntake">-</p>
-                        </div>
-                        <div class="scenario-card">
-                            <h3>Fiber</h3>
-                            <p id="fiberIntake">-</p>
-                        </div>
-                    </div>
-
-
-            
-    <div class="macro-tiles">
-        <div class="macro-tile">
-            <div class="tile-icon">
-                <i class="fas fa-dumbbell"></i>
-            </div>
-            <div class="tile-content">
-                <h3>Protein</h3>
-                <div class="tile-value">
-                    221<span>g/day</span>
-                </div>
-                <p class="tile-description">Essential for muscle growth and repair</p>
-            </div>
-        </div>
-
-        <div class="macro-tile">
-            <div class="tile-icon">
-                <i class="fas fa-bread-slice"></i>
-            </div>
-            <div class="tile-content">
-                <h3>Carbohydrates</h3>
-                <div class="tile-value">
-                    369<span>g/day</span>
-                </div>
-                <p class="tile-description">Primary energy source for your body</p>
-            </div>
-        </div>
-
-        <div class="macro-tile">
-            <div class="tile-icon">
-                <i class="fas fa-seedling"></i>
-            </div>
-            <div class="tile-content">
-                <h3>Fiber</h3>
-                <div class="tile-value">
-                    28<span>g/day</span>
-                </div>
-                <p class="tile-description">Supports digestive health</p>
-            </div>
-        </div>
-    </div>
 
 
 
