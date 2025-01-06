@@ -95,71 +95,78 @@
 
             <div class="calculator-card animate-in" style="animation-delay: 0.1s;">
 
-                <div class="chart-container">
+                <div class="chart-container" style="height: 300px;">
                     <canvas id="payoffChart"></canvas>
                 </div>
             </div>
 
             <!-- Scenarios Card -->
-            <div class="calculator-card scenarios-card animate-in" style="animation-delay: 0.2s; grid-column: 1 / -1;">
-                <div class="card-header">
-                    <div class="card-icon">
-                        <i class="fas fa-lightbulb"></i>
-                    </div>
-                    <h2 class="card-title">Payment Scenarios</h2>
-                </div>
-
-                <!-- Replace the existing scenarios-grid div with this -->
-                <div class="scenarios-grid">
-                    <div class="scenario-card-static">
-                        <i class="fas fa-plus-circle"></i>
-                        <div class="scenario-title">Extra Payment</div>
-                        <div class="scenario-description">Add \$200 extra to your monthly payment</div>
-                        <div class="scenario-content" id="extraPayment">
-                            <p>New payoff time: <span class="time">-</span></p>
-                            <p>Interest saved: <span class="savings">-</span></p>
-                            <p>Months saved: <span class="months">-</span></p>
-                        </div>
-                    </div>
-
-                    <div class="scenario-card-static">
-                        <!-- <div class="scenario-card-static" onclick="loadScenario('lumpSum')"> -->
-                        <i class="fas fa-money-bill-wave"></i>
-                        <div class="scenario-title">Lump Sum Payment</div>
-                        <div class="scenario-description">Add a one-time payment of \$2,000</div>
-                        <div class="scenario-content" id="lumpSum">
-                            <p>New payoff time: <span class="time">-</span></p>
-                            <p>Interest saved: <span class="savings">-</span></p>
-                            <p>Months saved: <span class="months">-</span></p>
-                        </div>
-                    </div>
-
-                    <div class="scenario-card-static">
-                        <!-- <div class="scenario-card-static" onclick="loadScenario('accelerated')"></div> -->
-                        <i class="fas fa-fast-forward"></i>
-                        <div class="scenario-title">Bi-Weekly Payments</div>
-                        <div class="scenario-description">Pay half your monthly payment every two weeks</div>
-                        <div class="scenario-content" id="accelerated">
-                            <p>New payoff time: <span class="time">-</span></p>
-                            <p>Interest saved: <span class="savings">-</span></p>
-                            <p>Months saved: <span class="months">-</span></p>
-                        </div>
-                    </div>
-
-                    <div class="scenario-card-static">
-                        <!-- <div class="scenario-card-static" onclick="loadScenario('debtAvalanche')"> -->
-
-                        <i class="fas fa-snowflake"></i>
-                        <div class="scenario-title">Debt Avalanche</div>
-                        <div class="scenario-description">Focus all extra money on this highest-interest debt</div>
-                        <div class="scenario-content" id="debtAvalanche">
-                            <p>New payoff time: <span class="time">-</span></p>
-                            <p>Interest saved: <span class="savings">-</span></p>
-                            <p>Months saved: <span class="months">-</span></p>
-                        </div>
-                    </div>
-                </div>
+            <h3 style="margin: 2rem 0 1rem">Macro Tiles</h3>
+<div class="macro-tiles">
+    <!-- Extra Payment Tile -->
+    <div class="macro-tile">
+        <div class="tile-icon">
+            <i class="fas fa-plus-circle"></i>
+        </div>
+        <div class="tile-content">
+            <h3>Extra Payment</h3>
+            <div class="tile-value">
+                <span class="time">-</span>
             </div>
+            <p class="tile-description">Add \$200 extra to your monthly payment</p>
+            <p class="tile-details">Interest saved: <span class="savings">-</span></p>
+            <p class="tile-details">Months saved: <span class="months">-</span></p>
+        </div>
+    </div>
+
+    <!-- Lump Sum Payment Tile -->
+    <div class="macro-tile">
+        <div class="tile-icon">
+            <i class="fas fa-money-bill-wave"></i>
+        </div>
+        <div class="tile-content">
+            <h3>Lump Sum Payment</h3>
+            <div class="tile-value">
+                <span class="time">-</span>
+            </div>
+            <p class="tile-description">Add a one-time payment of \$2,000</p>
+            <p class="tile-details">Interest saved: <span class="savings">-</span></p>
+            <p class="tile-details">Months saved: <span class="months">-</span></p>
+        </div>
+    </div>
+
+    <!-- Bi-Weekly Payments Tile -->
+    <div class="macro-tile">
+        <div class="tile-icon">
+            <i class="fas fa-fast-forward"></i>
+        </div>
+        <div class="tile-content">
+            <h3>Bi-Weekly Payments</h3>
+            <div class="tile-value">
+                <span class="time">-</span>
+            </div>
+            <p class="tile-description">Pay half your monthly payment every two weeks</p>
+            <p class="tile-details">Interest saved: <span class="savings">-</span></p>
+            <p class="tile-details">Months saved: <span class="months">-</span></p>
+        </div>
+    </div>
+
+    <!-- Debt Avalanche Tile -->
+    <div class="macro-tile">
+        <div class="tile-icon">
+            <i class="fas fa-snowflake"></i>
+        </div>
+        <div class="tile-content">
+            <h3>Debt Avalanche</h3>
+            <div class="tile-value">
+                <span class="time">-</span>
+            </div>
+            <p class="tile-description">Focus all extra money on the highest-interest debt</p>
+            <p class="tile-details">Interest saved: <span class="savings">-</span></p>
+            <p class="tile-details">Months saved: <span class="months">-</span></p>
+        </div>
+    </div>
+</div>
         </div>
     </div>
     <div id="footer-component"></div>
