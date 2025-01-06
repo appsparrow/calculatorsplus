@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,13 +15,12 @@
 
     <!-- Keep all the CSS from your T3 template and add these specific styles -->
     <style>
-
+ 
     </style>
 </head>
-
 <body>
     <div id="header-component"></div>
-
+    
     <div class="app-container">
         <div class="calculator-grid">
             <!-- Loan 1 Card -->
@@ -87,28 +85,22 @@
 
             <!-- Results Card (Now on the side) -->
             <div class="calculator-card animate-in results-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h2 class="card-title">Loan Comparison Results</h2>
+                </div>
+
+                <button class="calc-button" onclick="compareLoans()">
+                    Compare Loans <i class="fas fa-arrow-right"></i>
+                </button>
+
+                <div id="results"></div>
+
                 <div class="chart-container">
                     <canvas id="comparisonChart"></canvas>
                 </div>
-            </div>
-        </div>
-
-        <div class="calculator-card animate-in results-card">
-            <div class="card-header">
-                <div class="card-icon">
-                    <i class="fas fa-chart-bar"></i>
-                </div>
-                <h2 class="card-title">Loan Comparison Results</h2>
-            </div>
-
-            <button class="calc-button" onclick="compareLoans()">
-                Compare Loans <i class="fas fa-arrow-right"></i>
-            </button>
-
-            <div id="results"></div>
-
-            <div class="chart-container">
-                <canvas id="comparisonChart"></canvas>
             </div>
         </div>
     </div>
@@ -122,14 +114,14 @@
             const loanAmount = price - down;
             const monthlyRate = rate / 12 / 100;
             const numberOfPayments = term * 12;
-
+            
             const monthlyPayment = rate > 0
                 ? loanAmount * monthlyRate / (1 - Math.pow(1 + monthlyRate, -numberOfPayments))
                 : loanAmount / numberOfPayments;
-
+            
             const totalPayment = monthlyPayment * numberOfPayments;
             const totalInterest = totalPayment - loanAmount;
-
+            
             return {
                 loanAmount,
                 monthlyPayment,
@@ -161,7 +153,7 @@
             );
 
             const difference = loan2.totalPayment - loan1.totalPayment;
-
+            
             const resultsHtml = `
                 <table class="comparison-table">
                     <tr>
@@ -191,11 +183,11 @@
                     </tr>
                 </table>
                 <div class="savings ${difference < 0 ? 'negative' : ''}">
-                    ${difference > 0
-                    ? `Option 1 saves you ${formatCurrency(difference)} over the loan term`
-                    : difference < 0
-                        ? `Option 2 saves you ${formatCurrency(-difference)} over the loan term`
-                        : 'Both options cost the same over the loan term'}
+                    ${difference > 0 
+                        ? `Option 1 saves you ${formatCurrency(difference)} over the loan term`
+                        : difference < 0 
+                            ? `Option 2 saves you ${formatCurrency(-difference)} over the loan term`
+                            : 'Both options cost the same over the loan term'}
                 </div>
             `;
 
@@ -207,7 +199,7 @@
 
         function updateChart(loan1, loan2) {
             const ctx = document.getElementById('comparisonChart').getContext('2d');
-
+            
             if (comparisonChart) {
                 comparisonChart.destroy();
             }
@@ -266,5 +258,4 @@
         });
     </script>
 </body>
-
 </html>
