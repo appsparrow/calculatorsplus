@@ -368,7 +368,9 @@ body {
 
 
 
+/* macro Tile styles */
 
+/* Default styles for macro tiles */
 .macro-tiles {
     display: flex;
     flex-wrap: wrap;
@@ -451,4 +453,16 @@ body {
     color: var(--text-light);
     font-size: 0.9rem;
     line-height: 1.5;
+}
+
+/* Responsive styles for smaller screens */
+@media (max-width: 768px) {
+    .macro-tiles {
+        flex-direction: column; /* Stack tiles vertically */
+        gap: 1rem;
+    }
+
+    .macro-tile {
+        min-width: 100%; /* Make tiles take full width */
+    }
 }
