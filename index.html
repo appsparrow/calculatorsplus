@@ -6,6 +6,72 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculator Hub</title>
     <link rel="stylesheet" href="styles.css">  
+
+
+
+    <style>
+        .request-form-container {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            max-width: 500px;
+            margin: 2rem auto;
+        }
+
+        .request-form-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .request-form-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+
+        .request-form-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .request-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-message {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .form-message.success {
+            background: var(--success);
+            color: white;
+            display: block;
+        }
+
+        .form-message.error {
+            background: var(--error);
+            color: white;
+            display: block;
+        }
+
+
+
+    </style>
 </head>
 
 <body>
@@ -90,38 +156,14 @@
                 </div>
             `;
         }
-        /**
-                function submitRequest() {
-                    const description = document.getElementById('requestDescription').value;
-                    if (!description.trim()) {
-                        alert('Please describe the calculator you need');
-                        return;
-                    }
         
-                    const timestamp = new Date().toISOString();
-                    const content = `Request Time: ${timestamp}\nDescription: ${description}\n\n`;
-        
-                    const blob = new Blob([content], { type: 'text/plain' });
-                    const a = document.createElement('a');
-                    a.href = URL.createObjectURL(blob);
-                    a.download = 'calculator_requests.txt';
-                    a.click();
-        
-                    document.getElementById('successMessage').innerHTML = `
-                        <div class="success-message">
-                            Thank you for your request! We will consider adding this calculator.
-                        </div>`;
-                    document.getElementById('requestDescription').value = '';
-                }
-        **/
-
-
                         
 
 
 
 
 
+        // Caclulator new code begin
 
 
 
@@ -196,6 +238,47 @@
             }
         });
 
+        document.getElementById('calculatorRequestForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const formData = {
+                email: document.getElementById('email').value,
+                description: document.getElementById('description').value,
+                timestamp: new Date().toISOString(),
+                userAgent: navigator.userAgent
+            };
+
+            try {
+                const response = await fetch('save_calculator_request.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+                const messageDiv = document.getElementById('formMessage');
+
+                if (result.success) {
+                    messageDiv.className = 'form-message success';
+                    messageDiv.textContent = 'Thank you! Your calculator request has been submitted.';
+                    this.reset();
+                } else {
+                    messageDiv.className = 'form-message error';
+                    messageDiv.textContent = result.message || 'Failed to submit request. Please try again.';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                const messageDiv = document.getElementById('formMessage');
+                messageDiv.className = 'form-message error';
+                messageDiv.textContent = 'An error occurred. Please try again later.';
+            }
+        });
+
+
+        // Caclulator new code -end
+
         document.addEventListener('DOMContentLoaded', () => {
             createCalculatorCards();
             searchBox.value = '';
@@ -204,134 +287,92 @@
 
 
 
-
-// Add this to your existing JavaScript
-document.addEventListener('DOMContentLoaded', function() {
-    const calculatorRequestIcon = document.createElement('div');
-    calculatorRequestIcon.className = 'calculator-request-icon';
-    calculatorRequestIcon.innerHTML = '<i class="fas fa-question-circle"></i>';
-    document.body.appendChild(calculatorRequestIcon);
-
-    const requestForm = document.createElement('div');
-    requestForm.className = 'calculator-request-form';
-    requestForm.innerHTML = `
-        <div class="request-form-content">
-            <div class="close-form"><i class="fas fa-times"></i></div>
-            <h3>Calculator Request</h3>
-            <div class="input-group">
-                <label for="requestEmail">Email</label>
-                <input type="email" id="requestEmail" class="input-field" required>
-            </div>
-            <div class="input-group">
-                <label for="requestDescription">Description</label>
-                <textarea id="requestDescription" class="input-field" required></textarea>
-            </div>
-            <button type="button" class="calc-button" id="submitRequest">Submit Request</button>
-        </div>
-    `;
-    document.body.appendChild(requestForm);
-
-    // Add styles dynamically
-    const styles = `
-        .calculator-request-icon {
-            position: fixed;
-            top: 20px;
-            right: 70px;
-            background: var(--primary);
-            color: white;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 1000;
-        }
-        .calculator-request-form {
-            display: none;
-            position: fixed;
-            top: 0;
-            right: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1001;
-        }
-        .request-form-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            width: 90%;
-            max-width: 500px;
-        }
-        .close-form {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            cursor: pointer;
-        }
-    `;
-    
-    const styleSheet = document.createElement('style');
-    styleSheet.textContent = styles;
-    document.head.appendChild(styleSheet);
-
-    // Event Listeners
-    calculatorRequestIcon.addEventListener('click', () => {
-        requestForm.style.display = 'block';
-    });
-
-    requestForm.querySelector('.close-form').addEventListener('click', () => {
-        requestForm.style.display = 'none';
-    });
-
-    document.getElementById('submitRequest').addEventListener('click', async () => {
-        const email = document.getElementById('requestEmail').value;
-        const description = document.getElementById('requestDescription').value;
-
-        if (!email || !description) {
-            alert('Please fill in all fields');
-            return;
-        }
-
-        try {
-            const response = await fetch('/calculator_requests.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    email,
-                    calculator: 'Calorie Calculator',
-                    description
-                })
-            });
-
-            const result = await response.json();
-
-            if (result.success) {
-                alert('Request submitted successfully!');
-                requestForm.style.display = 'none';
-                document.getElementById('requestEmail').value = '';
-                document.getElementById('requestDescription').value = '';
-            } else {
-                throw new Error(result.message);
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            alert('Failed to submit request. Please try again later.');
-        }
-    });
-});
-
     </script>
 </body>
 
 </html>
 
+
+
+
+
+
+
+
+
+
+
+
+</style>
+</head>
+<body>
+    <div class="request-form-container">
+        <div class="request-form-header">
+            <div class="request-form-icon">
+                <i class="fas fa-calculator"></i>
+            </div>
+            <h2 class="request-form-title">Request a Calculator</h2>
+        </div>
+
+        <form id="calculatorRequestForm" class="request-form">
+            <div class="input-group">
+                <label class="input-label" for="email">Email Address</label>
+                <input type="email" id="email" class="input-field" required>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label" for="description">Calculator Description</label>
+                <textarea id="description" class="input-field" rows="4" required 
+                    placeholder="Please describe the calculator you're looking for..."></textarea>
+            </div>
+
+            <button type="submit" class="calc-button">
+                Submit Request
+            </button>
+        </form>
+
+        <div id="formMessage" class="form-message"></div>
+    </div>
+
+    <script>
+        document.getElementById('calculatorRequestForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const formData = {
+                email: document.getElementById('email').value,
+                description: document.getElementById('description').value,
+                timestamp: new Date().toISOString(),
+                userAgent: navigator.userAgent
+            };
+
+            try {
+                const response = await fetch('save_calculator_request.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+                const messageDiv = document.getElementById('formMessage');
+
+                if (result.success) {
+                    messageDiv.className = 'form-message success';
+                    messageDiv.textContent = 'Thank you! Your calculator request has been submitted.';
+                    this.reset();
+                } else {
+                    messageDiv.className = 'form-message error';
+                    messageDiv.textContent = result.message || 'Failed to submit request. Please try again.';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                const messageDiv = document.getElementById('formMessage');
+                messageDiv.className = 'form-message error';
+                messageDiv.textContent = 'An error occurred. Please try again later.';
+            }
+        });
+    </script>
+</body>
+</html>
 
