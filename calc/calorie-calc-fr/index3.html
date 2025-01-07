@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calorie Calculator</title>
+
+    <!-- Remove the missing file references -->
+    <script src="/assets/components.js"></script>
+    <link rel="stylesheet" href="/assets/common.css">
+
+    <!-- Add Chart.js before your custom scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Include your T3Styles directly if possible, or add the styles inline -->
+    <link rel="stylesheet" href="/T3Styles.css">
+    <link rel="stylesheet" href="/T3Styles-ext.css">
+
+
+</head>
+
+<body>
+    <div id="header-component"></div>
+    <div class="app-container">
+        
+
+        <!-- Main Grid Layout -->
+        <div class="calculator-grid">
+            <!-- Input Section -->
+            <div class="calculator-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <h2 class="card-title">Calorie Calculator</h2>
+                </div>
+                <div class="input-group">
+                    <label class="input-label" for="age">Age</label>
+                    <input type="number" class="input-field" id="age" min="15" max="80" value="27">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Gender</label>
+                    <select class="input-field" id="gender">
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Height</label>
+                    <div class="height-inputs">
+                        <input type="number" class="input-field" id="heightFeet" min="4" max="7" value="5"
+                            placeholder="Feet">
+                        <input type="number" class="input-field" id="heightInches" min="0" max="11" value="10"
+                            placeholder="Inches">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label class="input-label" for="weight">Weight (lbs)</label>
+                    <input type="number" class="input-field" id="weight" min="50" max="500" value="203">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Activity Level</label>
+                    <select class="input-field" id="activity">
+                        <option value="sedentary">Sedentary: little or no exercise</option>
+                        <option value="light">Light: exercise 1-3 times/week</option>
+                        <option value="moderate" selected>Moderate: exercise 4-5 times/week</option>
+                        <option value="active">Active: daily exercise or intense exercise 3-4 times/week</option>
+                        <option value="very-active">Very Active: intense exercise 6-7 times/week</option>
+                    </select>
+                </div>
+                <button class="calc-button" id="calculateBtn">Calculate Calories</button>
+            </div>
+
+            <!-- Results Section -->
+            <div class="calculator-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <h2 class="card-title">Calorie Results</h2>
+                </div>
+                <div class="result-grid">
+                    <div class="result-item">
+                        <div class="result-value" id="maintainCalories">-</div>
+                        <div class="result-label">Maintain Weight</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-value" id="mildLossCalories">-</div>
+                        <div class="result-label">Mild Weight Loss (0.5 lb/week)</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-value" id="lossCalories">-</div>
+                        <div class="result-label">Weight Loss (1 lb/week)</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-value" id="extremeLossCalories">-</div>
+                        <div class="result-label">Extreme Weight Loss (2 lb/week)</div>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="calorieChart"></canvas>
+                </div>
+
+
+                <div class="calculator-card scenarios-card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <h2 class="card-title">Macronutrient Breakdown</h2>
+                    </div>
+
+
+
+
+                    <div class="calculator-card">
+                        <div class="card-header">
+                            <div class="card-icon">
+                                <i class="fas fa-chart-pie"></i>
+                            </div>
+                            <h2 class="card-title">Macronutrient Breakdown</h2>
+                        </div>
+                        <div class="horizontal-tiles">
+                            <div class="horizontal-tile">
+                                <div class="tile-left">
+                                    <i class="fas fa-dumbbell"></i>
+                                </div>
+                                <div class="tile-right">
+                                    <h3>Protein</h3>
+                                    <p id="proteinIntake">221g/day</p>
+                                </div>
+                            </div>
+                            <div class="horizontal-tile">
+                                <div class="tile-left">
+                                    <i class="fas fa-bread-slice"></i>
+                                </div>
+                                <div class="tile-right">
+                                    <h3>Carbohydrates</h3>
+                                    <p id="carbIntake">369g/day</p>
+                                </div>
+                            </div>
+                            <div class="horizontal-tile">
+                                <div class="tile-left">
+                                    <i class="fas fa-seedling"></i>
+                                </div>
+                                <div class="tile-right">
+                                    <h3>Fiber</h3>
+                                    <p id="fiberIntake">28g/day</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Scenarios Section -->
+        <!-- <div class="calculator-card scenarios-card">
+            <div class="card-header">
+                <div class="card-icon">
+                    <i class="fas fa-info-circle"></i>
+                </div>
+                <h2 class="card-title">Macronutrient Breakdown</h2>
+            </div>
+            <div class="scenarios-grid">
+                <div class="scenario-card">
+                    <h3>Protein</h3>
+                    <p id="proteinIntake">-</p>
+                </div>
+                <div class="scenario-card">
+                    <h3>Carbohydrates</h3>
+                    <p id="carbIntake">-</p>
+                </div>
+                <div class="scenario-card">
+                    <h3>Fiber</h3>
+                    <p id="fiberIntake">-</p>
+                </div>
+            </div>
+        </div> -->
+    </div>
+    <div id="footer-component"></div>
+    <!-- Replace the external script with inline JavaScript -->
+    <script>
+        // Initialize chart variable
+        let calorieChart = null;
+        let macroChart = null;
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initial chart setup
+            const ctx = document.getElementById('calorieChart');
+            if (ctx) {
+                calorieChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Maintain', 'Mild Loss', 'Loss', 'Extreme Loss'],
+                        datasets: [{
+                            label: 'Calories/day',
+                            data: [0, 0, 0, 0],
+                            backgroundColor: [
+                                '#4f46e5',
+                                '#818cf8',
+                                '#0ea5e9',
+                                '#06b6d4'
+                            ],
+                            borderRadius: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: {
+                                    color: 'rgba(0, 0, 0, 0.1)'
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    display: false
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            const macroCtx = document.getElementById('macroChart');
+            if (macroCtx) {
+                macroChart = new Chart(macroCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Protein', 'Carbohydrates', 'Fiber'],
+                        datasets: [{
+                            data: [0, 0, 0],
+                            backgroundColor: [
+                                '#4f46e5',  // Primary
+                                '#0ea5e9',  // Secondary
+                                '#06b6d4'   // Accent
+                            ],
+                            borderWidth: 0,
+                            hoverOffset: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    padding: 20,
+                                    font: {
+                                        size: 12
+                                    }
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function (context) {
+                                        return `${context.label}: ${context.raw}g`;
+                                    }
+                                }
+                            }
+                        },
+                        cutout: '60%'
+                    }
+                });
+            }
+
+
+
+            // Add event listener to calculate button
+            const calculateBtn = document.getElementById('calculateBtn');
+            if (calculateBtn) {
+                calculateBtn.addEventListener('click', calculateCalories);
+            }
+
+
+
+
+        });
+
+        // Add this function to update the macro chart
+        function updateMacroChart(protein, carbs, fiber) {
+            if (!macroChart) {
+                console.error('Macro chart not initialized');
+                return;
+            }
+
+            macroChart.data.datasets[0].data = [protein, carbs, fiber];
+            macroChart.update();
+        }
+
+
+
+
+        function updateChart(data) {
+            if (!calorieChart) {
+                console.error('Chart not initialized');
+                return;
+            }
+
+            calorieChart.data.datasets[0].data = data;
+            calorieChart.update();
+        }
+
+        function calculateCalories() {
+            const age = parseInt(document.getElementById('age').value);
+            const gender = document.getElementById('gender').value;
+            const heightFeet = parseInt(document.getElementById('heightFeet').value);
+            const heightInches = parseInt(document.getElementById('heightInches').value);
+            const weight = parseInt(document.getElementById('weight').value);
+            const activity = document.getElementById('activity').value;
+
+            const height = heightFeet * 12 + heightInches;
+
+            // Calculate BMR
+            let bmr;
+            if (gender === 'male') {
+                bmr = (10 * (weight / 2.205)) + (6.25 * (height * 2.54)) - (5 * age) + 5;
+            } else {
+                bmr = (10 * (weight / 2.205)) + (6.25 * (height * 2.54)) - (5 * age) - 161;
+            }
+
+            // Activity multipliers
+            const activityMultiplier = {
+                sedentary: 1.2,
+                light: 1.375,
+                moderate: 1.55,
+                active: 1.725,
+                'very-active': 1.9
+            };
+
+            const tdee = bmr * activityMultiplier[activity];
+
+            // Calculate calorie needs
+            const maintain = Math.round(tdee);
+            const mildLoss = Math.round(tdee * 0.9);
+            const loss = Math.round(tdee * 0.8);
+            const extremeLoss = Math.round(tdee * 0.61);
+
+            // Update results
+            document.getElementById('maintainCalories').textContent = `${maintain} Calories/day`;
+            document.getElementById('mildLossCalories').textContent = `${mildLoss} Calories/day`;
+            document.getElementById('lossCalories').textContent = `${loss} Calories/day`;
+            document.getElementById('extremeLossCalories').textContent = `${extremeLoss} Calories/day`;
+
+            // Calculate macronutrients
+            const protein = Math.round(maintain * 0.3 / 4);
+            const carbs = Math.round(maintain * 0.5 / 4);
+            const fiber = Math.round(weight * 0.14);
+
+            // Update macronutrient display
+            document.getElementById('proteinIntake').textContent = `${protein}g/day`;
+            document.getElementById('carbIntake').textContent = `${carbs}g/day`;
+            document.getElementById('fiberIntake').textContent = `${fiber}g/day`;
+
+            // Update both charts
+            updateChart([maintain, mildLoss, loss, extremeLoss]);
+            updateMacroChart(protein, carbs, fiber);
+
+
+        }
+    </script>
+</body>
+
+</html>
+
+
+
+
+
