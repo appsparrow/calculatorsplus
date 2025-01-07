@@ -81,7 +81,39 @@
             <label for="calculator-search" class="search-label">I am looking for a calculator for...</label>
             <input type="text" id="calculator-search" class="search-box" placeholder="Type here to find a calculator">
         </div>
-        <div class="calculator-grid" id="calculatorGrid"></div>
+        <div class="calculator-grid" id="calculatorGrid">
+
+            <!-- Calculator Request Form (hidden by default) -->
+<div id="calculatorRequestForm" class="calculator-card" style="display: none;">
+    <div class="card-header">
+        <div class="card-icon">
+            <i class="fas fa-lightbulb"></i>
+        </div>
+        <h2 class="card-title">Request a Calculator</h2>
+    </div>
+    
+    <form id="requestForm">
+        <div class="input-group">
+            <label class="input-label" for="email">Email Address</label>
+            <input type="email" id="email" class="input-field" required>
+        </div>
+        <div class="input-group">
+            <label class="input-label" for="description">Calculator Description</label>
+            <textarea id="description" class="input-field" rows="4" required 
+                placeholder="Please describe the calculator you're looking for..."></textarea>
+        </div>
+        <button type="submit" class="calc-button">Submit Request</button>
+    </form>
+    
+    <div id="formMessage" style="display: none; margin-top: 1rem; padding: 1rem; border-radius: 8px;"></div>
+</div>
+
+
+
+
+
+
+        </div>
     </div>
 
     <script>
@@ -161,218 +193,97 @@
 
 
 
+// Add this to your existing JavaScript where you handle calculator search
+function handleCalculatorSearch(searchTerm) {
+    const calculatorGrid = document.getElementById('calculatorGrid');
+    const requestForm = document.getElementById('calculatorRequestForm');
+    const calculators = calculatorGrid.getElementsByClassName('calculator-card');
+    
+    let found = false;
+    searchTerm = searchTerm.toLowerCase();
 
-
-        // Caclulator new code begin
-
-
-
-        function submitRequest() {
-            const description = document.getElementById('requestDescription').value;
-            if (!description.trim()) {
-                alert('Please describe the calculator you need');
-                return;
-            }
-
-            // Create form data
-            const formData = new FormData();
-            formData.append('description', description);
-
-            // Send request to PHP endpoint
-            fetch('save_request.php', {
-                method: 'POST',
-                body: formData
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        document.getElementById('successMessage').innerHTML = `
-                <div class="success-message">
-                    Thank you for your request! We will consider adding this calculator.
-                </div>`;
-                        document.getElementById('requestDescription').value = '';
-                    } else {
-                        throw new Error(data.message || 'Failed to save request');
-                    }
-                })
-                .catch(error => {
-                    alert('Error saving request: ' + error.message);
-                });
+    // Hide all calculators first
+    Array.from(calculators).forEach(calculator => {
+        const title = calculator.querySelector('.card-title').textContent.toLowerCase();
+        if (title.includes(searchTerm)) {
+            calculator.style.display = 'block';
+            found = true;
+        } else {
+            calculator.style.display = 'none';
         }
+    });
 
-        function resetSearch() {
-            document.getElementById('calculator-search').value = '';
-            createCalculatorCards();
-        }
+    // Show/hide request form based on search results
+    if (!found && searchTerm.length > 0) {
+        requestForm.style.display = 'block';
+        // Pre-fill description with search term
+        document.getElementById('description').value = 
+            `I'm looking for a calculator for: ${searchTerm}`;
+    } else {
+        requestForm.style.display = 'none';
+    }
+}
 
-        function filterCalculators(searchTerm) {
-            const cards = document.querySelectorAll('.calculator-card');
-            let hasVisibleCards = false;
+// Add this to handle the form submission
+document.getElementById('requestForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = {
+        email: document.getElementById('email').value,
+        description: document.getElementById('description').value,
+        searchTerm: document.querySelector('.search-input').value, // Assuming you have a search input
+        timestamp: new Date().toISOString()
+    };
 
-            cards.forEach(card => {
-                const title = card.querySelector('h2').textContent.toLowerCase();
-                const description = card.querySelector('p').textContent.toLowerCase();
-
-                if (title.includes(searchTerm) || description.includes(searchTerm)) {
-                    card.style.display = 'block';
-                    card.style.opacity = '1';
-                    hasVisibleCards = true;
-                } else {
-                    card.style.display = 'none';
-                    card.style.opacity = '0';
-                }
-            });
-
-            if (!hasVisibleCards && searchTerm !== '') {
-                showRequestForm(searchTerm);
-            }
-        }
-
-        const searchBox = document.getElementById('calculator-search');
-        searchBox.addEventListener('input', (e) => {
-            const searchTerm = e.target.value.trim().toLowerCase();
-            if (searchTerm === '') {
-                createCalculatorCards();
-            } else {
-                filterCalculators(searchTerm);
-            }
+    try {
+        const response = await fetch('save_calculator_request.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
         });
 
-        document.getElementById('calculatorRequestForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
+        const result = await response.json();
+        const messageDiv = document.getElementById('formMessage');
+        messageDiv.style.display = 'block';
 
-            const formData = {
-                email: document.getElementById('email').value,
-                description: document.getElementById('description').value,
-                timestamp: new Date().toISOString(),
-                userAgent: navigator.userAgent
-            };
+        if (result.success) {
+            messageDiv.style.background = 'var(--success)';
+            messageDiv.style.color = 'white';
+            messageDiv.textContent = 'Thank you! Your calculator request has been submitted.';
+            
+            // Reset form after successful submission
+            this.reset();
+            
+            // Hide form after 3 seconds
+            setTimeout(() => {
+                document.getElementById('calculatorRequestForm').style.display = 'none';
+            }, 3000);
+        } else {
+            messageDiv.style.background = 'var(--error)';
+            messageDiv.style.color = 'white';
+            messageDiv.textContent = result.message || 'Failed to submit request. Please try again.';
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        const messageDiv = document.getElementById('formMessage');
+        messageDiv.style.display = 'block';
+        messageDiv.style.background = 'var(--error)';
+        messageDiv.style.color = 'white';
+        messageDiv.textContent = 'An error occurred. Please try again later.';
+    }
+});
 
-            try {
-                const response = await fetch('save_calculator_request.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(formData)
-                });
-
-                const result = await response.json();
-                const messageDiv = document.getElementById('formMessage');
-
-                if (result.success) {
-                    messageDiv.className = 'form-message success';
-                    messageDiv.textContent = 'Thank you! Your calculator request has been submitted.';
-                    this.reset();
-                } else {
-                    messageDiv.className = 'form-message error';
-                    messageDiv.textContent = result.message || 'Failed to submit request. Please try again.';
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                const messageDiv = document.getElementById('formMessage');
-                messageDiv.className = 'form-message error';
-                messageDiv.textContent = 'An error occurred. Please try again later.';
-            }
-        });
-
-
-        // Caclulator new code -end
-
-        document.addEventListener('DOMContentLoaded', () => {
-            createCalculatorCards();
-            searchBox.value = '';
-        });
-
+// Add this to your search input event listener
+document.querySelector('.search-input').addEventListener('input', function(e) {
+    handleCalculatorSearch(e.target.value);
+});
 
 
 
     </script>
 </body>
 
-</html>
-
-
-
-
-
-
-
-
-
-
-
-
-</style>
-</head>
-<body>
-    <div class="request-form-container">
-        <div class="request-form-header">
-            <div class="request-form-icon">
-                <i class="fas fa-calculator"></i>
-            </div>
-            <h2 class="request-form-title">Request a Calculator</h2>
-        </div>
-
-        <form id="calculatorRequestForm" class="request-form">
-            <div class="input-group">
-                <label class="input-label" for="email">Email Address</label>
-                <input type="email" id="email" class="input-field" required>
-            </div>
-
-            <div class="input-group">
-                <label class="input-label" for="description">Calculator Description</label>
-                <textarea id="description" class="input-field" rows="4" required 
-                    placeholder="Please describe the calculator you're looking for..."></textarea>
-            </div>
-
-            <button type="submit" class="calc-button">
-                Submit Request
-            </button>
-        </form>
-
-        <div id="formMessage" class="form-message"></div>
-    </div>
-
-    <script>
-        document.getElementById('calculatorRequestForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-
-            const formData = {
-                email: document.getElementById('email').value,
-                description: document.getElementById('description').value,
-                timestamp: new Date().toISOString(),
-                userAgent: navigator.userAgent
-            };
-
-            try {
-                const response = await fetch('save_calculator_request.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(formData)
-                });
-
-                const result = await response.json();
-                const messageDiv = document.getElementById('formMessage');
-
-                if (result.success) {
-                    messageDiv.className = 'form-message success';
-                    messageDiv.textContent = 'Thank you! Your calculator request has been submitted.';
-                    this.reset();
-                } else {
-                    messageDiv.className = 'form-message error';
-                    messageDiv.textContent = result.message || 'Failed to submit request. Please try again.';
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                const messageDiv = document.getElementById('formMessage');
-                messageDiv.className = 'form-message error';
-                messageDiv.textContent = 'An error occurred. Please try again later.';
-            }
-        });
-    </script>
-</body>
 </html>
 
