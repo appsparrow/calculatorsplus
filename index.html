@@ -77,19 +77,33 @@
             });
         }
 
+
+        // New ShowRequest form with JSON update
+
+
         function showRequestForm(searchTerm) {
-            const grid = document.getElementById('calculatorGrid');
-            grid.innerHTML = `
-                <div class="request-form">
-                    <h2>Request a Calculator</h2>
-                    <p>We couldn't find a calculator for "${searchTerm}". Please describe what you're looking for:</p>
-                    <textarea id="requestDescription" placeholder="I need a calculator that..."></textarea>
-                    <button class="submit-btn" onclick="submitRequest()">Submit Request</button>
-                    <div id="successMessage"></div>
-                    <button class="submit-btn" style="background: #868e96; margin-top: 1rem;" onclick="resetSearch()">Back to All Calculators</button>
-                </div>
-            `;
-        }
+    const grid = document.getElementById('calculatorGrid');
+    grid.innerHTML = `
+        <div class="request-form">
+            <h2>Request a Calculator</h2>
+            <p>We couldn't find a calculator for "${searchTerm}". Please describe what you're looking for:</p>
+            
+            <div class="form-group">
+                <label for="email">Your Email</label>
+                <input type="email" id="email" placeholder="Enter your email address" required>
+            </div>
+
+            <div class="form-group">
+                <label for="requestDescription">Description</label>
+                <textarea id="requestDescription" rows="4" placeholder="I need a calculator that..." required></textarea>
+            </div>
+
+            <button class="submit-btn" onclick="submitRequest()">Submit Request</button>
+            <div id="successMessage"></div>
+            <button class="submit-btn" style="background: #868e96; margin-top: 1rem;" onclick="resetSearch()">Back to All Calculators</button>
+        </div>
+    `;
+}
         /**
                 function submitRequest() {
                     const description = document.getElementById('requestDescription').value;
@@ -114,38 +128,49 @@
                     document.getElementById('requestDescription').value = '';
                 }
         **/
+
+
+        // NEW Submit Request with JSON 
+
         function submitRequest() {
-            const description = document.getElementById('requestDescription').value;
-            if (!description.trim()) {
-                alert('Please describe the calculator you need');
-                return;
-            }
+    const email = document.getElementById('email').value;
+    const description = document.getElementById('requestDescription').value;
 
-            // Create form data
-            const formData = new FormData();
-            formData.append('description', description);
+    if (!email.trim() || !description.trim()) {
+        alert('Please fill in all fields');
+        return;
+    }
 
-            // Send request to PHP endpoint
-            fetch('save_request.php', {
-                method: 'POST',
-                body: formData
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        document.getElementById('successMessage').innerHTML = `
+    // Create form data
+    const formData = new FormData();
+    formData.append('email', email);
+    formData.append('description', description);
+
+    // Send request to PHP endpoint
+    fetch('save_request.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            document.getElementById('successMessage').innerHTML = `
                 <div class="success-message">
                     Thank you for your request! We will consider adding this calculator.
                 </div>`;
-                        document.getElementById('requestDescription').value = '';
-                    } else {
-                        throw new Error(data.message || 'Failed to save request');
-                    }
-                })
-                .catch(error => {
-                    alert('Error saving request: ' + error.message);
-                });
+            document.getElementById('email').value = '';
+            document.getElementById('requestDescription').value = '';
+        } else {
+            throw new Error(data.message || 'Failed to save request');
         }
+    })
+    .catch(error => {
+        alert('Error saving request: ' + error.message);
+    });
+}
+
+
+
 
         function resetSearch() {
             document.getElementById('calculator-search').value = '';
