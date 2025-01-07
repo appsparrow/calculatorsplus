@@ -27,7 +27,7 @@ try {
     
     // Add new request to array
     $existingRequests[] = [
-        'type' => $requestData->type, // Add the type (feature or issue)
+        // 'type' => $requestData->type, // Add the type (feature or issue)
         'email' => $requestData->email,
         'calculator' => $requestData->calculator,
         'description' => $requestData->description,
