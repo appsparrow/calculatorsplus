@@ -58,52 +58,44 @@
 
 
 
-<?php
-header('Content-Type: application/json');
+document.getElementById('featureForm').addEventListener('submit', async (e) => {
+    e.preventDefault(); // Prevent form submission
 
-// Set error reporting
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+    // Get form values
+    const type = document.querySelector('input[name="type"]:checked').value;
+    const email = document.getElementById('email').value;
+    const calculator = document.getElementById('calculator').value;
+    const description = document.getElementById('description').value;
+    const timestamp = new Date().toISOString();
 
-// Allow CORS if needed
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: POST");
-header("Access-Control-Allow-Headers: Content-Type");
+    // Create the request object
+    const requestData = {
+        type, // Add the type (feature or issue)
+        email,
+        calculator,
+        description,
+        timestamp,
+    };
 
-try {
-    // Get the JSON data from the request
-    $jsonData = file_get_contents('php://input');
-    $requestData = json_decode($jsonData);
-    
-    // Path to the JSON file (two levels up)
-    $filePath = dirname(dirname(__FILE__)) . '/feature-requests.json';
-    
-    // Read existing requests or create empty array
-    $existingRequests = [];
-    if (file_exists($filePath)) {
-        $fileContent = file_get_contents($filePath);
-        $existingRequests = json_decode($fileContent, true) ?: [];
+    try {
+        // Send the request to the server
+        const response = await fetch('/path/to/your/php/script.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestData),
+        });
+
+        const result = await response.json();
+        if (result.success) {
+            alert('Request submitted successfully!');
+            document.getElementById('featureForm').reset(); // Reset the form
+        } else {
+            alert('Failed to submit request: ' + result.message);
+        }
+    } catch (error) {
+        console.error('Error submitting request:', error);
+        alert('An error occurred while submitting the request.');
     }
-    
-    // Add new request to array
-    $existingRequests[] = [
-        'type' => $requestData->type, // Add the type (feature or issue)
-        'email' => $requestData->email,
-        'calculator' => $requestData->calculator,
-        'description' => $requestData->description,
-        'timestamp' => $requestData->timestamp,
-        'ip' => $_SERVER['REMOTE_ADDR']
-    ];
-    
-    // Save back to file
-    if (file_put_contents($filePath, json_encode($existingRequests, JSON_PRETTY_PRINT))) {
-        echo json_encode(['success' => true, 'message' => 'Request saved successfully']);
-    } else {
-        throw new Exception('Failed to write to file');
-    }
-    
-} catch (Exception $e) {
-    http_response_code(500);
-    echo json_encode(['success' => false, 'message' => $e->getMessage()]);
-}
-?>
+});
