@@ -1,183 +1,206 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Feature Request Form</title>
+    <title>Calorie Calculator</title>
+    <link rel="stylesheet" href="assets/common.css">
+    <script src="/assets/components.js"></script>
+    <link rel="stylesheet" href="/assets/common.css">
+    <link rel="stylesheet" href="/T3Styles.css">
+    <link rel="stylesheet" href="/T3Styles-ext.css">
+    <link rel="stylesheet" href="cal-calc-styles.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        /* Feature Request Form Styles */
-        .feature-request-icon {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: var(--primary);
-            color: white;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
 
-        .feature-request-sidebar {
-            position: fixed;
-            top: 0;
-            right: -400px;
-            width: 400px;
-            height: 100vh;
-            background: white;
-            box-shadow: -2px 0 10px rgba(0,0,0,0.1);
-            transition: right 0.3s ease;
-            z-index: 1001;
-            padding: 2rem;
-        }
-
-        .feature-request-sidebar.active {
-            right: 0;
-        }
-
-        .close-sidebar {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            cursor: pointer;
-            font-size: 1.5rem;
-            color: var(--text-light);
-        }
-
-        .feature-form {
-            margin-top: 2rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: var(--text);
-            font-weight: 500;
-        }
-
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 0.75rem;
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            font-size: 1rem;
-        }
-
-        .form-group textarea {
-            min-height: 150px;
-            resize: vertical;
-        }
-
-        .submit-btn {
-            width: 100%;
-            padding: 0.75rem;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: opacity 0.3s ease;
-        }
-
-        .submit-btn:hover {
-            opacity: 0.9;
-        }
-
-        @media (max-width: 480px) {
-            .feature-request-sidebar {
-                width: 100%;
-                right: -100%;
-            }
-        }
-    </style>
 </head>
-<body>
-    <!-- Feature Request Icon -->
-    <div class="feature-request-icon">
-        <i class="fas fa-lightbulb"></i>
-    </div>
 
-    <!-- Feature Request Sidebar -->
-    <div class="feature-request-sidebar">
-        <div class="close-sidebar">
-            <i class="fas fa-times"></i>
+<body>
+    <div id="header-component"></div>
+    <div class="app-container">
+        <!-- Navigation Tabs -->
+        <!-- <div class="calculator-nav">
+            <div class="calc-tab">
+                <i class="fas fa-calculator"></i> Mortgage
+            </div>
+            <div class="calc-tab">
+                <i class="fas fa-car"></i> Loan Comparison
+            </div>
+            <div class="calc-tab active">
+                <i class="fas fa-utensils"></i> Calorie Calculator
+            </div>
+        </div> -->
+
+        <!-- Main Grid Layout -->
+        <div class="calculator-grid">
+            <!-- Input Section -->
+            <div class="calculator-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <h2 class="card-title">Calorie Calculator</h2>
+                </div>
+                <div class="input-group">
+                    <label class="input-label" for="age">Age</label>
+                    <input type="number" class="input-field" id="age" min="15" max="80" value="27">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Gender</label>
+                    <select class="input-field" id="gender">
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Height</label>
+                    <div class="height-inputs">
+                        <input type="number" class="input-field" id="heightFeet" min="4" max="7" value="5"
+                            placeholder="Feet">
+                        <input type="number" class="input-field" id="heightInches" min="0" max="11" value="10"
+                            placeholder="Inches">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label class="input-label" for="weight">Weight (lbs)</label>
+                    <input type="number" class="input-field" id="weight" min="50" max="500" value="203">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Activity Level</label>
+                    <select class="input-field" id="activity">
+                        <option value="sedentary">Sedentary: little or no exercise</option>
+                        <option value="light">Light: exercise 1-3 times/week</option>
+                        <option value="moderate" selected>Moderate: exercise 4-5 times/week</option>
+                        <option value="active">Active: daily exercise or intense exercise 3-4 times/week</option>
+                        <option value="very-active">Very Active: intense exercise 6-7 times/week</option>
+                    </select>
+                </div>
+                <button class="calc-button" id="calculateBtn">Calculate Calories</button>
+            </div>
+
+            <!-- Results Section -->
+            <div class="calculator-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <h2 class="card-title">Calorie Results</h2>
+                </div>
+                <div class="result-grid">
+                    <div class="result-item">
+                        <div class="result-value" id="maintainCalories">-</div>
+                        <div class="result-label">Maintain Weight</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-value" id="mildLossCalories">-</div>
+                        <div class="result-label">Mild Weight Loss (0.5 lb/week)</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-value" id="lossCalories">-</div>
+                        <div class="result-label">Weight Loss (1 lb/week)</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-value" id="extremeLossCalories">-</div>
+                        <div class="result-label">Extreme Weight Loss (2 lb/week)</div>
+                    </div>
+                </div>
+
+
+                <div class="calculator-card scenarios-card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <h2 class="card-title">Macronutrient Breakdown</h2>
+                    </div>
+                    <div class="scenarios-grid">
+                        <div class="scenario-card-inactive">
+                            <h3>Protein</h3>
+                            <p id="proteinIntake">221g/day</p>
+                        </div>
+                        <div class="scenario-card-inactive">
+                            <h3>Carbohydrates</h3>
+                            <p id="carbIntake">369g/day</p>
+                        </div>
+                        <div class="scenario-card-inactive">
+                            <h3>Fiber</h3>
+                            <p id="fiberIntake">28g/day</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="macroChart"></canvas>
+                </div>
+            </div>
         </div>
-        <h2>Feature Request</h2>
-        <form class="feature-form" id="featureForm">
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" required>
+
+        <!-- Scenarios Section -->
+        <!-- <div class="calculator-card scenarios-card">
+            <div class="card-header">
+                <div class="card-icon">
+                    <i class="fas fa-info-circle"></i>
+                </div>
+                <h2 class="card-title">Macronutrient Breakdown</h2>
             </div>
-            <div class="form-group">
-                <label for="calculator">Calculator</label>
-                <input type="text" id="calculator" value="Calorie Calculator" readonly>
+            <div class="scenarios-grid">
+                <div class="scenario-card">
+                    <h3>Protein</h3>
+                    <p id="proteinIntake">-</p>
+                </div>
+                <div class="scenario-card">
+                    <h3>Carbohydrates</h3>
+                    <p id="carbIntake">-</p>
+                </div>
+                <div class="scenario-card">
+                    <h3>Fiber</h3>
+                    <p id="fiberIntake">-</p>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="description">Description</label>
-                <textarea id="description" required placeholder="Describe the feature you'd like to see..."></textarea>
-            </div>
-            <button type="submit" class="submit-btn">Submit Request</button>
-        </form>
+        </div> -->
     </div>
+    <div id="footer-component"></div>
+
+    <script src="calorie-calc.js"></script>
+
+
 
     <script>
-        // Toggle sidebar
-        const featureIcon = document.querySelector('.feature-request-icon');
-        const sidebar = document.querySelector('.feature-request-sidebar');
-        const closeBtn = document.querySelector('.close-sidebar');
 
-        featureIcon.addEventListener('click', () => {
-            sidebar.classList.add('active');
-        });
 
-        closeBtn.addEventListener('click', () => {
-            sidebar.classList.remove('active');
-        });
-
-        // Handle form submission
-        const featureForm = document.getElementById('featureForm');
-        featureForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const formData = {
-                email: document.getElementById('email').value,
-                calculator: document.getElementById('calculator').value,
-                description: document.getElementById('description').value,
-                timestamp: new Date().toISOString()
-            };
-
-            // Convert form data to string
-            const dataString = JSON.stringify(formData, null, 2);
-
-            // Create a Blob and download it as a text file
-            const blob = new Blob([dataString], { type: 'text/plain' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `feature-request-${Date.now()}.txt`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            window.URL.revokeObjectURL(url);
-
-            // Reset form and close sidebar
-            featureForm.reset();
-            document.getElementById('calculator').value = 'Calorie Calculator';
-            sidebar.classList.remove('active');
-            alert('Feature request submitted successfully!');
-        });
+       
     </script>
+
+
+<!-- Feature Request Icon -->
+<div class="feature-request-icon">
+    <i class="fas fa-lightbulb"></i>
+</div>
+
+<!-- Feature Request Sidebar -->
+<div class="feature-request-sidebar">
+    <div class="close-sidebar">
+        <i class="fas fa-times"></i>
+    </div>
+    <h2>Feature Request</h2>
+    <form class="feature-form" id="featureForm">
+        <div class="input-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" class="input-field" required>
+        </div>
+        <div class="input-group">
+            <label for="calculator">Calculator</label>
+            <input type="text" id="calculator" class="input-field" value="Calorie Calculator" readonly>
+        </div>
+        <div class="input-group">
+            <label for="description">Description</label>
+            <textarea id="description" class="input-field" required placeholder="Describe the feature you'd like to see..." style="min-height: 150px; resize: vertical;"></textarea>
+        </div>
+        <button type="submit" class="calc-button">Submit Request</button>
+    </form>
+</div>
 </body>
+
 </html>
