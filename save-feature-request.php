@@ -13,7 +13,7 @@ header("Access-Control-Allow-Headers: Content-Type");
 try {
     // Get the JSON data from the request
     $jsonData = file_get_contents('php://input');
-    $featureRequest = json_decode($jsonData);
+    $requestData = json_decode($jsonData);
     
     // Path to the JSON file (two levels up)
     $filePath = dirname(dirname(__FILE__)) . '/feature-requests.json';
@@ -27,16 +27,17 @@ try {
     
     // Add new request to array
     $existingRequests[] = [
-        'email' => $featureRequest->email,
-        'calculator' => $featureRequest->calculator,
-        'description' => $featureRequest->description,
-        'timestamp' => $featureRequest->timestamp,
+        'type' => $requestData->type, // Add the type (feature or issue)
+        'email' => $requestData->email,
+        'calculator' => $requestData->calculator,
+        'description' => $requestData->description,
+        'timestamp' => $requestData->timestamp,
         'ip' => $_SERVER['REMOTE_ADDR']
     ];
     
     // Save back to file
     if (file_put_contents($filePath, json_encode($existingRequests, JSON_PRETTY_PRINT))) {
-        echo json_encode(['success' => true, 'message' => 'Feature request saved successfully']);
+        echo json_encode(['success' => true, 'message' => 'Request saved successfully']);
     } else {
         throw new Exception('Failed to write to file');
     }
