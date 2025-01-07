@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculator Hub</title>
-    <link rel="stylesheet" href="styles.css">  
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
@@ -80,30 +80,37 @@
 
         // New ShowRequest form with JSON update
 
-
         function showRequestForm(searchTerm) {
-    const grid = document.getElementById('calculatorGrid');
-    grid.innerHTML = `
-        <div class="request-form">
-            <h2>Request a Calculator</h2>
-            <p>We couldn't find a calculator for "${searchTerm}". Please describe what you're looking for:</p>
-            
-            <div class="form-group">
-                <label for="email">Your Email</label>
-                <input type="email" id="email" placeholder="Enter your email address" required>
-            </div>
+            const grid = document.getElementById('calculatorGrid');
+            grid.innerHTML = `
+                <div class="request-form">
+                    <div class="form-header">
+                        <h2>Request a Calculator</h2>
+                        <p>We couldn't find a calculator for "${searchTerm}". Please describe what you're looking for:</p>
+                    </div>
 
-            <div class="form-group">
-                <label for="requestDescription">Description</label>
-                <textarea id="requestDescription" rows="4" placeholder="I need a calculator that..." required></textarea>
-            </div>
+                    <div class="form-group">
+                        <label for="email">Your Email</label>
+                        <input type="email" id="email" placeholder="Enter your email address" required>
+                    </div>
 
-            <button class="submit-btn" onclick="submitRequest()">Submit Request</button>
-            <div id="successMessage"></div>
-            <button class="submit-btn" style="background: #868e96; margin-top: 1rem;" onclick="resetSearch()">Back to All Calculators</button>
-        </div>
-    `;
-}
+                    <div class="form-group">
+                        <label for="requestDescription">Description</label>
+                        <textarea id="requestDescription" rows="4" placeholder="I need a calculator that..." required></textarea>
+                    </div>
+
+                    <div class="button-container">
+                        <button class="submit-btn secondary-btn" onclick="resetSearch()">Back to Calculators</button>
+                        <button class="submit-btn primary-btn" onclick="submitRequest()">Submit Request</button>
+                    </div>
+
+                    <div id="successMessage"></div>
+                </div>
+            `;
+        }
+        // Rest of your existing JavaScript remains the same
+
+
         /**
                 function submitRequest() {
                     const description = document.getElementById('requestDescription').value;
@@ -133,41 +140,41 @@
         // NEW Submit Request with JSON 
 
         function submitRequest() {
-    const email = document.getElementById('email').value;
-    const description = document.getElementById('requestDescription').value;
+            const email = document.getElementById('email').value;
+            const description = document.getElementById('requestDescription').value;
 
-    if (!email.trim() || !description.trim()) {
-        alert('Please fill in all fields');
-        return;
-    }
+            if (!email.trim() || !description.trim()) {
+                alert('Please fill in all fields');
+                return;
+            }
 
-    // Create form data
-    const formData = new FormData();
-    formData.append('email', email);
-    formData.append('description', description);
+            // Create form data
+            const formData = new FormData();
+            formData.append('email', email);
+            formData.append('description', description);
 
-    // Send request to PHP endpoint
-    fetch('save_calculator_request.php', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            document.getElementById('successMessage').innerHTML = `
+            // Send request to PHP endpoint
+            fetch('save_calculator_request.php', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('successMessage').innerHTML = `
                 <div class="success-message">
                     Thank you for your request! We will consider adding this calculator.
                 </div>`;
-            document.getElementById('email').value = '';
-            document.getElementById('requestDescription').value = '';
-        } else {
-            throw new Error(data.message || 'Failed to save request');
+                        document.getElementById('email').value = '';
+                        document.getElementById('requestDescription').value = '';
+                    } else {
+                        throw new Error(data.message || 'Failed to save request');
+                    }
+                })
+                .catch(error => {
+                    alert('Error saving request: ' + error.message);
+                });
         }
-    })
-    .catch(error => {
-        alert('Error saving request: ' + error.message);
-    });
-}
 
 
 
