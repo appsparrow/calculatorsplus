@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="/T3Styles.css">
     <!-- <link rel="stylesheet" href="/T3Styles-ext.css"> -->
     <link rel="stylesheet" href="cal-calc-styles.css">
+    <link rel="stylesheet" href="/feature-request.css">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -128,7 +129,48 @@
 
       
     </div>
+
+
+
+
+
+    <!-- Feature Request Icon -->
+    <div class="feature-request-icon">
+        <i class="fas fa-lightbulb"></i>
+    </div>
+
+    <!-- Feature Request Sidebar -->
+    <div class="feature-request-sidebar">
+        <div class="close-sidebar">
+            <i class="fas fa-times"></i>
+        </div>
+        <h2>Feature Request</h2>
+        <form class="feature-form" id="featureForm">
+            <div class="input-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" class="input-field" required>
+            </div>
+            <div class="input-group">
+                <label for="calculator">Calculator</label>
+                <input type="text" id="calculator" class="input-field" value="Calorie Calculator" readonly>
+            </div>
+            <div class="input-group">
+                <label for="description">Description</label>
+                <textarea id="description" class="input-field" required
+                    placeholder="Describe the feature you'd like to see..."
+                    style="min-height: 150px; resize: vertical;"></textarea>
+            </div>
+            <button type="submit" class="calc-button">Submit Request</button>
+        </form>
+    </div>
+
+
+
+
     <div id="footer-component"></div>
+
+    <script src="/feature-request.js"></script>
+
 
     <script src="calorie-calc.js"></script>
 
