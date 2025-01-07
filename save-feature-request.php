@@ -16,7 +16,7 @@ try {
     $featureRequest = json_decode($jsonData);
     
     // Path to the JSON file (two levels up)
-    $filePath = dirname(dirname(__FILE__)) . 'feature-requests.json';
+    $filePath = dirname(dirname(__FILE__)) . '/feature-requests.json';
     
     // Read existing requests or create empty array
     $existingRequests = [];
