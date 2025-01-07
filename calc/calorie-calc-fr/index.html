@@ -230,7 +230,6 @@
 
 
     <script>
-
 // Feature Request Form functionality
 document.addEventListener('DOMContentLoaded', function() {
     const featureIcon = document.querySelector('.feature-request-icon');
@@ -258,28 +257,33 @@ document.addEventListener('DOMContentLoaded', function() {
             timestamp: new Date().toISOString()
         };
 
-        // Convert form data to string
-        const dataString = JSON.stringify(formData, null, 2);
+        try {
+            // Send data to PHP script
+            const response = await fetch('../../save-feature-request.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            });
 
-        // Create a Blob and download it as a text file
-        const blob = new Blob([dataString], { type: 'text/plain' });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `feature-request-${Date.now()}.txt`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
+            const result = await response.json();
 
-        // Reset form and close sidebar
-        featureForm.reset();
-        document.getElementById('calculator').value = 'Calorie Calculator';
-        sidebar.classList.remove('active');
-        alert('Feature request submitted successfully!');
+            if (result.success) {
+                // Reset form and close sidebar
+                featureForm.reset();
+                document.getElementById('calculator').value = 'Calorie Calculator';
+                sidebar.classList.remove('active');
+                alert('Feature request submitted successfully!');
+            } else {
+                throw new Error(result.message || 'Failed to submit feature request');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Failed to submit feature request. Please try again later.');
+        }
     });
 });
-
        
     </script>
 
