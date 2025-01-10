@@ -26,6 +26,7 @@ async function loadDietOptions() {
     try {
         const response = await fetch('data/diet-options.json');
         const data = await response.json();
+        // Make sure we're accessing the 'foods' array from the JSON
         return data.foods || [];
     } catch (error) {
         console.error('Error loading diet options:', error);
@@ -38,47 +39,50 @@ async function loadDietOptions() {
                 carbs: 0,
                 fiber: 0
             },
-            {
-                name: "Lentils",
-                type: "Vegetarian",
-                protein: 18,
-                carbs: 39,
-                fiber: 15
-            }
             // Add more fallback items as needed
         ];
     }
 }
 
 async function showDietOptionsForMacro(clickedMacro) {
-    const dietOptions = await loadDietOptions();
-    const dietPlanBody = document.getElementById('dietPlanBody');
-    
-    if (!dietPlanBody) {
-        console.error('Diet plan table body not found');
-        return;
+    try {
+        const dietOptions = await loadDietOptions();
+        
+        // Verify dietOptions is an array
+        if (!Array.isArray(dietOptions)) {
+            console.error('Diet options is not an array:', dietOptions);
+            return;
+        }
+
+        const dietPlanBody = document.getElementById('dietPlanBody');
+        if (!dietPlanBody) {
+            console.error('Diet plan table body not found');
+            return;
+        }
+
+        dietPlanBody.innerHTML = '';
+
+        let sortedOptions = [...dietOptions];
+        if (clickedMacro === 'protein') {
+            sortedOptions.sort((a, b) => b.protein - a.protein);
+        } else if (clickedMacro === 'carbs') {
+            sortedOptions.sort((a, b) => b.carbs - a.carbs);
+        } else if (clickedMacro === 'fiber') {
+            sortedOptions.sort((a, b) => b.fiber - a.fiber);
+        }
+
+        sortedOptions.forEach(item => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${item.name}</td>
+                <td>${item.type}</td>
+                <td>${item.protein}</td>
+                <td>${item.carbs}</td>
+                <td>${item.fiber}</td>
+            `;
+            dietPlanBody.appendChild(row);
+        });
+    } catch (error) {
+        console.error('Error displaying diet options:', error);
     }
-
-    dietPlanBody.innerHTML = '';
-
-    let sortedOptions = [...dietOptions];
-    if (clickedMacro === 'protein') {
-        sortedOptions.sort((a, b) => b.protein - a.protein);
-    } else if (clickedMacro === 'carbs') {
-        sortedOptions.sort((a, b) => b.carbs - a.carbs);
-    } else if (clickedMacro === 'fiber') {
-        sortedOptions.sort((a, b) => b.fiber - a.fiber);
-    }
-
-    sortedOptions.forEach(item => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${item.name}</td>
-            <td>${item.type}</td>
-            <td>${item.protein}</td>
-            <td>${item.carbs}</td>
-            <td>${item.fiber}</td>
-        `;
-        dietPlanBody.appendChild(row);
-    });
 }
