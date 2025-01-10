@@ -1,13 +1,25 @@
-// Diet table functionality
+// diet-table.js
+document.addEventListener('DOMContentLoaded', function() {
+    // Load diet options from JSON
+    loadDietOptions().then(initializeDietTable);
+});
+
 async function loadDietOptions() {
     try {
         const response = await fetch('data/diet-options.json');
-        const dietOptions = await response.json();
-        return dietOptions;
+        const data = await response.json();
+        return data.foods;
     } catch (error) {
         console.error('Error loading diet options:', error);
         return [];
     }
+}
+
+function initializeDietTable() {
+    // Add event listeners to buttons
+    document.getElementById('proteinBtn').addEventListener('click', () => showDietOptionsForMacro('protein'));
+    document.getElementById('carbBtn').addEventListener('click', () => showDietOptionsForMacro('carbs'));
+    document.getElementById('fiberBtn').addEventListener('click', () => showDietOptionsForMacro('fiber'));
 }
 
 async function showDietOptionsForMacro(clickedMacro) {
@@ -36,10 +48,3 @@ async function showDietOptionsForMacro(clickedMacro) {
         dietPlanBody.appendChild(row);
     });
 }
-
-// Event Listeners for macro cards
-document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('proteinCard').addEventListener('click', () => showDietOptionsForMacro('protein'));
-    document.getElementById('carbCard').addEventListener('click', () => showDietOptionsForMacro('carbs'));
-    document.getElementById('fiberCard').addEventListener('click', () => showDietOptionsForMacro('fiber'));
-});
