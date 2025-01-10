@@ -9,6 +9,9 @@
     <link rel="stylesheet" href="css/variables.css">    
     <link rel="stylesheet" href="/assets/common.css">
     <link rel="stylesheet" href="/T3Styles.css">
+    <link rel="stylesheet" href="css/caldiet.css">
+
+
 
     <link rel="stylesheet" href="/feature-request.css">
 
@@ -113,20 +116,40 @@
                         </div>
                         <h2 class="card-title">Macronutrient Breakdown</h2>
                     </div>
-                    <div class="scenarios-grid">
-                        <div class="scenario-card-inactive">
-                            <h3>Protein</h3>
-                            <p id="proteinIntake">221g/day</p>
-                        </div>
-                        <div class="scenario-card-inactive">
-                            <h3>Carbohydrates</h3>
-                            <p id="carbIntake">369g/day</p>
-                        </div>
-                        <div class="scenario-card-inactive">
-                            <h3>Fiber</h3>
-                            <p id="fiberIntake">28g/day</p>
-                        </div>
-                    </div>
+                    <!-- Replace your existing scenarios-grid div with this -->
+<div class="scenarios-grid">
+    <div class="scenario-card-inactive" id="proteinCard">
+        <h3>Protein</h3>
+        <p id="proteinIntake">221g/day</p>
+    </div>
+    <div class="scenario-card-inactive" id="carbCard">
+        <h3>Carbohydrates</h3>
+        <p id="carbIntake">369g/day</p>
+    </div>
+    <div class="scenario-card-inactive" id="fiberCard">
+        <h3>Fiber</h3>
+        <p id="fiberIntake">28g/day</p>
+    </div>
+</div>
+
+<!-- Add this right after the scenarios-grid div -->
+<div class="diet-plan-card">
+    <h2>Recommended Diet Options</h2>
+    <table id="dietPlanTable">
+        <thead>
+            <tr>
+                <th>Food Item</th>
+                <th>Type</th>
+                <th>Protein (g)</th>
+                <th>Carbs (g)</th>
+                <th>Fiber (g)</th>
+            </tr>
+        </thead>
+        <tbody id="dietPlanBody">
+            <!-- Rows will be inserted by JavaScript -->
+        </tbody>
+    </table>
+</div>
                 </div>
 
                 <div class="chart-container">
