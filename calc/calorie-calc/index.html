@@ -54,8 +54,14 @@
                     </div>
                 </div>
                 <div class="input-group">
-                    <label class="input-label" for="weight">Weight (lbs)</label>
-                    <input type="number" class="input-field" id="weight" min="50" max="500" value="203">
+                    <label class="input-label" for="weight">Weight</label>
+                    <div class="weight-inputs" style="display: flex; gap: 1rem;">
+                        <input type="number" class="input-field" id="weight" min="20" max="500" value="203" style="flex: 2;">
+                        <select class="input-field" id="weightUnit" style="flex: 1;">
+                            <option value="lbs">lbs</option>
+                            <option value="kg">kg</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="input-group">
                     <label class="input-label">Activity Level</label>

@@ -43,3 +43,17 @@
     color: var(--primary);
     font-weight: 600;
 }
+
+.weight-inputs {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.weight-inputs .input-field {
+    margin: 0;
+}
+
+.weight-inputs select {
+    min-width: 80px;
+}

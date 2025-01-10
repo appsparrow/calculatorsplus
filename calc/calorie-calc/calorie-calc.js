@@ -5,48 +5,17 @@ let macroChart = null;
 document.getElementById('calculateBtn').addEventListener('click', calculateCalories);
 
 // Initialize macro chart when DOM is loaded
-document.addEventListener('DOMContentLoaded', function () {
-    const macroCtx = document.getElementById('macroChart').getContext('2d');
-    if (macroCtx) {
-        macroChart = new Chart(macroCtx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Protein', 'Carbohydrates', 'Fiber'],
-                datasets: [{
-                    data: [0, 0, 0],
-                    backgroundColor: [
-                        '#4f46e5',  // Protein color
-                        '#0ea5e9',  // Carbohydrates color
-                        '#06b6d4'   // Fiber color
-                    ],
-                    borderWidth: 0,
-                    hoverOffset: 4
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            padding: 20,
-                            font: {
-                                size: 12
-                            }
-                        }
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function (context) {
-                                return `${context.label}: ${context.raw}g`;
-                            }
-                        }
-                    }
-                },
-                cutout: '60%'
-            }
-        });
+// Add event listener for weight unit changes to update min/max values
+document.getElementById('weightUnit').addEventListener('change', function() {
+    const weightInput = document.getElementById('weight');
+    if (this.value === 'kg') {
+        weightInput.min = "20";
+        weightInput.max = "227"; // ~500 lbs in kg
+        weightInput.value = Math.round(parseFloat(weightInput.value) / 2.205);
+    } else {
+        weightInput.min = "44"; // ~20 kg in lbs
+        weightInput.max = "500";
+        weightInput.value = Math.round(parseFloat(weightInput.value) * 2.205);
     }
 });
 
@@ -66,17 +35,21 @@ function calculateCalories() {
     const gender = document.getElementById('gender').value;
     const heightFeet = parseInt(document.getElementById('heightFeet').value);
     const heightInches = parseInt(document.getElementById('heightInches').value);
-    const weight = parseInt(document.getElementById('weight').value);
+    const weightInput = parseFloat(document.getElementById('weight').value);
+    const weightUnit = document.getElementById('weightUnit').value;
     const activity = document.getElementById('activity').value;
 
     const height = heightFeet * 12 + heightInches;
+    
+    // Convert weight to kg if needed
+    const weightInKg = weightUnit === 'lbs' ? weightInput / 2.205 : weightInput;
 
     // Calculate BMR
     let bmr;
     if (gender === 'male') {
-        bmr = (10 * (weight / 2.205)) + (6.25 * (height * 2.54)) - (5 * age) + 5;
+        bmr = (10 * weightInKg) + (6.25 * (height * 2.54)) - (5 * age) + 5;
     } else {
-        bmr = (10 * (weight / 2.205)) + (6.25 * (height * 2.54)) - (5 * age) - 161;
+        bmr = (10 * weightInKg) + (6.25 * (height * 2.54)) - (5 * age) - 161;
     }
 
     // Activity multipliers
@@ -104,7 +77,7 @@ function calculateCalories() {
     // Calculate and update macronutrients
     const protein = Math.round(maintain * 0.3 / 4);
     const carbs = Math.round(maintain * 0.5 / 4);
-    const fiber = Math.round(weight * 0.14);
+    const fiber = Math.round((weightUnit === 'lbs' ? weightInput : weightInput * 2.205) * 0.14);
 
     // Update macronutrient display
     document.getElementById('proteinIntake').textContent = `${protein}g/day`;
@@ -114,3 +87,11 @@ function calculateCalories() {
     // Update macro chart
     updateMacroChart(protein, carbs, fiber);
 }
+
+
+
+
+
+
+
+
